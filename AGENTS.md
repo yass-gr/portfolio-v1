@@ -7,6 +7,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 <!-- END:nextjs-agent-rules -->
 
 <!-- BEGIN:workflow-rules -->
+
 - Never build or lint without being asked
 - Commit small, non-prefixed commits often
+-dont commit workflow stuff
 <!-- END:workflow-rules -->
