@@ -11,6 +11,9 @@
   --font-expose-regular: var(--font-expose-regular);
   --font-expose-bold: var(--font-expose-bold);
   --font-expose-black: var(--font-expose-black);
+  --font-clash-grotesk-regular: var(--font-clash-grotesk-regular);
+  --font-clash-grotesk-semibold: var(--font-clash-grotesk-semibold);
+  --font-clash-grotesk-bold: var(--font-clash-grotesk-bold);
 }
 
 @media (prefers-color-scheme: dark) {

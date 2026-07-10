@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { exposeRegular, exposeBold, exposeBlack } from "./fonts";
+import {
+  exposeRegular,
+  exposeBold,
+  exposeBlack,
+  clashGroteskRegular,
+  clashGroteskSemibold,
+  clashGroteskBold,
+} from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,7 +22,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} h-full antialiased`}
+      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

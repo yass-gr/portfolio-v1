@@ -20,3 +20,24 @@ export const exposeBlack = localFont({
   variable: '--font-expose-black',
   display: 'swap',
 })
+
+export const clashGroteskRegular = localFont({
+  src: '../public/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Regular.woff2',
+  weight: '400',
+  variable: '--font-clash-grotesk-regular',
+  display: 'swap',
+})
+
+export const clashGroteskSemibold = localFont({
+  src: '../public/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Semibold.woff2',
+  weight: '600',
+  variable: '--font-clash-grotesk-semibold',
+  display: 'swap',
+})
+
+export const clashGroteskBold = localFont({
+  src: '../public/ClashGrotesk_Complete/Fonts/WEB/fonts/ClashGrotesk-Bold.woff2',
+  weight: '700',
+  variable: '--font-clash-grotesk-bold',
+  display: 'swap',
+})
