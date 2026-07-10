@@ -1,4 +1,5 @@
 import Model3D from "@/components/Model3D";
+import AsciiCarousel from "@/components/AsciiCarousel";
 
 export default function Home() {
   return (
@@ -9,6 +10,9 @@ export default function Home() {
         </h1>
       </div>
       <Model3D />
+      <div className="max-w-md mx-auto mt-12">
+        <AsciiCarousel />
+      </div>
     </main>
   );
 }
