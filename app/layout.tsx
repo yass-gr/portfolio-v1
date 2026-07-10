@@ -24,7 +24,7 @@ export default function RootLayout({
       lang="en"
       className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full  flex flex-col">{children}</body>
     </html>
   );
 }
