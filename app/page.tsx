@@ -3,20 +3,9 @@
 import { useState } from 'react'
 import Model3D from '@/components/Model3D'
 import AsciiCarousel from '@/components/AsciiCarousel'
-import AsciiControls from '@/components/AsciiControls'
-import type { AsciiConfig } from '@/components/AsciiCarousel'
 
 export default function Home() {
-  const [asciiConfig, setAsciiConfig] = useState<AsciiConfig>({})
-  const [showControls, setShowControls] = useState(false)
-
-  const mergedConfig: Required<AsciiConfig> = {
-    charSet: asciiConfig.charSet ?? " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$",
-    fontSize: asciiConfig.fontSize ?? 0,
-    contrast: asciiConfig.contrast ?? 1.4,
-    threshold: asciiConfig.threshold ?? 248,
-    letterSpacing: asciiConfig.letterSpacing ?? -0.3,
-  }
+  const [contrast, setContrast] = useState(1.4)
 
   return (
     <main>
@@ -24,30 +13,36 @@ export default function Home() {
         <h1 className="mx-auto text-[12.5vw] font-clash-grotesk-bold">YASSINE GRAIRI</h1>
       </div>
       <Model3D />
-      <div className="max-w-md mx-auto mt-12">
-        <AsciiCarousel config={asciiConfig} />
-        {showControls && (
-          <div className="mt-4">
-            <AsciiControls
-              initial={mergedConfig}
-              onChange={(next) => setAsciiConfig({
-                fontSize: next.fontSize === 0 ? undefined : next.fontSize,
-                contrast: next.contrast,
-                threshold: next.threshold,
-                letterSpacing: next.letterSpacing,
-              })}
-              onClose={() => setShowControls(false)}
-            />
-          </div>
-        )}
-        {!showControls && (
-          <button
-            onClick={() => setShowControls(true)}
-            className="mt-4 w-full py-2 text-sm text-neutral-600 border border-neutral-300 rounded-lg hover:border-neutral-400 hover:text-neutral-800 transition-colors"
-          >
-            show ascii controls
-          </button>
-        )}
+      <div className="max-w-md mx-auto mt-12 space-y-4">
+        <AsciiCarousel config={{ contrast }} />
+        <div className="flex items-center gap-3 border p-3 rounded-lg">
+          <span className="text-xs w-20">Contrast</span>
+          <input
+            type="range"
+            min={0.5}
+            max={3}
+            step={0.1}
+            value={contrast}
+            onChange={e => setContrast(parseFloat(e.target.value))}
+            className="flex-1"
+          />
+          <span className="text-xs w-8 text-right tabular-nums">{contrast}</span>
+        </div>
+        <input
+          type="range"
+          min={0.5}
+          max={3}
+          step={0.1}
+          onChange={e => setContrast(parseFloat(e.target.value))}
+          className="w-full"
+        />
+        <p className="text-xs text-neutral-400">test raw range input</p>
+        <button
+          onClick={() => setContrast(c => c + 0.1)}
+          className="block w-full py-2 text-sm border rounded-lg"
+        >
+          increment contrast ({contrast.toFixed(1)})
+        </button>
       </div>
     </main>
   )
