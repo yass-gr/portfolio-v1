@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useMemo, useState, useEffect, Suspense } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useTexture } from '@react-three/drei'
 import * as THREE from 'three'
@@ -213,7 +213,7 @@ function Scene({ imageUrl, hovered }: { imageUrl: string; hovered: boolean }) {
 
   return (
     <group>
-      <mesh ref={imageRef} scale={[imageAspect > 1 ? 1 : imageAspect, imageAspect > 1 ? 1 / imageAspect : 1, 1]}>
+      <mesh ref={imageRef} position={[0, 0, -0.01]} renderOrder={0} scale={[imageAspect > 1 ? 1 : imageAspect, imageAspect > 1 ? 1 / imageAspect : 1, 1]}>
         <planeGeometry args={[2, 2]} />
         <meshBasicMaterial
           map={texture}
@@ -224,7 +224,7 @@ function Scene({ imageUrl, hovered }: { imageUrl: string; hovered: boolean }) {
       </mesh>
 
       {geometry && (
-        <mesh ref={meshRef} geometry={geometry} material={material} />
+        <mesh ref={meshRef} renderOrder={1} geometry={geometry} material={material} />
       )}
     </group>
   )
@@ -242,19 +242,16 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
 
   return (
     <div
-      className="relative w-full aspect-square"
+      className="relative w-full aspect-square bg-neutral-950"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Suspense fallback={
-        <div className="w-full h-full flex items-center justify-center bg-neutral-950">
-          <span className="text-neutral-500 text-sm">loading...</span>
-        </div>
-      }>
-        <Canvas orthographic camera={{ position: [0, 0, 1], zoom: 1 }}>
-          <Scene imageUrl={images[index]} hovered={hovered} />
-        </Canvas>
-      </Suspense>
+      <Canvas
+        orthographic
+        camera={{ left: -1, right: 1, top: 1, bottom: -1, near: 0.1, far: 10 }}
+      >
+        <Scene imageUrl={images[index]} hovered={hovered} />
+      </Canvas>
     </div>
   )
 }
