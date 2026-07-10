@@ -121,7 +121,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
 }
 
 function buildLayout(img: HTMLImageElement, w: number, h: number, cfg: Required<AsciiConfig>): Layout {
-  const fontSize = cfg.fontSize || Math.max(5, Math.round(Math.min(w, h) / 100))
+  const fontSize = cfg.fontSize || Math.max(8, Math.round(Math.min(w, h) / 60))
   const spacing = fontSize * 0.55 + cfg.letterSpacing
   const charHeight = fontSize
   const cols = Math.floor(w / spacing)
