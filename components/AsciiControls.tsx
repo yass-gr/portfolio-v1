@@ -39,8 +39,8 @@ function Slider({ label, min, max, step, value, onChange }: {
         min={min}
         max={max}
         step={step}
-        value={value}
-        onChange={e => onChange(parseFloat(e.target.value))}
+        defaultValue={value}
+        onInput={e => onChange(parseFloat((e.target as HTMLInputElement).value))}
         className="flex-1 accent-neutral-800"
       />
       <span className="w-10 text-right text-xs text-neutral-500 tabular-nums">{value}</span>
