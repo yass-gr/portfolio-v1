@@ -22,8 +22,8 @@ function Model() {
 
 export default function Model3D() {
   return (
-    <div className="w-full h-[95vh]  absolute top-[15%] -right-[38%]">
-      <Canvas camera={{ position: [0, 1, 3], fov: 45 }}>
+    <div className="w-full h-[95vh]  fixed top-[10%] -right-[38%] pointer-events-none">
+      <Canvas camera={{ position: [0, 1, 3], fov: 45 }} style={{ pointerEvents: 'none' }}>
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 5, 5]} intensity={1} />
         <Model />
