@@ -25,7 +25,6 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
   const imgRef = useRef<HTMLImageElement | null>(null)
   const progressRef = useRef(0)
   const rafRef = useRef(0)
-  const loadingRef = useRef(false)
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -38,8 +37,6 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
     const canvas = canvasRef.current
     if (!container || !canvas) return
 
-    loadingRef.current = true
-
     const w = container.clientWidth
     const h = container.clientHeight
     const dpr = devicePixelRatio
@@ -47,32 +44,34 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
     canvas.height = Math.round(h * dpr)
 
     const img = new Image()
-    img.crossOrigin = 'anonymous'
     img.onload = () => {
       imgRef.current = img
       layoutRef.current = buildLayout(img, w, h)
-      loadingRef.current = false
       progressRef.current = 0
-      drawFrame(canvas, layoutRef.current, img, 0)
     }
     img.src = images[index]
-
-    return () => { loadingRef.current = false }
   }, [index, images])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    if (!canvas || loadingRef.current) return
-
-    const target = hovered ? 1 : 0
+    if (!canvas) return
 
     const animate = () => {
+      const img = imgRef.current
+      const layout = layoutRef.current
+      if (!img || !layout) {
+        rafRef.current = requestAnimationFrame(animate)
+        return
+      }
+
+      const target = hovered ? 1 : 0
       progressRef.current += (target - progressRef.current) * 0.06
+
       if (Math.abs(progressRef.current - target) < 0.001) {
         progressRef.current = target
       }
 
-      drawFrame(canvas, layoutRef.current, imgRef.current, progressRef.current)
+      drawFrame(canvas, layout, img, progressRef.current)
 
       if (Math.abs(progressRef.current - target) > 0.001) {
         rafRef.current = requestAnimationFrame(animate)
@@ -86,7 +85,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-square overflow-hidden bg-neutral-950"
+      className="relative w-full aspect-square overflow-hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
