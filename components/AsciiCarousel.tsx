@@ -147,10 +147,12 @@ const fragShader = `
     float charW = 1.0 / uCharCount;
     vec2 charUv = vec2(vUv.x * charW + vCharIndex * charW, vUv.y);
     float char = texture2D(uTexture, charUv).r;
-    float alpha = char * (1.0 - uHover * 0.85);
 
-    if (alpha < 0.01) discard;
-    gl_FragColor = vec4(1.0, 1.0, 1.0, alpha);
+    float reveal = char * (1.0 - uHover * 0.85);
+    vec3 color = mix(vec3(1.0), vec3(0.0), reveal);
+    float alpha = 1.0 - uHover * 0.9;
+
+    gl_FragColor = vec4(color, alpha);
   }
 `
 
