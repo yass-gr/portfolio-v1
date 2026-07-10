@@ -29,8 +29,13 @@ export default function Home() {
         {showControls && (
           <div className="mt-4">
             <AsciiControls
-              config={mergedConfig}
-              onChange={(patch) => setAsciiConfig(prev => ({ ...prev, ...patch }))}
+              initial={mergedConfig}
+              onChange={(next) => setAsciiConfig({
+                fontSize: next.fontSize === 0 ? undefined : next.fontSize,
+                contrast: next.contrast,
+                threshold: next.threshold,
+                letterSpacing: next.letterSpacing,
+              })}
               onClose={() => setShowControls(false)}
             />
           </div>
