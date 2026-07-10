@@ -1,5 +1,5 @@
 import Model3D from "@/components/Model3D";
-import AsciiHover from "@/components/AsciiHover";
+import DissolveHover from "@/components/DissolveHover";
 
 export default function Home() {
   return (
@@ -9,8 +9,8 @@ export default function Home() {
           YASSINE GRAIRI
         </h1>
       </div>
-      <div className="flex justify-center mt-8">
-        <AsciiHover />
+      <div className="ml-4 mt-8">
+        <DissolveHover />
       </div>
       <Model3D />
     </main>
