@@ -2,7 +2,15 @@
 
 import { useRef, useEffect, useState } from 'react'
 
-const CHARS = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+const DEFAULT_CHARS = " .'`^\",:;Il!i><~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+
+export interface AsciiConfig {
+  charSet?: string
+  fontSize?: number
+  contrast?: number
+  threshold?: number
+  letterSpacing?: number
+}
 
 interface Char {
   c: string
@@ -16,7 +24,20 @@ interface Layout {
   fontSize: number
 }
 
-export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { images?: string[] }) {
+const defaultConfig: Required<AsciiConfig> = {
+  charSet: DEFAULT_CHARS,
+  fontSize: 0,
+  contrast: 1.4,
+  threshold: 248,
+  letterSpacing: -0.3,
+}
+
+interface Props {
+  images?: string[]
+  config?: AsciiConfig
+}
+
+export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = {} }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
@@ -25,6 +46,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
   const imgRef = useRef<HTMLImageElement | null>(null)
   const progressRef = useRef(0)
   const rafRef = useRef(0)
+  const cfg = { ...defaultConfig, ...config }
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -39,18 +61,17 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
 
     const w = container.clientWidth
     const h = container.clientHeight
-    const dpr = devicePixelRatio
-    canvas.width = Math.round(w * dpr)
-    canvas.height = Math.round(h * dpr)
 
     const img = new Image()
     img.onload = () => {
+      canvas.width = Math.round(w * devicePixelRatio)
+      canvas.height = Math.round(h * devicePixelRatio)
       imgRef.current = img
-      layoutRef.current = buildLayout(img, w, h)
+      layoutRef.current = buildLayout(img, w, h, cfg)
       progressRef.current = 0
     }
     img.src = images[index]
-  }, [index, images])
+  }, [index, images, JSON.stringify(cfg)])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -71,7 +92,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
         progressRef.current = target
       }
 
-      drawFrame(canvas, layout, img, progressRef.current)
+      drawFrame(canvas, layout, img, progressRef.current, cfg)
 
       if (Math.abs(progressRef.current - target) > 0.001) {
         rafRef.current = requestAnimationFrame(animate)
@@ -80,7 +101,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
 
     rafRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [hovered])
+  }, [hovered, JSON.stringify(cfg)])
 
   return (
     <div
@@ -94,9 +115,9 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'] }: { image
   )
 }
 
-function buildLayout(img: HTMLImageElement, w: number, h: number): Layout {
-  const fontSize = Math.max(5, Math.round(Math.min(w, h) / 100))
-  const spacing = fontSize * 0.55 - 0.3
+function buildLayout(img: HTMLImageElement, w: number, h: number, cfg: Required<AsciiConfig>): Layout {
+  const fontSize = cfg.fontSize || Math.max(5, Math.round(Math.min(w, h) / 100))
+  const spacing = fontSize * 0.55 + cfg.letterSpacing
   const charHeight = fontSize
   const cols = Math.floor(w / spacing)
   const rows = Math.floor(h / charHeight)
@@ -122,24 +143,22 @@ function buildLayout(img: HTMLImageElement, w: number, h: number): Layout {
   sampleCtx.drawImage(img, sx, sy, srcW, srcH, 0, 0, cols, rows)
   const data = sampleCtx.getImageData(0, 0, cols, rows).data
 
-  const contrast = 1.4
-  const threshold = 248
   const chars: Char[] = []
 
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       const p = (row * cols + col) * 4
       let b = 0.299 * data[p] + 0.587 * data[p + 1] + 0.114 * data[p + 2]
-      b = (b - 128) * contrast + 128
+      b = (b - 128) * cfg.contrast + 128
       b = Math.max(0, Math.min(255, b))
 
-      if (b > threshold) continue
+      if (b > cfg.threshold) continue
 
-      const ci = Math.floor((b / 255) * (CHARS.length - 1))
+      const ci = Math.floor((b / 255) * (cfg.charSet.length - 1))
       let seed = (Math.sin(col * 12.9898 + row * 78.233) * 43758.5453) % 1
       if (seed < 0) seed += 1
       chars.push({
-        c: CHARS[ci],
+        c: cfg.charSet[ci],
         x: col * spacing,
         y: row * charHeight,
         seed,
@@ -152,9 +171,10 @@ function buildLayout(img: HTMLImageElement, w: number, h: number): Layout {
 
 function drawFrame(
   canvas: HTMLCanvasElement,
-  layout: Layout | null,
-  img: HTMLImageElement | null,
+  layout: Layout,
+  img: HTMLImageElement,
   progress: number,
+  cfg: Required<AsciiConfig>,
 ) {
   const ctx = canvas.getContext('2d')!
   const dpr = devicePixelRatio
@@ -163,7 +183,7 @@ function drawFrame(
 
   ctx.clearRect(0, 0, w, h)
 
-  if (img && progress > 0) {
+  if (progress > 0) {
     ctx.save()
     ctx.globalAlpha = progress
 
@@ -185,7 +205,7 @@ function drawFrame(
     ctx.restore()
   }
 
-  if (layout && progress < 1) {
+  if (progress < 1) {
     const { chars, fontSize } = layout
     ctx.fillStyle = '#111'
     ctx.font = `${Math.round(fontSize * dpr)}px "JetBrains Mono", "IBM Plex Mono", "Geist Mono", "SF Mono", monospace`
