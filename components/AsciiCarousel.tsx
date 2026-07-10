@@ -42,11 +42,13 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
   const containerRef = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
   const [hovered, setHovered] = useState(false)
+  const [version, setVersion] = useState(0)
   const layoutRef = useRef<Layout | null>(null)
   const imgRef = useRef<HTMLImageElement | null>(null)
   const progressRef = useRef(0)
   const rafRef = useRef(0)
-  const cfg = { ...defaultConfig, ...config }
+  const cfgRef = useRef({ ...defaultConfig, ...config })
+  cfgRef.current = { ...defaultConfig, ...config }
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -61,6 +63,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
 
     const w = container.clientWidth
     const h = container.clientHeight
+    const cfg = cfgRef.current
 
     const img = new Image()
     img.onload = () => {
@@ -69,9 +72,10 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
       imgRef.current = img
       layoutRef.current = buildLayout(img, w, h, cfg)
       progressRef.current = 0
+      setVersion(v => v + 1)
     }
     img.src = images[index]
-  }, [index, images, JSON.stringify(cfg)])
+  }, [index, images, JSON.stringify(cfgRef.current)])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -85,6 +89,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
         return
       }
 
+      const cfg = cfgRef.current
       const target = hovered ? 1 : 0
       progressRef.current += (target - progressRef.current) * 0.06
 
@@ -101,7 +106,7 @@ export default function AsciiCarousel({ images = ['/pers-img-1.jpeg'], config = 
 
     rafRef.current = requestAnimationFrame(animate)
     return () => cancelAnimationFrame(rafRef.current)
-  }, [hovered, JSON.stringify(cfg)])
+  }, [hovered, version])
 
   return (
     <div
