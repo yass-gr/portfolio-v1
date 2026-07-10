@@ -38,7 +38,7 @@ export default function Home() {
         {!showControls && (
           <button
             onClick={() => setShowControls(true)}
-            className="mt-4 text-xs text-neutral-400 hover:text-neutral-700 w-full text-center"
+            className="mt-4 w-full py-2 text-sm text-neutral-600 border border-neutral-300 rounded-lg hover:border-neutral-400 hover:text-neutral-800 transition-colors"
           >
             show ascii controls
           </button>
