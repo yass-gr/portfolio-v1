@@ -59,19 +59,29 @@ export default function TechStack() {
   return (
     <section className="mx-auto mt-32 mb-20 w-full max-w-[70%] px-5">
       <div className="grid grid-cols-[8fr_2fr] gap-6 items-stretch">
-        <div className="min-w-0 overflow-hidden flex items-center justify-center">
-          <LogoLoop
-            logos={logos}
-            speed={80}
-            direction="left"
-            logoHeight={50}
-            gap={24}
-            pauseOnHover
-            fadeOut
-          />
+        <div className="flex flex-col overflow-hidden rounded-2xl bg-neutral-100/50 backdrop-blur-xl shadow-[0_8px_32px_-4px_rgba(0,0,0,0.08)] dark:bg-neutral-900/50 dark:shadow-[0_8px_32px_-4px_rgba(255,255,255,0.03)]">
+          <div className="flex flex-1 items-center px-2 pt-2">
+            <LogoLoop
+              logos={logos}
+              speed={80}
+              direction="left"
+              logoHeight={50}
+              gap={24}
+              pauseOnHover
+              fadeOut
+            />
+          </div>
+          <p className="px-2 pb-1.5 pt-1 text-left font-clash-grotesk-regular text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+            Tech Stack
+          </p>
         </div>
-        <div className="rounded-2xl bg-neutral-100/50 p-2 backdrop-blur-xl shadow-[0_8px_32px_-4px_rgba(0,0,0,0.08)] dark:bg-neutral-900/50 dark:shadow-[0_8px_32px_-4px_rgba(255,255,255,0.03)]">
-          <GitHubCommits username="yass-gr" />
+        <div className="flex flex-col rounded-2xl bg-neutral-100/50 backdrop-blur-xl shadow-[0_8px_32px_-4px_rgba(0,0,0,0.08)] dark:bg-neutral-900/50 dark:shadow-[0_8px_32px_-4px_rgba(255,255,255,0.03)]">
+          <div className="flex-1 p-2">
+            <GitHubCommits username="yass-gr" />
+          </div>
+          <p className="px-2 pb-1.5 pt-1 text-left font-clash-grotesk-regular text-[10px] uppercase tracking-widest text-neutral-400 dark:text-neutral-500">
+            GitHub
+          </p>
         </div>
       </div>
     </section>
