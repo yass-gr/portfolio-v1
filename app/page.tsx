@@ -5,7 +5,6 @@ export default function Home() {
   return (
     <main>
       <Hero />
-      <Model3D />
     </main>
   );
 }
