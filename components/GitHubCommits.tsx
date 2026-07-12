@@ -3,6 +3,16 @@
 import { useEffect, useState } from "react";
 import { ActivityCalendar } from "react-activity-calendar";
 
+const styles = `
+.gh-scroll > div {
+  overflow-x: hidden !important;
+  scrollbar-width: none;
+}
+.gh-scroll > div::-webkit-scrollbar {
+  display: none;
+}
+`;
+
 interface Activity {
   date: string;
   count: number;
@@ -48,7 +58,9 @@ export function GitHubCommits({ username = "yass-gr" }: { username?: string }) {
   }, [username]);
 
   return (
-    <div className="w-full overflow-x-auto">
+    <>
+      <style>{styles}</style>
+      <div className="w-full">
       {loading ? (
         <div className="flex gap-1 h-28 items-end">
           {Array.from({ length: 52 }).map((_, i) => (
@@ -65,18 +77,20 @@ export function GitHubCommits({ username = "yass-gr" }: { username?: string }) {
         </div>
       ) : (
         <ActivityCalendar
+          className="gh-scroll"
           data={data}
-          blockSize={8}
-          blockMargin={2}
-          fontSize={10}
+          blockSize={10}
+          blockMargin={3}
+          fontSize={11}
           colorScheme={isDark ? "dark" : "light"}
           theme={{
-            light: ["#f5f5f5", "#e0e0e0", "#9e9e9e", "#616161", "#000000"],
-            dark: ["#1a1a1a", "#333333", "#808080", "#cccccc", "#ffffff"],
+            light: ["#e5e5e5", "#b3b3b3", "#737373", "#333333", "#000000"],
+            dark: ["#111111", "#666666", "#b3b3b3", "#e6e6e6", "#ffffff"],
           }}
           labels={{ totalCount: "{{count}} contributions in 2026" }}
         />
       )}
     </div>
+    </>
   );
 }
