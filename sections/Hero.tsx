@@ -203,8 +203,8 @@ export default function Hero() {
 
   return (
     <div className="mx-5 relative" ref={containerRef}>
-      <div className="flex justify-center  xl:lg:-translate-y-10 lg:-translate-y-6 sm:-translate-y-4">
-        <h1 className="mx-auto text-[12.5vw] font-clash-grotesk-bold">
+      <div className="flex justify-center">
+        <h1 className="mx-auto text-[clamp(2.5rem,12.5vw,6rem)] font-clash-grotesk-bold text-wrap-balance tracking-[-0.03em]">
           {words.map((word, i) => (
             <span key={i} className="hero-word inline-block">
               {word}
@@ -215,7 +215,7 @@ export default function Hero() {
       </div>
 
       <LiquidGlassCard
-        className="w-[60%] absolute -top-47 left-20"
+        className="w-[90%] sm:w-4/5 md:w-3/4 lg:w-[60%] absolute left-1/2 -translate-x-1/2 lg:left-20 lg:translate-x-0 -top-12 sm:-top-16 md:-top-24 lg:-top-47"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}
@@ -225,23 +225,23 @@ export default function Hero() {
         borderOpacity={borderOpacity}
         borderRadius={borderRadius}
       >
-        <div className="grid grid-cols-[30%_70%] grid-rows-[auto_auto_auto_auto] gap-6 items-start max-w-4xl mx-auto py-10 mt-5 md:mt-4 px-2">
-          <div className="row-span-4 flex items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-[30%_70%] md:grid-rows-[auto_auto_auto_auto] gap-5 md:gap-6 items-start max-w-4xl mx-auto py-8 md:py-10 mt-3 md:mt-5 px-3 md:px-2">
+          <div className="md:row-span-4 flex items-center justify-center">
             <Avatar />
           </div>
-          <p className="font-clash-grotesk-regular text-2xl text-pretty text-base sm:text-lg md:text-xl leading-relaxed">
+          <p className="font-clash-grotesk-regular text-pretty text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
             {lines.map((line, i) => (
               <span key={i} className="hero-line block">
                 {line}
               </span>
             ))}
           </p>
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">Tech Stack</span>
+          <div className="flex flex-col gap-2 md:gap-3">
+            <span className="text-[10px] md:text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">Tech Stack</span>
             <LogoCarousel columnCount={3} logos={logos} />
           </div>
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">Activity</span>
+          <div className="flex flex-col gap-2 md:gap-3">
+            <span className="text-[10px] md:text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">Activity</span>
             <GitHubCommits />
           </div>
         </div>
