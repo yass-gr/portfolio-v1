@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "dahl": {
+      "options": {
+        "apiKey": "dahl_71GmHmeVwpTDyWD8fBTHRkn791E8cVG1v",
+        "baseURL": "https://inference.dahl.global/v1"
+      },
+      "models": {
+        "Kimi-K2.6": {
+          "id": "moonshotai/Kimi-K2.6",
+          "limit": {
+            "context": 128000,
+            "output": 8192
+          },
+          "cost": {
+            "input": 0,
+            "output": 0
+          }
+        }
+      }
+    }
+  },
+  "model": "dahl/Kimi-K2.6"
+}
