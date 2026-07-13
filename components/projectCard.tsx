@@ -4,6 +4,29 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
+const iconSlugs: Record<string, string> = {
+  React: "react",
+  Python: "python",
+  TensorFlow: "tensorflow",
+  "Next.js": "nextdotjs",
+  Stripe: "stripe",
+  PostgreSQL: "postgresql",
+  GraphQL: "graphql",
+  Redis: "redis",
+  Docker: "docker",
+  "Vue.js": "vuedotjs",
+  AWS: "amazonwebservices",
+  Tailwind: "tailwindcss",
+  Svelte: "svelte",
+  MongoDB: "mongodb",
+  "D3.js": "d3dotjs",
+  Go: "go",
+  WebRTC: "webrtc",
+  gRPC: "grpc",
+  Flutter: "flutter",
+  Firebase: "firebase",
+};
+
 interface ProjectCardProps {
   title: string;
   imageId: number;
@@ -98,15 +121,30 @@ export default function ProjectCard({
       >
         <h3 className="font-panchang-bold text-4xl text-white">{title}</h3>
         <div className="flex items-end justify-between mt-4">
-          <div className="flex gap-2">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="text-xs px-2 py-1 rounded-md bg-white/15 text-white/70 font-clash-grotesk-regular"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="flex gap-3">
+            {tags.map((tag) => {
+              const slug = iconSlugs[tag];
+              return slug ? (
+                <span
+                  key={tag}
+                  className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
+                >
+                  <img
+                    src={`https://cdn.simpleicons.org/${slug}`}
+                    alt={tag}
+                    title={tag}
+                    className="w-5 h-5"
+                  />
+                </span>
+              ) : (
+                <span
+                  key={tag}
+                  className="text-xs px-2 py-1 rounded-md bg-white/15 text-white/70 font-clash-grotesk-regular"
+                >
+                  {tag}
+                </span>
+              );
+            })}
           </div>
           <div className="flex gap-2">
             <a
