@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -77,16 +77,17 @@ export default function Projects() {
         },
       },
     );
+  }, []);
 
-    if (textRef.current) {
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: "bottom top",
-        pin: textRef.current,
-        pinSpacing: false,
-      });
-    }
+  useEffect(() => {
+    if (!textRef.current || !sectionRef.current) return;
+    const st = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top top",
+      end: "bottom top",
+      pin: textRef.current,
+    });
+    return () => st.kill();
   }, []);
 
   return (
@@ -96,9 +97,8 @@ export default function Projects() {
       </h1>
 
       <LiquidGlassCard className="-translate-y-[5%] mt-20 ">
-        <div className="min-h-dvh p-5 py-[100px]">
-          <div className="flex gap-8">
-            <div ref={textRef} className="text-2xl w-3/12 mt-20">
+        <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px]">
+          <div ref={textRef} className="text-2xl col-span-3 mt-20 ml-8">
             <div className="text-left">
               <h2 className="font-clash-grotesk-regular leading-15">
                 i do{" "}
@@ -121,7 +121,7 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="w-9/12 grid grid-cols-2 gap-8 content-start p-4">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4">
             {projects.map((project) => (
               <Magnet key={project.imageId} padding={10} magnetStrength={10}>
                 <ProjectCard {...project} />
@@ -129,7 +129,6 @@ export default function Projects() {
             ))}
           </div>
         </div>
-      </div>
       </LiquidGlassCard>
     </section>
   );
