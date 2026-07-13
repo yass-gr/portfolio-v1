@@ -41,3 +41,24 @@ export const clashGroteskBold = localFont({
   variable: '--font-clash-grotesk-bold',
   display: 'swap',
 })
+
+export const panchangRegular = localFont({
+  src: '../public/Panchang_Complete/Fonts/WEB/fonts/Panchang-Regular.woff2',
+  weight: '400',
+  variable: '--font-panchang-regular',
+  display: 'swap',
+})
+
+export const panchangBold = localFont({
+  src: '../public/Panchang_Complete/Fonts/WEB/fonts/Panchang-Bold.woff2',
+  weight: '700',
+  variable: '--font-panchang-bold',
+  display: 'swap',
+})
+
+export const panchangExtrabold = localFont({
+  src: '../public/Panchang_Complete/Fonts/WEB/fonts/Panchang-Extrabold.woff2',
+  weight: '800',
+  variable: '--font-panchang-extrabold',
+  display: 'swap',
+})
