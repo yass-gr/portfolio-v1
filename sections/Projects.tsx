@@ -79,7 +79,7 @@ export default function Projects() {
     );
 
     if (textRef.current) {
-      <ScrollTrigger.create({
+      ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
         end: "bottom top",
