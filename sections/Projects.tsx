@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LiquidGlassCard from "@/components/LiquidGlassCard";
 import ProjectCard from "@/components/projectCard";
+import Magnet from "@/components/magnet";
 
 const projects = [
   {
@@ -110,7 +111,9 @@ export default function Projects() {
           </div>
           <div className="col-span-9 grid grid-cols-2 gap-4 content-start p-4">
             {projects.map((project) => (
-              <ProjectCard key={project.imageId} {...project} />
+              <Magnet key={project.imageId} padding={80} magnetStrength={4}>
+                <ProjectCard {...project} />
+              </Magnet>
             ))}
           </div>
         </div>
