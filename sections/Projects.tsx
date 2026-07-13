@@ -32,12 +32,12 @@ const projects = [
   {
     title: "Task Manager",
     imageId: 314,
-    tags: ["Svelte", "WebSocket", "MongoDB"],
+    tags: ["Svelte", "Socket.io", "MongoDB"],
   },
   {
     title: "Weather App",
     imageId: 512,
-    tags: ["React Native", "OpenWeather", "D3.js"],
+    tags: ["React Native", "D3.js"],
   },
   {
     title: "Chat Engine",
@@ -47,7 +47,7 @@ const projects = [
   {
     title: "Fitness Tracker",
     imageId: 777,
-    tags: ["Flutter", "ML Kit", "Firebase"],
+    tags: ["Flutter", "Firebase"],
   },
 ];
 
@@ -109,7 +109,7 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-6 content-start p-4">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4">
             {projects.map((project) => (
               <Magnet key={project.imageId} padding={10} magnetStrength={10}>
                 <ProjectCard {...project} />

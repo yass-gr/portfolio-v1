@@ -25,6 +25,7 @@ const iconSlugs: Record<string, string> = {
   gRPC: "grpc",
   Flutter: "flutter",
   Firebase: "firebase",
+  "Socket.io": "socketdotio",
 };
 
 interface ProjectCardProps {
@@ -134,24 +135,20 @@ export default function ProjectCard({
             {tags.map((tag) => {
               const slug = iconSlugs[tag];
               const color = isDark ? "white" : "black";
-              return slug ? (
+              return (
                 <span
                   key={tag}
-                  className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-white/15"
                 >
                   <img
                     src={`https://cdn.simpleicons.org/${slug}/${color}`}
                     alt={tag}
                     title={tag}
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
-                </span>
-              ) : (
-                <span
-                  key={tag}
-                  className="text-xs px-2 py-1 rounded-md bg-white/15 text-white/70 font-clash-grotesk-regular"
-                >
-                  {tag}
+                  <span className="text-xs text-white/70 font-clash-grotesk-regular">
+                    {tag}
+                  </span>
                 </span>
               );
             })}
