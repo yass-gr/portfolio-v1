@@ -234,14 +234,14 @@ const words = ["YASSINE", "GRAIRI"];
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [blurAmount, setBlurAmount] = useState(3.5);
+  const [blurAmount, setBlurAmount] = useState(17);
   const [brightness, setBrightness] = useState(2);
-  const [displacementScale, setDisplacementScale] = useState(20);
+  const [displacementScale, setDisplacementScale] = useState(30);
   const [turbulenceFreq, setTurbulenceFreq] = useState(0.012);
   const [turbulenceOctaves, setTurbulenceOctaves] = useState(2);
-  const [borderWidth, setBorderWidth] = useState(6);
-  const [borderOpacity, setBorderOpacity] = useState(0.7);
-  const [borderRadius, setBorderRadius] = useState(28);
+  const [borderWidth, setBorderWidth] = useState(4);
+  const [borderOpacity, setBorderOpacity] = useState(0.55);
+  const [borderRadius, setBorderRadius] = useState(60);
   const [showControls, setShowControls] = useState(false);
   useGSAP(() => {
     const ctx = containerRef.current;
@@ -304,7 +304,7 @@ export default function Hero() {
 
   return (
     <div
-      className="mx-5 relative h-[100dvh] flex flex-col justify-center"
+      className="relative h-[100dvh] flex flex-col justify-center"
       ref={containerRef}
     >
 

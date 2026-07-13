@@ -15,17 +15,28 @@ interface LiquidGlassCardProps {
   borderRadius?: number;
 }
 
+const DEFAULTS = {
+  blurAmount: 17,
+  brightness: 2,
+  displacementScale: 30,
+  turbulenceFreq: 0.012,
+  turbulenceOctaves: 2,
+  borderWidth: 4,
+  borderOpacity: 0.55,
+  borderRadius: 60,
+} as const;
+
 export default function LiquidGlassCard({
   children,
   className = "",
-  blurAmount = 2,
-  brightness = 1.1,
-  displacementScale = 200,
-  turbulenceFreq = 0.01,
-  turbulenceOctaves = 2,
-  borderWidth = 6,
-  borderOpacity = 0.7,
-  borderRadius = 28,
+  blurAmount = DEFAULTS.blurAmount,
+  brightness = DEFAULTS.brightness,
+  displacementScale = DEFAULTS.displacementScale,
+  turbulenceFreq = DEFAULTS.turbulenceFreq,
+  turbulenceOctaves = DEFAULTS.turbulenceOctaves,
+  borderWidth = DEFAULTS.borderWidth,
+  borderOpacity = DEFAULTS.borderOpacity,
+  borderRadius = DEFAULTS.borderRadius,
 }: LiquidGlassCardProps) {
   const uid = useId().replace(/[:.]/g, "-");
   const filterId = `lg-filter-${uid}`;

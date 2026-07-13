@@ -5,6 +5,50 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import LiquidGlassCard from "@/components/LiquidGlassCard";
+import ProjectCard from "@/components/projectCard";
+
+const projects = [
+  {
+    title: "AI Dashboard",
+    imageId: 42,
+    tags: ["React", "Python", "TensorFlow"],
+  },
+  {
+    title: "E-Commerce App",
+    imageId: 77,
+    tags: ["Next.js", "Stripe", "PostgreSQL"],
+  },
+  {
+    title: "Social Platform",
+    imageId: 133,
+    tags: ["GraphQL", "Redis", "Docker"],
+  },
+  {
+    title: "Portfolio Builder",
+    imageId: 256,
+    tags: ["Vue.js", "AWS", "Tailwind"],
+  },
+  {
+    title: "Task Manager",
+    imageId: 314,
+    tags: ["Svelte", "WebSocket", "MongoDB"],
+  },
+  {
+    title: "Weather App",
+    imageId: 512,
+    tags: ["React Native", "OpenWeather", "D3.js"],
+  },
+  {
+    title: "Chat Engine",
+    imageId: 618,
+    tags: ["Go", "WebRTC", "gRPC"],
+  },
+  {
+    title: "Fitness Tracker",
+    imageId: 777,
+    tags: ["Flutter", "ML Kit", "Firebase"],
+  },
+];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,9 +61,10 @@ export default function Projects() {
 
     gsap.fromTo(
       titleRef.current,
-      { fontSize: "5vw", y: "-65%" },
+      { fontSize: "3vw", x: 0, y: "-70%" },
       {
-        fontSize: "8.5vw",
+        fontSize: "6.5vw",
+        x: "24dvw",
         y: "-20%",
         ease: "power1.out",
         scrollTrigger: {
@@ -33,13 +78,42 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="h-dvh">
-      <h1 ref={titleRef} className="font-panchang-bold text-center">
-        projects
+    <section ref={sectionRef} className="min-h-dvh p-5">
+      <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
+        Projects
       </h1>
 
-      <LiquidGlassCard>
-        <div className="min-h-dvh"></div>
+      <LiquidGlassCard className="-translate-y-[5.5%] mt-20 ">
+        <div className="min-h-dvh p-5 grid grid-cols-12">
+          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-0 self-start">
+            <div className="text-left">
+              <h2 className="font-clash-grotesk-regular leading-15">
+                i do{" "}
+                <span className="outline rounded-full m-2 inline-block leading-none px-4 py-3 rotate-3 hover:rotate-0 transition-all duration-200 ease-in-out">
+                  Web developpement
+                </span>
+                <br />
+                <span className="outline rounded-full m-2 inline-block leading-none -rotate-2 px-4 py-3 hover:rotate-0 transition-all duration-200 ease-in-out">
+                  Mobile Developpement
+                </span>
+                <br />
+                <span className="outline rounded-full m-2 inline-block leading-none px-4 py-3 transition-all hover:rotate-1 duration-200 ease-in-out">
+                  Design
+                </span>
+                <br />
+              </h2>
+              <h2 className="font-clash-grotesk-regular ">
+                and everything in <br />
+                between.
+              </h2>
+            </div>
+          </div>
+          <div className="col-span-9 grid grid-cols-2 gap-4 content-start p-4">
+            {projects.map((project) => (
+              <ProjectCard key={project.imageId} {...project} />
+            ))}
+          </div>
+        </div>
       </LiquidGlassCard>
     </section>
   );

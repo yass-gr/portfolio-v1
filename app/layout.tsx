@@ -54,7 +54,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full relative">
+      <body className=" relative ">
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none dark:block hidden"
           loop
@@ -71,7 +71,7 @@ export default function RootLayout({
           playsInline
           src="/ascii-test-2-slow-light.mp4"
         ></video>
-        <div className="flex min-h-full flex-col">
+        <div className="flex min-h-full flex-col px-[3%]">
           {children}
           <BottomNav />
         </div>
