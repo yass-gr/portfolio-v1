@@ -3,7 +3,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import GlassButton from "./glassButton";
 
 const iconSlugs: Record<string, string> = {
   React: "react",
@@ -154,9 +153,19 @@ export default function ProjectCard({
               );
             })}
           </div>
-          <div className="flex items-center gap-2">
-            <GlassButton label="GitHub" href={githubUrl} />
-            <GlassButton label="Preview" href={previewUrl} />
+          <div className="flex gap-2">
+            <a
+              href={githubUrl}
+              className="text-xs px-3 py-1.5 rounded-full bg-white/15 text-white/80 font-clash-grotesk-semibold hover:bg-white/25 transition-colors"
+            >
+              GitHub
+            </a>
+            <a
+              href={previewUrl}
+              className="text-xs px-3 py-1.5 rounded-full bg-white/15 text-white/80 font-clash-grotesk-semibold hover:bg-white/25 transition-colors"
+            >
+              Preview
+            </a>
           </div>
         </div>
       </div>
