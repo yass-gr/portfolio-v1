@@ -133,20 +133,19 @@ export default function ProjectCard({
           <div className="flex gap-3">
             {tags.map((tag) => {
               const slug = iconSlugs[tag];
+              const color = isDark ? "white" : "black";
               return slug ? (
-                  const color = isDark ? "white" : "black";
-                  return (
-                    <span
-                      key={tag}
-                      className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
-                    >
-                      <img
-                        src={`https://cdn.simpleicons.org/${slug}/${color}`}
-                        alt={tag}
-                        title={tag}
-                        className="w-5 h-5"
-                      />
-                    </span>
+                <span
+                  key={tag}
+                  className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
+                >
+                  <img
+                    src={`https://cdn.simpleicons.org/${slug}/${color}`}
+                    alt={tag}
+                    title={tag}
+                    className="w-5 h-5"
+                  />
+                </span>
               ) : (
                 <span
                   key={tag}
