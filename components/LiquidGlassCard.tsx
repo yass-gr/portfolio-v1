@@ -50,7 +50,7 @@ export default function LiquidGlassCard({
         </filter>
       </svg>
       <div
-        className={`relative flex flex-wrap items-center justify-center overflow-hidden ${className}`}
+        className={`relative flex flex-wrap items-center justify-center ${className}`}
         style={{
           borderRadius: `${borderRadius}px`,
           filter: "drop-shadow(-8px -10px 46px #0000005f)",
