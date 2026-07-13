@@ -6,6 +6,9 @@ import {
   clashGroteskRegular,
   clashGroteskSemibold,
   clashGroteskBold,
+  panchangRegular,
+  panchangBold,
+  panchangExtrabold,
 } from "./fonts";
 import { InteractiveGrid } from "@/components/InteractiveGrid";
 import { BottomNav } from "@/components/BottomNav";
@@ -26,7 +29,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} h-full antialiased`}
+      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased`}
     >
       <head>
         <script
@@ -52,6 +55,22 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full relative">
+        <video
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none dark:block hidden"
+          loop
+          autoPlay
+          muted
+          playsInline
+          src="/ascii-test-2-slow.mp4"
+        ></video>
+        <video
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none block dark:hidden"
+          loop
+          autoPlay
+          muted
+          playsInline
+          src="/ascii-test-2-slow-light.mp4"
+        ></video>
         <div className="flex min-h-full flex-col">
           {children}
           <BottomNav />
