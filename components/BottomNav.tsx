@@ -11,11 +11,11 @@ const navItems = [
 ];
 
 const icons: Record<string, React.ReactNode> = {
-  about: <User size={20} />,
-  projects: <FolderKanban size={20} />,
-  inspirations: <Sparkles size={20} />,
-  dark: <Moon size={20} />,
-  light: <Sun size={20} />,
+  about: <User size={24} />,
+  projects: <FolderKanban size={24} />,
+  inspirations: <Sparkles size={24} />,
+  dark: <Moon size={24} />,
+  light: <Sun size={24} />,
 };
 
 function scrollToSection(id: string) {
@@ -38,7 +38,7 @@ export function BottomNav() {
   }, [isDark]);
 
   return (
-    <nav className="fixed inset-x-0 bottom-6 z-50 flex justify-center">
+    <nav className="fixed inset-x-0 bottom-6 z-[1200] flex justify-center">
       <GlassSurface
         width="auto"
         height="auto"

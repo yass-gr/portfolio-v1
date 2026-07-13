@@ -87,7 +87,9 @@ export function GitHubCommits({ username = "yass-gr" }: { username?: string }) {
             light: ["#e5e5e5", "#b3b3b3", "#737373", "#333333", "#000000"],
             dark: ["#111111", "#666666", "#b3b3b3", "#e6e6e6", "#ffffff"],
           }}
-          labels={{ totalCount: "{{count}} contributions in 2026" }}
+          showMonthLabels={false}
+          showColorLegend={false}
+          showTotalCount={false}
         />
       )}
     </div>
