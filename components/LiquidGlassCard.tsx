@@ -61,7 +61,7 @@ export default function LiquidGlassCard({
             boxShadow: `inset ${borderWidth}px ${borderWidth}px 0px -${borderWidth}px rgba(0,0,0,${borderOpacity * 0.6}), inset 0 0 8px 1px rgba(0,0,0,${borderOpacity * 0.3})`,
           }}
         />
-        <div className="relative z-10 w-full">{children}</div>
+        <div className="relative z-10 size-full">{children}</div>
       </div>
     </>
   );
