@@ -26,7 +26,7 @@ export default function Projects() {
           trigger: sectionRef.current,
           start: "top bottom",
           end: "top top",
-          scrub: 1,
+          scrub: 0,
         },
       },
     );
@@ -34,12 +34,12 @@ export default function Projects() {
 
   return (
     <section ref={sectionRef} className="h-dvh">
-      <h1 ref={titleRef} className="font-clash-grotesk-bold text-center">
+      <h1 ref={titleRef} className="font-panchang-bold text-center">
         projects
       </h1>
 
       <LiquidGlassCard>
-        <h1>hi</h1>
+        <div className="min-h-dvh"></div>
       </LiquidGlassCard>
     </section>
   );
