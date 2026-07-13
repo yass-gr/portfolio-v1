@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
@@ -45,6 +45,15 @@ export default function ProjectCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    setIsDark(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useGSAP(() => {
     const card = cardRef.current;
@@ -125,17 +134,19 @@ export default function ProjectCard({
             {tags.map((tag) => {
               const slug = iconSlugs[tag];
               return slug ? (
-                <span
-                  key={tag}
-                  className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
-                >
-                  <img
-                    src={`https://cdn.simpleicons.org/${slug}`}
-                    alt={tag}
-                    title={tag}
-                    className="w-5 h-5"
-                  />
-                </span>
+                  const color = isDark ? "white" : "black";
+                  return (
+                    <span
+                      key={tag}
+                      className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center"
+                    >
+                      <img
+                        src={`https://cdn.simpleicons.org/${slug}/${color}`}
+                        alt={tag}
+                        title={tag}
+                        className="w-5 h-5"
+                      />
+                    </span>
               ) : (
                 <span
                   key={tag}
