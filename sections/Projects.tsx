@@ -111,7 +111,7 @@ export default function Projects() {
           </div>
           <div className="col-span-9 grid grid-cols-2 gap-4 content-start p-4">
             {projects.map((project) => (
-              <Magnet key={project.imageId} padding={80} magnetStrength={4}>
+              <Magnet key={project.imageId} padding={80} magnetStrength={1}>
                 <ProjectCard {...project} />
               </Magnet>
             ))}
