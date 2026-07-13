@@ -109,9 +109,9 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-4 content-start p-4">
+          <div className="col-span-9 grid grid-cols-2 gap-6 content-start p-4">
             {projects.map((project) => (
-              <Magnet key={project.imageId} padding={80} magnetStrength={1}>
+              <Magnet key={project.imageId} padding={10} magnetStrength={10}>
                 <ProjectCard {...project} />
               </Magnet>
             ))}
