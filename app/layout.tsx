@@ -9,6 +9,7 @@ import {
 } from "./fonts";
 import { InteractiveGrid } from "@/components/InteractiveGrid";
 import { BottomNav } from "@/components/BottomNav";
+import GradualBlur from "@/components/GradualBlur";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -50,13 +51,21 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full">
-        <InteractiveGrid className=" fixed inset-0 overflow-hidden w-full">
-          <div className="flex min-h-full flex-col">
-            {children}
-            <BottomNav />
-          </div>
-        </InteractiveGrid>
+      <body className="min-h-full relative">
+        <div className="flex min-h-full flex-col">
+          {children}
+          <BottomNav />
+        </div>
+        <GradualBlur
+          target="page"
+          position="bottom"
+          height="5rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential
+          opacity={0.8}
+        />
       </body>
     </html>
   );
