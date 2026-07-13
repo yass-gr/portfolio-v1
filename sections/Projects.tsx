@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,7 +56,6 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (!sectionRef.current || !titleRef.current) return;
@@ -79,17 +78,6 @@ export default function Projects() {
     );
   }, []);
 
-  useEffect(() => {
-    if (!textRef.current || !sectionRef.current) return;
-    const st = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top top",
-      end: "bottom top",
-      pin: textRef.current,
-    });
-    return () => st.kill();
-  }, []);
-
   return (
     <section ref={sectionRef} className="min-h-dvh p-5">
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
@@ -98,7 +86,7 @@ export default function Projects() {
 
       <LiquidGlassCard className="-translate-y-[5%] mt-20 ">
         <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px]">
-          <div ref={textRef} className="text-2xl col-span-3 mt-20 ml-8">
+          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-0 h-fit">
             <div className="text-left">
               <h2 className="font-clash-grotesk-regular leading-15">
                 i do{" "}
