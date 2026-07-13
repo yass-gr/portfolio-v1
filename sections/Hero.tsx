@@ -202,7 +202,23 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="mx-5 relative" ref={containerRef}>
+    <div className="mx-5 relative h-[100dvh] flex flex-col justify-center" ref={containerRef}>
+      <video
+        className="absolute right-0 bottom-0 w-[60vw] h-auto object-contain -z-10 pointer-events-none -scale-x-100 dark:block hidden"
+        loop
+        autoPlay
+        muted
+        playsInline
+        src="/vids/bg-ascii.webm"
+      ></video>
+      <video
+        className="absolute right-0 bottom-0 w-[60vw] h-auto object-contain -z-10 pointer-events-none -scale-x-100 block dark:hidden"
+        loop
+        autoPlay
+        muted
+        playsInline
+        src="/vids/bg-ascii-light.webm"
+      ></video>
       <div className="flex justify-center  xl:lg:-translate-y-10 lg:-translate-y-6 sm:-translate-y-4">
         <h1 className="mx-auto text-[12.5vw] font-clash-grotesk-bold">
           {words.map((word, i) => (
@@ -215,7 +231,7 @@ export default function Hero() {
       </div>
 
       <LiquidGlassCard
-        className="w-[60%] absolute -top-47 left-20"
+        className="w-[60%] absolute -top-44 left-20"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}
@@ -225,7 +241,7 @@ export default function Hero() {
         borderOpacity={borderOpacity}
         borderRadius={borderRadius}
       >
-        <div className="grid grid-cols-[30%_70%] grid-rows-[auto_auto_auto_auto] gap-6 items-start max-w-4xl mx-auto py-10 mt-5 md:mt-4 px-2">
+        <div className="grid grid-cols-[15%_85%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-4xl mx-auto py-10 mt-5 md:mt-4 px-2">
           <div className="row-span-4 flex items-center justify-center">
             <Avatar />
           </div>
@@ -241,7 +257,7 @@ export default function Hero() {
             <LogoCarousel columnCount={3} logos={logos} />
           </div>
           <div className="flex flex-col gap-3">
-            <span className="text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">Activity</span>
+            <span className="text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">GitHub Activity (2026)</span>
             <GitHubCommits />
           </div>
         </div>
