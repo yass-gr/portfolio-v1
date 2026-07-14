@@ -1,21 +1,19 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { User, FolderKanban, Sparkles, Moon, Sun } from "lucide-react";
+import { User, FolderKanban, Moon, Sun } from "lucide-react";
 import GlassSurface from "@/components/GlassSurface";
 
 const navItems = [
   { label: "About", icon: "about" },
   { label: "Projects", icon: "projects" },
-  { label: "Inspirations", icon: "inspirations" },
 ];
 
 const icons: Record<string, React.ReactNode> = {
-  about: <User size={24} />,
-  projects: <FolderKanban size={24} />,
-  inspirations: <Sparkles size={24} />,
-  dark: <Moon size={24} />,
-  light: <Sun size={24} />,
+  about: <User size={20} />,
+  projects: <FolderKanban size={20} />,
+  dark: <Moon size={20} />,
+  light: <Sun size={20} />,
 };
 
 function scrollToSection(id: string) {
@@ -45,9 +43,9 @@ export function BottomNav() {
         borderRadius={999}
         backgroundOpacity={0.15}
         saturation={1.8}
-        className="px-3 py-2"
+        className="px-2 py-1.5"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {navItems.map(({ label, icon }) => (
             <button
               key={label}
@@ -55,7 +53,7 @@ export function BottomNav() {
                 setActiveItem(label.toLowerCase());
                 scrollToSection(label.toLowerCase());
               }}
-              className={`rounded-xl p-2.5 transition-colors ${
+              className={`rounded-lg p-1.5 transition-colors ${
                 activeItem === label.toLowerCase()
                   ? "text-black dark:text-white"
                   : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
@@ -65,11 +63,11 @@ export function BottomNav() {
             </button>
           ))}
 
-          <div className="mx-1.5 h-5 w-px bg-neutral-300/50 dark:bg-neutral-600/50" />
+          <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50" />
 
           <button
             onClick={toggleDark}
-            className="rounded-xl p-2.5 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+            className="rounded-lg p-1.5 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
             aria-label="Toggle dark mode"
           >
             {isDark ? icons.dark : icons.light}
