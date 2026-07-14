@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { User, FolderKanban, Moon, Sun } from "lucide-react";
+import { User, FolderKanban, Wrench, Moon, Sun } from "lucide-react";
 import GlassSurface from "@/components/GlassSurface";
 import {
   Tooltip,
@@ -11,11 +11,13 @@ import {
 const navItems = [
   { label: "About", icon: "about" },
   { label: "Projects", icon: "projects" },
+  { label: "Tools", icon: "tools" },
 ];
 
 const icons: Record<string, React.ReactNode> = {
   about: <User size={20} />,
   projects: <FolderKanban size={20} />,
+  tools: <Wrench size={20} />,
   dark: <Moon size={20} />,
   light: <Sun size={20} />,
 };
