@@ -12,7 +12,9 @@ import {
 } from "./fonts";
 import { InteractiveGrid } from "@/components/InteractiveGrid";
 import { BottomNav } from "@/components/BottomNav";
+import DownloadCvButton from "@/components/download-cv";
 import GradualBlur from "@/components/GradualBlur";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -71,8 +73,13 @@ export default function RootLayout({
           playsInline
           src="/ascii-test-2-slow-light.mp4"
         ></video>
-        <div className="flex min-h-full flex-col px-[3%]">
-          {children}
+        <TooltipProvider>
+          <div className="flex min-h-full flex-col px-[3%]">
+            {children}
+          </div>
+        </TooltipProvider>
+        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4">
+          <DownloadCvButton />
           <BottomNav />
         </div>
         <GradualBlur
