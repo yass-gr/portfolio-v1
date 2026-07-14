@@ -49,6 +49,7 @@ export function BottomNav() {
           {navItems.map(({ label, icon }) => (
             <button
               key={label}
+              title={label}
               onClick={() => {
                 setActiveItem(label.toLowerCase());
                 scrollToSection(label.toLowerCase());
@@ -68,6 +69,7 @@ export function BottomNav() {
           <button
             onClick={toggleDark}
             className="rounded-lg p-1.5 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+            title={isDark ? "Light mode" : "Dark mode"}
             aria-label="Toggle dark mode"
           >
             {isDark ? icons.dark : icons.light}
