@@ -79,12 +79,12 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="min-h-dvh p-5">
+    <section ref={sectionRef} id="projects" className="min-h-dvh p-5">
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Projects
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[5%] mt-20 ">
+      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 ">
         <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px]">
           <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit">
             <div className="text-left">

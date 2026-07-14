@@ -304,6 +304,7 @@ export default function Hero() {
 
   return (
     <div
+      id="about"
       className="relative h-[100dvh] flex flex-col justify-center"
       ref={containerRef}
     >
