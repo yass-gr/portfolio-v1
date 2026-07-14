@@ -16,6 +16,7 @@ import { parsePathToVertices } from "@/utils/svg-path-to-vertices"
 import { debounce } from "lodash"
 import Matter, {
   Bodies,
+  Body,
   Common,
   Engine,
   Events,
@@ -44,6 +45,8 @@ type PhysicsBody = {
   element: HTMLElement
   body: Matter.Body
   props: MatterBodyProps
+  clampMinX?: string
+  clampMaxX?: string
 }
 
 type MatterBodyProps = {
@@ -56,6 +59,8 @@ type MatterBodyProps = {
   y?: number | string
   angle?: number
   className?: string
+  clampMinX?: string
+  clampMaxX?: string
 }
 
 export type GravityRef = {
@@ -195,7 +200,13 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
 
         if (body) {
           World.add(engine.current.world, [body])
-          bodiesMap.current.set(id, { element, body, props })
+          bodiesMap.current.set(id, {
+            element,
+            body,
+            props,
+            clampMinX: props.clampMinX,
+            clampMaxX: props.clampMaxX,
+          })
         }
       },
       [debug]
@@ -329,6 +340,20 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
           }
         })
       }
+
+      Events.on(engine.current, "beforeUpdate", () => {
+        const canvasWidth = canvas.current?.offsetWidth ?? 0
+        bodiesMap.current.forEach(({ body, clampMinX, clampMaxX }) => {
+          const minX = clampMinX !== undefined ? (parseFloat(clampMinX) / 100) * canvasWidth : undefined
+          const maxX = clampMaxX !== undefined ? (parseFloat(clampMaxX) / 100) * canvasWidth : undefined
+          if (minX !== undefined && body.position.x < minX) {
+            Body.setPosition(body, { x: minX, y: body.position.y })
+          }
+          if (maxX !== undefined && body.position.x > maxX) {
+            Body.setPosition(body, { x: maxX, y: body.position.y })
+          }
+        })
+      })
 
       World.add(engine.current.world, [mouseConstraint.current, ...walls])
 
