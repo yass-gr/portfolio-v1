@@ -15,6 +15,7 @@ import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import GradualBlur from "@/components/GradualBlur";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { InlineScript } from "@/components/inline-script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,26 +35,8 @@ export default function RootLayout({
       className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased`}
     >
       <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var mq = window.matchMedia('(prefers-color-scheme: dark)');
-                  if (mq.matches) {
-                    document.documentElement.classList.add('dark');
-                  }
-                  mq.addEventListener('change', function(e) {
-                    if (e.matches) {
-                      document.documentElement.classList.add('dark');
-                    } else {
-                      document.documentElement.classList.remove('dark');
-                    }
-                  });
-                } catch(e) {}
-              })();
-            `,
-          }}
+        <InlineScript
+          html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
       </head>
       <body className=" relative ">
