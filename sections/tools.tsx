@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -48,13 +48,12 @@ interface Bucket {
   tools: Tool[]
   x: string
   width: string
-  color: string
 }
 
 const buckets: Bucket[] = [
-  { label: "dev", tools: devTools, x: "3%", width: "30%", color: "#3178C6" },
-  { label: "design", tools: designTools, x: "35%", width: "30%", color: "#F24E1E" },
-  { label: "ai", tools: aiTools, x: "67%", width: "30%", color: "#EE4C2C" },
+  { label: "dev", tools: devTools, x: "3%", width: "30%" },
+  { label: "design", tools: designTools, x: "35%", width: "30%" },
+  { label: "ai", tools: aiTools, x: "67%", width: "30%" },
 ]
 
 function getBucketCenter(bucket: Bucket): number {
@@ -64,7 +63,7 @@ function getBucketCenter(bucket: Bucket): number {
 function ToolPill({ tool, x, y }: { tool: Tool; x: string; y: string }) {
   return (
     <MatterBody
-      matterBodyOptions={{ friction: 0.5, restitution: 0.3 }}
+      matterBodyOptions={{ friction: 0.8, restitution: 0.08, density: 0.002 }}
       x={x}
       y={y}
       bodyType="rectangle"
@@ -92,9 +91,22 @@ function rng(base: number, range: number) {
   return `${base + (Math.random() - 0.5) * range}%`
 }
 
+function getBucketRight(bucket: Bucket): number {
+  return parseFloat(bucket.x) + parseFloat(bucket.width)
+}
+
 export default function Tools() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsDark(document.documentElement.classList.contains("dark"));
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
   useGSAP(() => {
     if (!sectionRef.current || !titleRef.current) return;
@@ -117,19 +129,25 @@ export default function Tools() {
     );
   }, []);
 
+  const borderColor = isDark ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.12)";
+  const labelBg = isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)";
+  const textColor = isDark ? "text-neutral-100" : "text-neutral-900";
+
   return (
     <section ref={sectionRef} id="tools" className="min-h-dvh p-5">
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Tools
       </h1>
-      <p className="text-center text-xl font-clash-grotesk-regular text-neutral-500 dark:text-neutral-400 mt-1">
-        tools i use
-      </p>
 
       <LiquidGlassCard className="-translate-y-[3.5%] mt-16">
-        <div className="min-h-[600px] p-5 relative">
+        <div className="p-6">
+          <p className="text-center text-xl font-clash-grotesk-regular text-neutral-500 dark:text-neutral-400 mb-4">
+            tools i use
+          </p>
+        </div>
+        <div className="min-h-[600px] px-5 pb-5 relative">
           <Gravity
-            gravity={{ x: 0, y: 1 }}
+            gravity={{ x: 0, y: 0.4 }}
             className="w-full h-full"
             grabCursor
             addTopWall
@@ -141,18 +159,16 @@ export default function Tools() {
                   style={{
                     left: bucket.x,
                     width: bucket.width,
-                    top: "8%",
-                    height: "88%",
-                    border: `2px solid ${bucket.color}40`,
-                    backgroundColor: `${bucket.color}08`,
+                    top: "5%",
+                    height: "92%",
+                    border: `1.5px solid ${borderColor}`,
                   }}
                 />
                 <div
-                  className="absolute top-0 left-0 text-xl font-clash-grotesk-semibold capitalize pointer-events-none px-4 py-1.5 rounded-lg"
+                  className={`absolute top-0 left-0 text-base font-clash-grotesk-semibold capitalize pointer-events-none px-3 py-1 rounded-lg ${textColor}`}
                   style={{
                     left: bucket.x,
-                    color: bucket.color,
-                    backgroundColor: `${bucket.color}15`,
+                    backgroundColor: labelBg,
                   }}
                 >
                   {bucket.label}
@@ -161,12 +177,26 @@ export default function Tools() {
                   <ToolPill
                     key={tool.name}
                     tool={tool}
-                    x={rng(getBucketCenter(bucket), parseFloat(bucket.width) * 0.5)}
+                    x={rng(getBucketCenter(bucket), parseFloat(bucket.width) * 0.4)}
                     y={`${18 + i * 10}%`}
                   />
                 ))}
               </div>
             ))}
+
+            {buckets.slice(0, -1).map((bucket) => {
+              const wallX = getBucketRight(bucket)
+              return (
+                <MatterBody
+                  key={`wall-${bucket.label}`}
+                  matterBodyOptions={{ isStatic: true, friction: 1 }}
+                  x={`${wallX}%`}
+                  y="50%"
+                >
+                  <div className="w-[6px] h-[900px] opacity-0 pointer-events-none" />
+                </MatterBody>
+              )
+            })}
           </Gravity>
         </div>
       </LiquidGlassCard>
