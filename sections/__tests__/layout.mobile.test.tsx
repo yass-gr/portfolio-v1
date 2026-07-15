@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeAll, vi, type ReactNode } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mock } from "vitest";
 import { render } from "@testing-library/react";
+import type { ReactNode } from "react";
 import gsap from "gsap";
 import Page from "@/app/page";
 import { BottomNav } from "@/components/BottomNav";
@@ -53,7 +54,7 @@ function renderPage() {
 }
 
 describe("Layout on mobile (375x812)", () => {
-  let toSpy: ReturnType<typeof vi.spyOn>;
+  let toSpy: Mock;
 
   beforeEach(() => {
     toSpy = vi.spyOn(gsap, "to");
@@ -66,13 +67,13 @@ describe("Layout on mobile (375x812)", () => {
   /* ── Hero section ── */
   it("hero section switches to auto height with justify-start on mobile", () => {
     renderPage();
-    const hero = document.getElementById("about");
+    const hero = document.getElementById("about")!;
     expect(hero).toBeInTheDocument();
-    expect(hero!.className).toContain("max-sm:h-auto");
-    expect(hero!.className).toContain("max-sm:min-h-dvh");
-    expect(hero!.className).toContain("max-sm:justify-start");
-    expect(hero!.className).toContain("max-sm:pt-4");
-    expect(hero!.className).toContain("max-sm:pb-0");
+    expect(hero.className).toContain("max-sm:h-auto");
+    expect(hero.className).toContain("max-sm:min-h-dvh");
+    expect(hero.className).toContain("max-sm:justify-start");
+    expect(hero.className).toContain("max-sm:pt-4");
+    expect(hero.className).toContain("max-sm:pb-0");
   });
 
   it("hero title is full width, bigger font, centered, tight leading on mobile", () => {
@@ -129,7 +130,7 @@ describe("Layout on mobile (375x812)", () => {
 
   it("scroll indicator is positioned higher on mobile", () => {
     renderPage();
-    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]');
+    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]')!;
     expect(el).toBeInTheDocument();
     expect(el.className).toContain("max-sm:bottom-24");
   });
@@ -171,10 +172,10 @@ describe("Layout on mobile (375x812)", () => {
   it("tools inner container has reduced padding on mobile", () => {
     renderPage();
     const subtitle = document.querySelector("#tools p")!;
-    const inner = subtitle.closest("[class*='px-10']") || subtitle.parentElement;
-    expect(inner!.className).toContain("max-sm:pt-8");
-    expect(inner!.className).toContain("max-sm:pb-6");
-    expect(inner!.className).toContain("max-sm:px-4");
+    const inner = subtitle.closest("[class*='px-10']") || subtitle.parentElement!;
+    expect(inner.className).toContain("max-sm:pt-8");
+    expect(inner.className).toContain("max-sm:pb-6");
+    expect(inner.className).toContain("max-sm:px-4");
   });
 
   /* ── Footer ── */
@@ -197,7 +198,7 @@ describe("Layout on mobile (375x812)", () => {
     renderPage();
     const sections = document.querySelectorAll("section");
     const allP = sections[sections.length - 1].querySelectorAll("p");
-    const bodyP = allP[1];
+    const bodyP = allP[1]!;
     expect(bodyP.className).toContain("max-sm:text-base");
     expect(bodyP.className).toContain("max-sm:leading-7");
   });
@@ -245,7 +246,7 @@ describe("Layout on mobile (375x812)", () => {
     renderPage();
     const links = document.querySelectorAll('a[download]');
     expect(links.length).toBe(1);
-    const link = links[0];
+    const link = links[0]!;
     const glass = link.closest('[class*="cursor-pointer"]')!;
     expect(glass.className).toContain("max-sm:p-1");
   });
@@ -259,38 +260,39 @@ describe("Layout on mobile (375x812)", () => {
 
   /* ── GSAP matchMedia animation configs ── */
   it("hero title scroll animation uses mobile-friendly values", () => {
-    const toSpy = vi.spyOn(gsap, "to");
     renderPage();
 
     const titleAnim = toSpy.mock.calls.find(
-      (call) =>
-        call[0]?.classList?.contains?.("hero-title-wrap") ||
-        call[0]?.className?.includes?.("hero-title-wrap"),
-    );
+      (call: unknown[]) =>
+        (call[0] as Element | null)?.classList?.contains?.("hero-title-wrap") ||
+        (call[0] as { className?: string } | null)?.className?.includes?.("hero-title-wrap"),
+    )!;
 
     expect(titleAnim).toBeDefined();
-    expect(titleAnim![1].yPercent).toBe(-15);
-    expect(titleAnim![1].scale).toBe(0.85);
-    expect(titleAnim![1].ease).toBe("none");
-    expect(titleAnim![1].scrollTrigger).toBeDefined();
-    expect(titleAnim![1].scrollTrigger.start).toBe("top top");
-    expect(titleAnim![1].scrollTrigger.end).toBe("bottom top");
-    expect(titleAnim![1].scrollTrigger.scrub).toBe(0.5);
+    const vars = titleAnim[1] as Record<string, unknown>;
+    expect(vars.yPercent).toBe(-15);
+    expect(vars.scale).toBe(0.85);
+    expect(vars.ease).toBe("none");
+    const st = vars.scrollTrigger as Record<string, unknown>;
+    expect(st).toBeDefined();
+    expect(st.start).toBe("top top");
+    expect(st.end).toBe("bottom top");
+    expect(st.scrub).toBe(0.5);
   });
 
   it("hero glass card scroll animation omits yPercent on mobile", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
-      (call) =>
-        call[0]?.classList?.contains?.("glass-card-wrap") ||
-        call[0]?.className?.includes?.("glass-card-wrap"),
+      (call: unknown[]) =>
+        (call[0] as Element | null)?.classList?.contains?.("glass-card-wrap") ||
+        (call[0] as { className?: string } | null)?.className?.includes?.("glass-card-wrap"),
     );
 
     expect(cardAnims.length).toBe(1);
-    const anim = cardAnims[0][1];
-    expect(anim.yPercent).toBeUndefined();
-    expect(anim.opacity).toBe(0);
-    expect(anim.scrollTrigger).toBeDefined();
+    const vars = cardAnims[0][1] as Record<string, unknown>;
+    expect(vars.yPercent).toBeUndefined();
+    expect(vars.opacity).toBe(0);
+    expect(vars.scrollTrigger).toBeDefined();
   });
 });

@@ -280,7 +280,7 @@ export default function Hero() {
         isMobile: "(max-width: 639px)",
       },
       (context) => {
-        const { isDesktop } = context.conditions;
+        const isDesktop = !!(context.conditions as Record<string, boolean>).isDesktop;
 
         if (heroTitle) {
           gsap.to(heroTitle, {

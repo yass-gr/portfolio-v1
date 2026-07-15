@@ -1,5 +1,6 @@
-import { describe, it, expect, beforeAll, vi, type ReactNode } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi, type Mock } from "vitest";
 import { render } from "@testing-library/react";
+import type { ReactNode } from "react";
 import gsap from "gsap";
 import Page from "@/app/page";
 import { BottomNav } from "@/components/BottomNav";
@@ -50,7 +51,7 @@ function renderPage() {
 }
 
 describe("Layout on xlarge screens (1920x1080)", () => {
-  let toSpy: ReturnType<typeof vi.spyOn>;
+  let toSpy: Mock;
 
   beforeEach(() => {
     toSpy = vi.spyOn(gsap, "to");
@@ -63,12 +64,12 @@ describe("Layout on xlarge screens (1920x1080)", () => {
   /* ── Hero section ── */
   it("hero section is full viewport with centered flex column", () => {
     renderPage();
-    const hero = document.getElementById("about");
+    const hero = document.getElementById("about")!;
     expect(hero).toBeInTheDocument();
-    expect(hero!.className).toContain("h-[100dvh]");
-    expect(hero!.className).toContain("flex");
-    expect(hero!.className).toContain("flex-col");
-    expect(hero!.className).toContain("justify-center");
+    expect(hero.className).toContain("h-[100dvh]");
+    expect(hero.className).toContain("flex");
+    expect(hero.className).toContain("flex-col");
+    expect(hero.className).toContain("justify-center");
   });
 
   it("hero title uses 7.5vw font with panchang-extrabold, centered flex row", () => {
@@ -93,7 +94,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
 
   it("glass card in hero is absolute, w-[60%], negative top offset", () => {
     renderPage();
-    const card = document.querySelector('[class*="w-[60%]"]');
+    const card = document.querySelector('[class*="w-[60%]"]')!;
     expect(card).toBeInTheDocument();
     expect(card.className).toContain("w-[60%]");
     expect(card.className).toContain("absolute");
@@ -145,7 +146,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
 
   it("scroll indicator is bottom-8 left-1/2 with flex column centered", () => {
     renderPage();
-    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]');
+    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]')!;
     expect(el).toBeInTheDocument();
     expect(el.className).toContain("flex");
     expect(el.className).toContain("flex-col");
@@ -361,8 +362,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     renderPage();
     const sections = document.querySelectorAll("section");
     const allP = sections[sections.length - 1].querySelectorAll("p");
-    // second <p> is the body copy
-    const bodyP = allP[1];
+    const bodyP = allP[1]!;
     expect(bodyP.className).toContain("text-lg");
     expect(bodyP.className).toContain("leading-9");
     expect(bodyP.className).toContain("font-clash-grotesk-regular");
@@ -411,7 +411,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     const sections = document.querySelectorAll("section");
     const footer = sections[sections.length - 1];
     const allP = footer.querySelectorAll("p");
-    const thanks = allP[allP.length - 1];
+    const thanks = allP[allP.length - 1]!;
     expect(thanks.className).toContain("text-center");
     expect(thanks.className).toContain("font-clash-grotesk-regular");
   });
@@ -445,7 +445,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     const glass = nav.firstElementChild!;
     expect(glass.className).toContain("px-2");
     expect(glass.className).toContain("py-1.5");
-    expect(glass.style.borderRadius).toBe("999px");
+    expect((glass as HTMLElement).style.borderRadius).toBe("999px");
   });
 
   it("bottom nav buttons are rounded-lg, p-1.5", () => {
@@ -476,34 +476,36 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     renderPage();
 
     const titleAnim = toSpy.mock.calls.find(
-      (call) =>
-        call[0]?.classList?.contains?.("hero-title-wrap") ||
-        call[0]?.className?.includes?.("hero-title-wrap"),
-    );
+      (call: unknown[]) =>
+        (call[0] as Element | null)?.classList?.contains?.("hero-title-wrap") ||
+        (call[0] as { className?: string } | null)?.className?.includes?.("hero-title-wrap"),
+    )!;
 
     expect(titleAnim).toBeDefined();
-    expect(titleAnim![1].yPercent).toBe(-50);
-    expect(titleAnim![1].scale).toBe(0.7);
-    expect(titleAnim![1].ease).toBe("none");
-    expect(titleAnim![1].scrollTrigger).toBeDefined();
-    expect(titleAnim![1].scrollTrigger.start).toBe("top top");
-    expect(titleAnim![1].scrollTrigger.end).toBe("bottom top");
-    expect(titleAnim![1].scrollTrigger.scrub).toBe(0.5);
+    const vars = titleAnim[1] as Record<string, unknown>;
+    expect(vars.yPercent).toBe(-50);
+    expect(vars.scale).toBe(0.7);
+    expect(vars.ease).toBe("none");
+    const st = vars.scrollTrigger as Record<string, unknown>;
+    expect(st).toBeDefined();
+    expect(st.start).toBe("top top");
+    expect(st.end).toBe("bottom top");
+    expect(st.scrub).toBe(0.5);
   });
 
   it("hero glass card scroll animation uses yPercent -20 on desktop", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
-      (call) =>
-        call[0]?.classList?.contains?.("glass-card-wrap") ||
-        call[0]?.className?.includes?.("glass-card-wrap"),
+      (call: unknown[]) =>
+        (call[0] as Element | null)?.classList?.contains?.("glass-card-wrap") ||
+        (call[0] as { className?: string } | null)?.className?.includes?.("glass-card-wrap"),
     );
 
     expect(cardAnims.length).toBe(1);
-    const anim = cardAnims[0][1];
-    expect(anim.yPercent).toBe(-20);
-    expect(anim.opacity).toBe(0);
-    expect(anim.scrollTrigger).toBeDefined();
+    const vars = cardAnims[0][1] as Record<string, unknown>;
+    expect(vars.yPercent).toBe(-20);
+    expect(vars.opacity).toBe(0);
+    expect(vars.scrollTrigger).toBeDefined();
   });
 });

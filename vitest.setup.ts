@@ -85,4 +85,4 @@ const mockCanvasContext = {
 
 CSS.supports = vi.fn(() => true);
 
-HTMLCanvasElement.prototype.getContext = vi.fn((_contextId: string) => mockCanvasContext as unknown as CanvasRenderingContext2D);
+HTMLCanvasElement.prototype.getContext = vi.fn((_contextId: string) => mockCanvasContext as unknown as CanvasRenderingContext2D) as unknown as typeof HTMLCanvasElement.prototype.getContext;
