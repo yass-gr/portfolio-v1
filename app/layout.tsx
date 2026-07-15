@@ -13,6 +13,7 @@ import {
 import { InteractiveGrid } from "@/components/InteractiveGrid";
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
+import Footer from "@/components/footer";
 import GradualBlur from "@/components/GradualBlur";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { InlineScript } from "@/components/inline-script";
@@ -41,7 +42,7 @@ export default function RootLayout({
           html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
       </head>
-      <body className="relative overflow-x-hidden">
+      <body className="flex min-h-dvh flex-col overflow-hidden">
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] dark:block hidden"
           loop
@@ -59,9 +60,10 @@ export default function RootLayout({
           src="/ascii-test-2-slow-light.mp4"
         ></video>
         <TooltipProvider>
-          <div className="flex min-h-full flex-col px-[3%] max-sm:px-0">
+          <div className="flex-1 px-[3%] max-sm:px-0">
             {children}
           </div>
+          <Footer />
         </TooltipProvider>
         <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 overflow-x-hidden">
           <DownloadCvButton />

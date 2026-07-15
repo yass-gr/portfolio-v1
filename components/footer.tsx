@@ -131,18 +131,18 @@ export default function Footer() {
   }, [])
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative flex items-center justify-center overflow-hidden pt-16 pb-24 max-sm:pt-8 max-sm:pb-20">
 
       <LiquidGlassCard
         borderRadius={42}
-        className="flex-col w-full px-14 md:px-20 py-28 items-center justify-center max-sm:px-6 max-sm:py-16"
+        className="flex-col w-full px-14 md:px-20 py-28 items-center justify-center max-sm:px-6 max-sm:py-12"
       >
         <div className="text-center">
           <p className="font-clash-grotesk-semibold tracking-[0.4em] uppercase text-black/80 dark:text-zinc-300 text-sm">
             Let&apos;s Build Something
           </p>
 
-          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-black dark:text-white max-sm:text-5xl">
+          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-black dark:text-white max-sm:text-4xl">
             Together
           </h2>
 
@@ -168,11 +168,11 @@ export default function Footer() {
           <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
         </div>
 
-        <p className="font-clash-grotesk-regular mt-8 text-center text-black/70 dark:text-zinc-400">
+        <p className="font-clash-grotesk-regular mt-8 text-center text-black/70 dark:text-zinc-400 max-sm:text-sm">
           Thanks for making it to the end.
         </p>
 
-        <div className="mt-20 flex justify-between text-sm text-black/60 dark:text-zinc-500 font-clash-grotesk-regular">
+          <div className="mt-20 flex justify-between text-sm text-black/60 dark:text-zinc-500 font-clash-grotesk-regular max-sm:mt-12 max-sm:flex-col max-sm:items-center max-sm:gap-1">
           <span>&copy; 2026 Yassine Grairi</span>
           <span ref={builtRef}>Built with Next.js &amp; GSAP</span>
         </div>
