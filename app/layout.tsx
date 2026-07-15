@@ -33,7 +33,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased`}
+      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased overflow-x-hidden`}
     >
       <head>
         <link rel="icon" href="/strawhat.png" />
@@ -43,7 +43,7 @@ export default function RootLayout({
       </head>
       <body className="relative overflow-x-hidden">
         <video
-          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none dark:block hidden"
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] dark:block hidden"
           loop
           autoPlay
           muted
@@ -51,7 +51,7 @@ export default function RootLayout({
           src="/ascii-test-2-slow.mp4"
         ></video>
         <video
-          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none block dark:hidden"
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] block dark:hidden"
           loop
           autoPlay
           muted
@@ -59,7 +59,7 @@ export default function RootLayout({
           src="/ascii-test-2-slow-light.mp4"
         ></video>
         <TooltipProvider>
-          <div className="flex min-h-full flex-col px-[3%]">
+          <div className="flex min-h-full flex-col px-[3%] max-sm:px-0">
             {children}
           </div>
         </TooltipProvider>
