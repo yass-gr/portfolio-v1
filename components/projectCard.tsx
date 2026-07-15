@@ -101,8 +101,6 @@ export default function ProjectCard({
     };
   }, []);
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
-
   return (
     <div
       ref={cardRef}
@@ -112,15 +110,15 @@ export default function ProjectCard({
         ref={imgRef}
         src={`https://picsum.photos/seed/${imageId}/600/400`}
         alt={title}
-        className="w-full aspect-square object-cover max-sm:aspect-[4/3]"
+        className="w-full aspect-square object-cover"
         loading="lazy"
       />
       <div
         ref={overlayRef}
-        className="absolute inset-0 flex flex-col justify-end p-6 pb-8 max-sm:p-4 max-sm:pb-4"
+        className="absolute inset-0 flex flex-col justify-end p-6 pb-8 max-sm:p-4 max-sm:pb-4 max-sm:bg-gradient-to-t max-sm:from-black/80 max-sm:to-transparent"
         style={{
-          backdropFilter: isMobile ? "blur(60px)" : "blur(0px)",
-          WebkitBackdropFilter: isMobile ? "blur(60px)" : "blur(0px)",
+          backdropFilter: "blur(0px)",
+          WebkitBackdropFilter: "blur(0px)",
           opacity: 1,
         }}
       >

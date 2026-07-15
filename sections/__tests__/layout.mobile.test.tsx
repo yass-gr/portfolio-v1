@@ -169,11 +169,12 @@ describe("Layout on mobile (375x812)", () => {
     });
   });
 
-  it("project card images switch to 4/3 aspect ratio on mobile", () => {
+  it("project card images stay square on mobile", () => {
     renderPage();
     const imgs = document.querySelectorAll("#projects img[class*='aspect-square']");
+    expect(imgs.length).toBe(8);
     imgs.forEach((img) => {
-      expect(img.className).toContain("max-sm:aspect-[4/3]");
+      expect(img.className).not.toContain("max-sm:aspect-[4/3]");
     });
   });
 
@@ -185,12 +186,15 @@ describe("Layout on mobile (375x812)", () => {
     });
   });
 
-  it("project card overlay always has blur on mobile", () => {
+  it("project card overlay has no blur on mobile with gradient background for readability", () => {
     renderPage();
     const overlays = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] [class*='inset-0']");
     overlays.forEach((o) => {
       const el = o as HTMLElement;
-      expect(el.style.backdropFilter).toBe("blur(60px)");
+      expect(el.style.backdropFilter).toBe("blur(0px)");
+      expect(o.className).toContain("max-sm:bg-gradient-to-t");
+      expect(o.className).toContain("max-sm:from-black/80");
+      expect(o.className).toContain("max-sm:to-transparent");
     });
   });
 

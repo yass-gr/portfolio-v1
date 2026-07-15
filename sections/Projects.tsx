@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -56,6 +56,11 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640);
+  }, []);
 
   useGSAP(() => {
     if (!sectionRef.current || !titleRef.current) return;
@@ -111,7 +116,7 @@ export default function Projects() {
           </div>
           <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-4 max-sm:p-0">
             {projects.map((project) => (
-              <Magnet key={project.imageId} padding={10} magnetStrength={10}>
+              <Magnet key={project.imageId} padding={10} magnetStrength={10} disabled={isMobile}>
                 <ProjectCard {...project} />
               </Magnet>
             ))}
