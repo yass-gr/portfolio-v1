@@ -255,6 +255,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         },
       })
 
+      canvas.current.addEventListener("wheel", (e) => e.stopPropagation(), { capture: true })
       const mouse = Mouse.create(render.current.canvas)
       mouseConstraint.current = MouseConstraint.create(engine.current, {
         mouse: mouse,
