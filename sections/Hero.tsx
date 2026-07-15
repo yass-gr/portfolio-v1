@@ -300,20 +300,6 @@ export default function Hero() {
         },
       });
     }
-
-    const scrollIndicator = containerRef.current?.querySelector(".scroll-indicator");
-    if (scrollIndicator) {
-      gsap.to(scrollIndicator, {
-        opacity: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "center center",
-          scrub: 0.5,
-        },
-      });
-    }
   }, []);
 
   return (
@@ -322,6 +308,7 @@ export default function Hero() {
       className="relative h-[100dvh] flex flex-col justify-center"
       ref={containerRef}
     >
+
       <div className="hero-title-wrap flex justify-center  xl:lg:-translate-y-18 lg:-translate-y-6 sm:-translate-y-4">
         <h1 className="mx-auto text-[7.5vw] font-panchang-extrabold">
           {words.map((word, i) => (
@@ -377,7 +364,7 @@ export default function Hero() {
         {showControls ? "✕" : "⚙"}
       </button>
       {showControls && (
-        <div className="fixed top-16 right-4 z-[2000] flex flex-col gap-3 rounded-2xl bg-black/70 p-4 text-white text-xs backdrop-blur-md w-56 max-h-[60vh] overflow-y-auto">
+        <div         className="fixed top-16 right-4 z-[2000] flex flex-col gap-3 rounded-2xl bg-black/70 p-4 text-white text-xs backdrop-blur-md w-56 max-h-[60vh] overflow-y-auto">
           <Slider
             label="Blur"
             min={0}
@@ -449,19 +436,11 @@ export default function Hero() {
         </div>
       )}
 
-      <div className="scroll-indicator absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400">
         <span className="font-clash-grotesk-semibold text-[10px] uppercase tracking-[0.25em] animate-bounce">
           scroll for more
         </span>
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          className="animate-bounce"
-        >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="animate-bounce">
           <path d="M6 9l6 6 6-6" />
         </svg>
       </div>
