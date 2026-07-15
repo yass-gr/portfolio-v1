@@ -161,11 +161,11 @@ describe("Layout on mobile (375x812)", () => {
     expect(grid.className).toContain("max-sm:gap-4");
   });
 
-  it("project cards become smaller with rounded-[30px] on mobile", () => {
+  it("project cards become smaller with rounded-[20px] on mobile", () => {
     renderPage();
     const cards = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]']");
     cards.forEach((c) => {
-      expect(c.className).toContain("max-sm:rounded-[30px]");
+      expect(c.className).toContain("max-sm:rounded-[20px]");
     });
   });
 
@@ -178,11 +178,11 @@ describe("Layout on mobile (375x812)", () => {
     });
   });
 
-  it("project card title shrinks to text-2xl on mobile", () => {
+  it("project card title shrinks to text-xl on mobile", () => {
     renderPage();
     const titles = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] h3");
     titles.forEach((t) => {
-      expect(t.className).toContain("max-sm:text-2xl");
+      expect(t.className).toContain("max-sm:text-xl");
     });
   });
 
@@ -195,6 +195,16 @@ describe("Layout on mobile (375x812)", () => {
       expect(o.className).toContain("max-sm:bg-gradient-to-t");
       expect(o.className).toContain("max-sm:from-black/80");
       expect(o.className).toContain("max-sm:to-transparent");
+    });
+  });
+
+  it("project card gh and pv icons are larger on mobile", () => {
+    renderPage();
+    const svgs = document.querySelectorAll("#projects [class*='col-span-9'] svg");
+    expect(svgs.length).toBe(16);
+    svgs.forEach((svg) => {
+      expect(svg.className).toContain("max-sm:w-6");
+      expect(svg.className).toContain("max-sm:h-6");
     });
   });
 
