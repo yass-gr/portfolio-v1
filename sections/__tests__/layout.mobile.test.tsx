@@ -140,7 +140,7 @@ describe("Layout on mobile (375x812)", () => {
     renderPage();
     const inner = document.querySelector("#projects [class*='grid-cols-12']")!;
     expect(inner.className).toContain("max-sm:grid-cols-1");
-    expect(inner.className).toContain("max-sm:py-10");
+    expect(inner.className).toContain("max-sm:py-6");
     expect(inner.className).toContain("max-sm:p-3");
   });
 
@@ -159,6 +159,39 @@ describe("Layout on mobile (375x812)", () => {
     expect(grid.className).toContain("max-sm:col-span-1");
     expect(grid.className).toContain("max-sm:grid-cols-1");
     expect(grid.className).toContain("max-sm:gap-4");
+  });
+
+  it("project cards become smaller with rounded-[30px] on mobile", () => {
+    renderPage();
+    const cards = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]']");
+    cards.forEach((c) => {
+      expect(c.className).toContain("max-sm:rounded-[30px]");
+    });
+  });
+
+  it("project card images switch to 4/3 aspect ratio on mobile", () => {
+    renderPage();
+    const imgs = document.querySelectorAll("#projects img[class*='aspect-square']");
+    imgs.forEach((img) => {
+      expect(img.className).toContain("max-sm:aspect-[4/3]");
+    });
+  });
+
+  it("project card title shrinks to text-2xl on mobile", () => {
+    renderPage();
+    const titles = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] h3");
+    titles.forEach((t) => {
+      expect(t.className).toContain("max-sm:text-2xl");
+    });
+  });
+
+  it("project card overlay always has blur on mobile", () => {
+    renderPage();
+    const overlays = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] [class*='inset-0']");
+    overlays.forEach((o) => {
+      const el = o as HTMLElement;
+      expect(el.style.backdropFilter).toBe("blur(60px)");
+    });
   });
 
   /* ── Tools section ── */

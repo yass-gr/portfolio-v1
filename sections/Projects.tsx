@@ -85,7 +85,7 @@ export default function Projects() {
       </h1>
 
       <LiquidGlassCard className="-translate-y-[3.5%] mt-20 ">
-        <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-10 max-sm:p-3">
+        <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3">
           <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6">
             <div className="text-left">
               <h2 className="font-clash-grotesk-regular leading-15">
