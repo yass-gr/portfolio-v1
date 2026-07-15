@@ -435,6 +435,15 @@ export default function Hero() {
           />
         </div>
       )}
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400">
+        <span className="font-clash-grotesk-semibold text-[10px] uppercase tracking-[0.25em] animate-bounce">
+          scroll for more
+        </span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="animate-bounce">
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </div>
     </div>
   );
 }
