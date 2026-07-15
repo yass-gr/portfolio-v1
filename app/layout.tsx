@@ -39,7 +39,7 @@ export default function RootLayout({
           html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
       </head>
-      <body className=" relative ">
+      <body className="relative overflow-x-hidden">
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none dark:block hidden"
           loop
@@ -61,7 +61,7 @@ export default function RootLayout({
             {children}
           </div>
         </TooltipProvider>
-        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4">
+        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 overflow-x-hidden">
           <DownloadCvButton />
           <BottomNav />
         </div>
