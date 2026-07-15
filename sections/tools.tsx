@@ -289,8 +289,8 @@ export default function Tools() {
       </h1>
 
       <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14">
-        <div className="pt-14 pb-10 px-10">
-          <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6">
+        <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4">
+          <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2">
             everything i need to build, design, and ship
           </p>
         </div>

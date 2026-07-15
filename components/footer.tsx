@@ -69,7 +69,7 @@ function FooterLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1"
+      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1 max-sm:px-5 max-sm:py-3 max-sm:justify-center"
     >
       {icon}
       <span className="font-clash-grotesk-semibold text-black/80 dark:text-white/80">{title}</span>
@@ -97,7 +97,7 @@ function FooterCopyButton({
   return (
     <button
       onClick={handleCopy}
-      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1"
+      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1 max-sm:px-5 max-sm:py-3 max-sm:justify-center"
     >
       {icon}
       <span className="font-clash-grotesk-semibold">{copied ? "Copied!" : title}</span>
@@ -135,25 +135,25 @@ export default function Footer() {
 
       <LiquidGlassCard
         borderRadius={42}
-        className="flex-col w-full px-14 md:px-20 py-28 items-center justify-center"
+        className="flex-col w-full px-14 md:px-20 py-28 items-center justify-center max-sm:px-6 max-sm:py-16"
       >
         <div className="text-center">
           <p className="font-clash-grotesk-semibold tracking-[0.4em] uppercase text-black/80 dark:text-zinc-300 text-sm">
             Let&apos;s Build Something
           </p>
 
-          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-black dark:text-white">
+          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-black dark:text-white max-sm:text-5xl">
             Together
           </h2>
 
-          <p className="font-clash-grotesk-regular mx-auto mt-8 max-w-2xl text-black/70 dark:text-zinc-300 text-lg leading-9">
+          <p className="font-clash-grotesk-regular mx-auto mt-8 max-w-2xl text-black/70 dark:text-zinc-300 text-lg leading-9 max-sm:text-base max-sm:leading-7">
             I&apos;m always open to new opportunities,
             interesting projects and collaborations.
             Let&apos;s create something great.
           </p>
         </div>
 
-        <div className="mt-14 flex flex-wrap justify-center gap-6">
+        <div className="mt-14 flex flex-wrap justify-center gap-6 max-sm:flex-col max-sm:items-stretch max-sm:gap-3">
           <FooterLink icon={<MailIcon />} title="Email Me" href="mailto:grairiiyassine@gmail.com" />
           <FooterLink icon={<GithubIcon />} title="GitHub" href="https://github.com/grairiyassine" />
           <FooterLink icon={<LinkedinIcon />} title="LinkedIn" href="https://linkedin.com/in/grairi-yassine" />
