@@ -65,20 +65,52 @@ export default function Projects() {
   useGSAP(() => {
     if (!sectionRef.current || !titleRef.current) return;
 
-    gsap.fromTo(
-      titleRef.current,
-      { fontSize: "3vw", x: 0, y: "-70%" },
+    const mm = gsap.matchMedia();
+
+    mm.add(
       {
-        fontSize: "6.5vw",
-        x: "24dvw",
-        y: "-20%",
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "top top",
-          scrub: 0,
-        },
+        isDesktop: "(min-width: 640px)",
+        isMobile: "(max-width: 639px)",
+      },
+      (context) => {
+        const isDesktop = !!(context.conditions as Record<string, boolean>)
+          .isDesktop;
+
+        if (isDesktop) {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "3vw", x: 0, y: "-70%" },
+            {
+              fontSize: "6.5vw",
+              x: "24dvw",
+              y: "-20%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 0,
+              },
+            },
+          );
+        } else {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "2vw", x: "-2%", y: "-50%" },
+            {
+              fontSize: "10vw",
+              x: "10dvw",
+              y: "-10%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 0,
+              },
+            },
+          );
+        }
       },
     );
   }, []);

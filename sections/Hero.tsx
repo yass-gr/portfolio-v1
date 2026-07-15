@@ -300,7 +300,7 @@ export default function Hero() {
         if (glassCard) {
           gsap.to(glassCard, {
             opacity: 0,
-            ...(isDesktop && { yPercent: -20 }),
+            yPercent: isDesktop ? -20 : -10,
             ease: "none",
             scrollTrigger: {
               trigger: hero,
