@@ -69,10 +69,10 @@ function FooterLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-center gap-3 rounded-full border border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-white/25 hover:-translate-y-1"
+      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1"
     >
       {icon}
-      <span className="font-clash-grotesk-semibold text-white/80">{title}</span>
+      <span className="font-clash-grotesk-semibold text-black/80 dark:text-white/80">{title}</span>
       <ArrowIcon />
     </a>
   )
@@ -97,7 +97,7 @@ function FooterCopyButton({
   return (
     <button
       onClick={handleCopy}
-      className="group flex items-center gap-3 rounded-full border border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-white/25 hover:-translate-y-1"
+      className="group flex items-center gap-3 rounded-full border border-black/10 dark:border-white/[0.15] bg-white/[0.07] px-8 py-5 backdrop-blur-xl transition-all duration-300 hover:bg-white/[0.12] hover:border-black/20 dark:hover:border-white/25 hover:-translate-y-1"
     >
       {icon}
       <span className="font-clash-grotesk-semibold">{copied ? "Copied!" : title}</span>
@@ -138,15 +138,15 @@ export default function Footer() {
         className="flex-col w-full px-14 md:px-20 py-28 items-center justify-center"
       >
         <div className="text-center">
-          <p className="font-clash-grotesk-semibold tracking-[0.4em] uppercase text-zinc-300 text-sm">
+          <p className="font-clash-grotesk-semibold tracking-[0.4em] uppercase text-black/80 dark:text-zinc-300 text-sm">
             Let&apos;s Build Something
           </p>
 
-          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-white">
+          <h2 className="mt-3 text-[8rem] leading-none font-panchang-bold uppercase text-black dark:text-white">
             Together
           </h2>
 
-          <p className="font-clash-grotesk-regular mx-auto mt-8 max-w-2xl text-zinc-300 text-lg leading-9">
+          <p className="font-clash-grotesk-regular mx-auto mt-8 max-w-2xl text-black/70 dark:text-zinc-300 text-lg leading-9">
             I&apos;m always open to new opportunities,
             interesting projects and collaborations.
             Let&apos;s create something great.
@@ -161,16 +161,18 @@ export default function Footer() {
         </div>
 
         <div className="mt-20 flex items-center gap-6">
-          <div className="h-px flex-1 bg-white/10" />
-          <div className="text-white text-xl">✦</div>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
+          <div className="flex items-center justify-center size-8">
+            <img src="/strawhat.png" alt="" className="size-full object-contain dark:invert" />
+          </div>
+          <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
         </div>
 
-        <p className="font-clash-grotesk-regular mt-8 text-center text-zinc-400">
+        <p className="font-clash-grotesk-regular mt-8 text-center text-black/70 dark:text-zinc-400">
           Thanks for making it to the end.
         </p>
 
-        <div className="mt-20 flex justify-between text-sm text-zinc-500 font-clash-grotesk-regular">
+        <div className="mt-20 flex justify-between text-sm text-black/60 dark:text-zinc-500 font-clash-grotesk-regular">
           <span>&copy; 2026 Yassine Grairi</span>
           <span ref={builtRef}>Built with Next.js &amp; GSAP</span>
         </div>

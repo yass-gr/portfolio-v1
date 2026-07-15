@@ -21,6 +21,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Yassine Grairi",
   description: "Yassine Grairi's Portfolio",
+  icons: [{ rel: "icon", url: "/strawhat.png" }],
 };
 
 export default function RootLayout({
@@ -35,6 +36,7 @@ export default function RootLayout({
       className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased`}
     >
       <head>
+        <link rel="icon" href="/strawhat.png" />
         <InlineScript
           html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
