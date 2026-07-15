@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useEffect, useCallback, Fragment } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -55,12 +55,41 @@ interface Bucket {
   tools: Tool[];
   x: string;
   width: string;
+  top?: string;
+  height?: string;
 }
 
-const buckets: Bucket[] = [
+const desktopBuckets: Bucket[] = [
   { label: "dev", tools: devTools, x: "3%", width: "30%" },
   { label: "design", tools: designTools, x: "35%", width: "30%" },
   { label: "ai", tools: aiTools, x: "67%", width: "30%" },
+];
+
+const mobileBuckets: Bucket[] = [
+  {
+    label: "dev",
+    tools: devTools,
+    x: "5%",
+    width: "90%",
+    top: "2%",
+    height: "25%",
+  },
+  {
+    label: "design",
+    tools: designTools,
+    x: "5%",
+    width: "90%",
+    top: "30%",
+    height: "25%",
+  },
+  {
+    label: "ai",
+    tools: aiTools,
+    x: "5%",
+    width: "90%",
+    top: "58%",
+    height: "25%",
+  },
 ];
 
 function getBucketCenter(bucket: Bucket): number {
@@ -118,7 +147,7 @@ function ToolPill({
       clampMaxX={clampMaxX}
     >
       <div
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing ${textColor} ${borderColor} ${bgColor}`}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm ${textColor} ${borderColor} ${bgColor}`}
         style={{
           borderWidth: "1.5px",
           boxShadow: isDark
@@ -127,14 +156,14 @@ function ToolPill({
         }}
       >
         {iconFailed ? (
-          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold">
+          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs">
             {tool.name[0]}
           </span>
         ) : (
           <img
             src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
             alt={tool.name}
-            className="w-6 h-6"
+            className="w-6 h-6 max-sm:w-5 max-sm:h-5"
             onError={() => setIconFailed(true)}
           />
         )}
@@ -159,14 +188,13 @@ function BucketVisual({
 }) {
   return (
     <div
-      className="absolute pointer-events-none"
+      className="absolute pointer-events-none rounded-[60px] max-sm:rounded-[20px]"
       style={{
         left: bucket.x,
         width: bucket.width,
-        top: "5%",
-        height: "92%",
+        top: bucket.top || "5%",
+        height: bucket.height || "92%",
         border: `1.5px solid ${borderColor}`,
-        borderRadius: 60,
         backgroundColor: blurBg,
       }}
     >
@@ -187,7 +215,62 @@ export default function Tools() {
   const gravityRef = useRef<GravityRef>(null);
   const gravityStarted = useRef(false);
   const [isDark, setIsDark] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [wallPositions, setWallPositions] = useState<number[]>([]);
+  const [cardBounds, setCardBounds] = useState<
+    { left: number; right: number; bottom: number }[]
+  >([]);
+  const wallPositionsRef = useRef<number[]>([]);
+  const cardBoundsRef = useRef<
+    { left: number; right: number; bottom: number }[]
+  >([]);
   const hoveredRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    wallPositionsRef.current = wallPositions;
+    cardBoundsRef.current = cardBounds;
+    if (isMobile && wallPositions.length > 0 && !gravityStarted.current) {
+      const rect = sectionRef.current?.getBoundingClientRect();
+      if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
+        gravityStarted.current = true;
+        gravityRef.current?.start();
+      }
+    }
+  }, [wallPositions, isMobile]);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || !gravityContainerRef.current) return;
+    const container = gravityContainerRef.current;
+    const updateWalls = () => {
+      const containerRect = container.getBoundingClientRect();
+      const containerHeight = containerRect.height;
+      const containerWidth = containerRect.width;
+      if (!containerHeight || !containerWidth) return;
+      const cardEls = container.querySelectorAll<HTMLElement>(".bucket-card");
+      const positions: number[] = [];
+      const bounds: { left: number; right: number; bottom: number }[] = [];
+      cardEls.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const left = ((r.left - containerRect.left) / containerWidth) * 100;
+        const right = ((r.right - containerRect.left) / containerWidth) * 100;
+        const bottom = ((r.bottom - containerRect.top) / containerHeight) * 100;
+        bounds.push({ left, right, bottom });
+        if (i < cardEls.length - 1) {
+          positions.push(bottom);
+        }
+      });
+      setWallPositions(positions);
+      setCardBounds(bounds);
+    };
+    updateWalls();
+    const ro = new ResizeObserver(updateWalls);
+    ro.observe(container);
+    return () => ro.disconnect();
+  }, [isMobile]);
 
   useEffect(() => {
     const check = () =>
@@ -201,11 +284,14 @@ export default function Tools() {
     return () => observer.disconnect();
   }, []);
 
+  const buckets = isMobile ? mobileBuckets : desktopBuckets;
+
   useEffect(() => {
     if (!sectionRef.current) return;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !gravityStarted.current) {
+          if (isMobile && wallPositionsRef.current.length === 0) return;
           gravityStarted.current = true;
           gravityRef.current?.start();
         }
@@ -214,7 +300,7 @@ export default function Tools() {
     );
     io.observe(sectionRef.current);
     return () => io.disconnect();
-  }, []);
+  }, [isMobile]);
 
   function updateBucketLabel(label: string | null) {
     for (const bucket of buckets) {
@@ -230,26 +316,36 @@ export default function Tools() {
     }
   }
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!gravityContainerRef.current) return;
-    const rect = gravityContainerRef.current.getBoundingClientRect();
-    const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
-    const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent) => {
+      if (!gravityContainerRef.current) return;
+      const rect = gravityContainerRef.current.getBoundingClientRect();
+      const mouseX = ((e.clientX - rect.left) / rect.width) * 100;
+      const mouseY = ((e.clientY - rect.top) / rect.height) * 100;
 
-    let found: string | null = null;
-    for (const bucket of buckets) {
-      const bx = parseFloat(bucket.x);
-      const bw = parseFloat(bucket.width);
-      if (mouseX >= bx && mouseX <= bx + bw && mouseY >= 5 && mouseY <= 97) {
-        found = bucket.label;
-        break;
+      let found: string | null = null;
+      for (const bucket of buckets) {
+        const bx = parseFloat(bucket.x);
+        const bw = parseFloat(bucket.width);
+        const bt = bucket.top ? parseFloat(bucket.top) : 5;
+        const bh = bucket.height ? parseFloat(bucket.height) : 92;
+        if (
+          mouseX >= bx &&
+          mouseX <= bx + bw &&
+          mouseY >= bt &&
+          mouseY <= bt + bh
+        ) {
+          found = bucket.label;
+          break;
+        }
       }
-    }
-    if (found !== hoveredRef.current) {
-      hoveredRef.current = found;
-      updateBucketLabel(found);
-    }
-  }, []);
+      if (found !== hoveredRef.current) {
+        hoveredRef.current = found;
+        updateBucketLabel(found);
+      }
+    },
+    [buckets],
+  );
 
   const handleMouseLeave = useCallback(() => {
     if (hoveredRef.current !== null) {
@@ -261,20 +357,52 @@ export default function Tools() {
   useGSAP(() => {
     if (!sectionRef.current || !titleRef.current) return;
 
-    gsap.fromTo(
-      titleRef.current,
-      { fontSize: "3vw", x: 0, y: "-70%" },
+    const mm = gsap.matchMedia();
+
+    mm.add(
       {
-        fontSize: "6.5vw",
-        x: "-30dvw",
-        y: "-20%",
-        ease: "power1.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "top top",
-          scrub: 0,
-        },
+        isDesktop: "(min-width: 640px)",
+        isMobile: "(max-width: 639px)",
+      },
+      (context) => {
+        const isDesktop = !!(context.conditions as Record<string, boolean>)
+          .isDesktop;
+
+        if (isDesktop) {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "3vw", x: 0, y: "-70%" },
+            {
+              fontSize: "6.5vw",
+              x: "-30dvw",
+              y: "-20%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 0,
+              },
+            },
+          );
+        } else {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "2vw", x: "2%", y: "-50%" },
+            {
+              fontSize: "10vw",
+              x: "-30%",
+              y: "-10%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 0,
+              },
+            },
+          );
+        }
       },
     );
   }, []);
@@ -283,23 +411,49 @@ export default function Tools() {
   const blurBg = isDark ? "rgba(255,255,255,0.06)" : "rgba(230,230,235,0.6)";
 
   return (
-    <section ref={sectionRef} id="tools" className="min-h-dvh p-5">
+    <section
+      ref={sectionRef}
+      id="tools"
+      className="min-h-dvh p-5 max-sm:pt-[15vh]"
+    >
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Tools
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14">
+      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%]">
         <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4">
           <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2">
             everything i need to build, design, and ship
           </p>
         </div>
         <div
-          className="min-h-[600px] px-10 pb-5 relative"
+          className="px-10 pb-5 relative min-h-[600px] max-sm:min-h-0 max-sm:px-4"
           ref={gravityContainerRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
+          {isMobile && (
+            <div className="flex flex-col items-center gap-4 py-4">
+              {buckets.map((bucket) => (
+                <div
+                  key={bucket.label}
+                  className="w-full aspect-square rounded-[60px] max-sm:rounded-[20px] relative bucket-card"
+                  style={{
+                    border: `1.5px solid ${borderColor}`,
+                    backgroundColor: blurBg,
+                  }}
+                >
+                  <div
+                    id={`bucket-label-${bucket.label}`}
+                    className="absolute top-8 left-8 font-panchang-bold text-4xl text-black dark:text-white capitalize pointer-events-none transition-all duration-500 ease-out translate-y-[-120%] opacity-0"
+                  >
+                    {bucket.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           <Gravity
             ref={gravityRef}
             gravity={{ x: 0, y: 0.2 }}
@@ -308,16 +462,17 @@ export default function Tools() {
             addTopWall
             autoStart={false}
           >
-            {buckets.map((bucket) => (
-              <BucketVisual
-                key={bucket.label}
-                bucket={bucket}
-                borderColor={borderColor}
-                blurBg={blurBg}
-              />
-            ))}
+            {!isMobile &&
+              buckets.map((bucket) => (
+                <BucketVisual
+                  key={bucket.label}
+                  bucket={bucket}
+                  borderColor={borderColor}
+                  blurBg={blurBg}
+                />
+              ))}
 
-            {buckets.map((bucket) =>
+            {buckets.map((bucket, bi) =>
               bucket.tools.map((tool, i) => (
                 <ToolPill
                   key={`${bucket.label}-${tool.name}`}
@@ -326,48 +481,97 @@ export default function Tools() {
                     getBucketCenter(bucket),
                     parseFloat(bucket.width) * 0.3,
                   )}
-                  y={`${12 + i * 8}%`}
-                  clampMinX={bucket.x}
-                  clampMaxX={`${getBucketRight(bucket)}%`}
+                  y={isMobile ? `${2 + bi * 33 + i * 3}%` : `${12 + i * 8}%`}
+                  clampMinX={
+                    isMobile && cardBounds[bi]
+                      ? `${cardBounds[bi].left}%`
+                      : bucket.x
+                  }
+                  clampMaxX={
+                    isMobile && cardBounds[bi]
+                      ? `${cardBounds[bi].right}%`
+                      : `${getBucketRight(bucket)}%`
+                  }
                 />
               )),
             )}
 
-            {buckets.slice(0, -1).map((bucket, i) => (
+            {isMobile &&
+              cardBounds.map((b, i) => (
+                <Fragment key={`enc-${i}`}>
+                  <MatterBody
+                    matterBodyOptions={{ isStatic: true, friction: 1 }}
+                    x="50%"
+                    y={`${b.bottom}%`}
+                  >
+                    <div
+                      className="opacity-0 pointer-events-none"
+                      style={{ width: 5000, height: 30 }}
+                    />
+                  </MatterBody>
+                  <MatterBody
+                    matterBodyOptions={{ isStatic: true, friction: 1 }}
+                    x={`${b.left}%`}
+                    y={`${b.bottom / 2}%`}
+                  >
+                    <div
+                      className="opacity-0 pointer-events-none"
+                      style={{ width: 30, height: 5000 }}
+                    />
+                  </MatterBody>
+                  <MatterBody
+                    matterBodyOptions={{ isStatic: true, friction: 1 }}
+                    x={`${b.right}%`}
+                    y={`${b.bottom / 2}%`}
+                  >
+                    <div
+                      className="opacity-0 pointer-events-none"
+                      style={{ width: 30, height: 5000 }}
+                    />
+                  </MatterBody>
+                </Fragment>
+              ))}
+
+            {!isMobile &&
+              buckets.slice(0, -1).map((bucket, i) => (
+                <MatterBody
+                  key={`wall-${i}`}
+                  matterBodyOptions={{ isStatic: true, friction: 1 }}
+                  x={getGapCenter(bucket, buckets[i + 1])}
+                  y="50%"
+                >
+                  <div
+                    className="opacity-0 pointer-events-none"
+                    style={{ width: 80, height: 3000 }}
+                  />
+                </MatterBody>
+              ))}
+
+            {!isMobile && (
               <MatterBody
-                key={`wall-${i}`}
                 matterBodyOptions={{ isStatic: true, friction: 1 }}
-                x={getGapCenter(bucket, buckets[i + 1])}
+                x={buckets[0].x}
                 y="50%"
               >
                 <div
                   className="opacity-0 pointer-events-none"
-                  style={{ width: 80, height: 3000 }}
+                  style={{ width: 60, height: 3000 }}
                 />
               </MatterBody>
-            ))}
+            )}
 
-            <MatterBody
-              matterBodyOptions={{ isStatic: true, friction: 1 }}
-              x={buckets[0].x}
-              y="50%"
-            >
-              <div
-                className="opacity-0 pointer-events-none"
-                style={{ width: 60, height: 3000 }}
-              />
-            </MatterBody>
-
-            <MatterBody
-              matterBodyOptions={{ isStatic: true, friction: 1 }}
-              x={`${getBucketRight(buckets[buckets.length - 1])}%`}
-              y="50%"
-            >
-              <div
-                className="opacity-0 pointer-events-none"
-                style={{ width: 60, height: 3000 }}
-              />
-            </MatterBody>
+            {!isMobile && (
+              <MatterBody
+                matterBodyOptions={{ isStatic: true, friction: 1 }}
+                x={`${getBucketRight(buckets[buckets.length - 1])}%`}
+                y="50%"
+              >
+                <div
+                  className="opacity-0 pointer-events-none"
+                  style={{ width: 60, height: 3000 }}
+                />
+              </MatterBody>
+            )}
 
             <MatterBody
               matterBodyOptions={{ isStatic: true, friction: 1 }}
