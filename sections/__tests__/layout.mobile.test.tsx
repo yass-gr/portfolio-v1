@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import type { ReactNode } from "react";
 import gsap from "gsap";
 import Page from "@/app/page";
+import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,15 +34,18 @@ beforeAll(() => {
 
 function TestWrapper({ children }: { children: ReactNode }) {
   return (
-    <TooltipProvider>
-      <div className="flex min-h-full flex-col px-[3%] max-sm:px-0 overflow-x-hidden">
-        {children}
-      </div>
+    <div className="flex min-h-dvh flex-col overflow-hidden">
+      <TooltipProvider>
+        <div className="flex-1 px-[3%] max-sm:px-0">
+          {children}
+        </div>
+        <Footer />
+      </TooltipProvider>
       <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
         <DownloadCvButton />
         <BottomNav />
       </div>
-    </TooltipProvider>
+    </div>
   );
 }
 
@@ -229,20 +233,76 @@ describe("Layout on mobile (375x812)", () => {
     expect(inner.className).toContain("max-sm:px-4");
   });
 
+  it("tools section has top padding on mobile", () => {
+    renderPage();
+    const section = document.querySelector("#tools")!;
+    expect(section.className).toContain("max-sm:pt-[15vh]");
+  });
+
+  it("tools glass card adjusts translate-y on mobile", () => {
+    renderPage();
+    const card = document.querySelector("#tools [class*='-translate-y-']")!;
+    expect(card.className).toContain("max-sm:-translate-y-[5%]");
+  });
+
+  it("tools gravity container has no min-h and reduced padding on mobile", () => {
+    renderPage();
+    const container = document.querySelector("#tools [class*='min-h-\\[600px\\]']")!;
+    expect(container).toBeInTheDocument();
+    expect(container.className).toContain("max-sm:min-h-0");
+    expect(container.className).toContain("max-sm:px-4");
+  });
+
+  it("tool pills are slightly smaller on mobile", () => {
+    renderPage();
+    const pills = document.querySelectorAll("#tools [class*='rounded-full']");
+    expect(pills.length).toBeGreaterThan(10);
+    pills.forEach((p) => {
+      expect(p.className).toContain("max-sm:gap-1.5");
+      expect(p.className).toContain("max-sm:px-3");
+      expect(p.className).toContain("max-sm:py-1.5");
+      expect(p.className).toContain("max-sm:text-sm");
+    });
+  });
+
+  it("tool pill icons are smaller on mobile", () => {
+    renderPage();
+    const icons = document.querySelectorAll("#tools [class*='rounded-full'] img");
+    expect(icons.length).toBeGreaterThan(10);
+    icons.forEach((icon) => {
+      expect(icon.className).toContain("max-sm:w-5");
+      expect(icon.className).toContain("max-sm:h-5");
+    });
+  });
+
+  it("bucket cards render as flex column with aspect-square on mobile", () => {
+    renderPage();
+    const container = document.querySelector("#tools [class*='flex-col']")!;
+    expect(container.className).toContain("flex");
+    expect(container.className).toContain("flex-col");
+    expect(container.className).toContain("items-center");
+    const cards = container.querySelectorAll('[class*="aspect-square"]');
+    expect(cards.length).toBe(3);
+    cards.forEach((c) => {
+      expect(c.className).toContain("rounded-[60px]");
+      expect(c.className).toContain("max-sm:rounded-[20px]");
+    });
+  });
+
   /* ── Footer ── */
   it("footer glass card has reduced padding on mobile", () => {
     renderPage();
     const sections = document.querySelectorAll("section");
     const card = sections[sections.length - 1].querySelector('[class*="flex-col"]')!;
     expect(card.className).toContain("max-sm:px-6");
-    expect(card.className).toContain("max-sm:py-16");
+    expect(card.className).toContain("max-sm:py-12");
   });
 
   it("footer heading is smaller on mobile", () => {
     renderPage();
     const sections = document.querySelectorAll("section");
     const h2 = sections[sections.length - 1].querySelector("h2")!;
-    expect(h2.className).toContain("max-sm:text-5xl");
+    expect(h2.className).toContain("max-sm:text-4xl");
   });
 
   it("footer body text is smaller on mobile", () => {
@@ -278,6 +338,32 @@ describe("Layout on mobile (375x812)", () => {
     expect(row.className).toContain("max-sm:gap-3");
   });
 
+  it("footer section has reduced top padding on mobile", () => {
+    renderPage();
+    const sections = document.querySelectorAll("section");
+    const footer = sections[sections.length - 1];
+    expect(footer.className).toContain("max-sm:pt-8");
+  });
+
+  it("footer thanks text is smaller on mobile", () => {
+    renderPage();
+    const sections = document.querySelectorAll("section");
+    const footer = sections[sections.length - 1];
+    const allP = footer.querySelectorAll("p");
+    const thanks = allP[allP.length - 1]!;
+    expect(thanks.className).toContain("max-sm:text-sm");
+  });
+
+  it("footer copyright row stacks vertically on mobile", () => {
+    renderPage();
+    const sections = document.querySelectorAll("section");
+    const footer = sections[sections.length - 1];
+    const row = footer.querySelector('[class*="justify-between"]')!;
+    expect(row.className).toContain("max-sm:flex-col");
+    expect(row.className).toContain("max-sm:items-center");
+    expect(row.className).toContain("max-sm:gap-1");
+  });
+
   /* ── Bottom nav ── */
   it("bottom nav GlassSurface shrinks padding on mobile", () => {
     renderPage();
@@ -305,7 +391,7 @@ describe("Layout on mobile (375x812)", () => {
   /* ── Global content wrapper ── */
   it("content wrapper removes horizontal padding on mobile", () => {
     renderPage();
-    const wrapper = document.querySelector('[class*="flex-col"][class*="px-\\[3%\\]"]')!;
+    const wrapper = document.querySelector('[class*="flex-1"][class*="px-\\[3%\\]"]')!;
     expect(wrapper.className).toContain("max-sm:px-0");
   });
 
@@ -331,7 +417,7 @@ describe("Layout on mobile (375x812)", () => {
     expect(st.scrub).toBe(0.5);
   });
 
-  it("hero glass card scroll animation omits yPercent on mobile", () => {
+  it("hero glass card scroll animation uses yPercent -10 on mobile", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
@@ -342,7 +428,7 @@ describe("Layout on mobile (375x812)", () => {
 
     expect(cardAnims.length).toBe(1);
     const vars = cardAnims[0][1] as Record<string, unknown>;
-    expect(vars.yPercent).toBeUndefined();
+    expect(vars.yPercent).toBe(-10);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });

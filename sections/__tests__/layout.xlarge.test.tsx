@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import type { ReactNode } from "react";
 import gsap from "gsap";
 import Page from "@/app/page";
+import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
@@ -31,14 +32,17 @@ beforeAll(() => {
 
 function TestWrapper({ children }: { children: ReactNode }) {
   return (
-    <TooltipProvider>
-      <div className="flex min-h-full flex-col px-[3%] overflow-x-hidden">
-        {children}
-      </div>
+    <div className="flex min-h-dvh flex-col overflow-hidden">
+      <TooltipProvider>
+        <div className="flex-1 px-[3%]">
+          {children}
+        </div>
+        <Footer />
+      </TooltipProvider>
       <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
         <BottomNav />
       </div>
-    </TooltipProvider>
+    </div>
   );
 }
 
@@ -316,6 +320,20 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     });
   });
 
+  it("bucket visual containers have rounded-[60px] on desktop", () => {
+    renderPage();
+    const visuals = document.querySelectorAll("#tools [class*='rounded-\\[60px\\]']");
+    expect(visuals.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it("tools glass card uses desktop translate-y and margin", () => {
+    renderPage();
+    const section = document.querySelector("#tools")!;
+    const card = section.querySelector('[class*="-translate-y-\\[11\\.5\\%\\]"]')!;
+    expect(card).toBeInTheDocument();
+    expect(card.className).toContain("mt-16");
+  });
+
   /* ── Footer ── */
   it("footer is flex centered row with pt-16", () => {
     renderPage();
@@ -465,9 +483,15 @@ describe("Layout on xlarge screens (1920x1080)", () => {
   });
 
   /* ── Global content wrapper ── */
-  it("content wrapper is vertical flex column with 3% horizontal padding", () => {
+  it("body is vertical flex column with min-h-dvh", () => {
     renderPage();
-    const wrapper = document.querySelector('[class*="flex-col"]')!;
+    const body = document.querySelector('[class*="flex-col"]')!;
+    expect(body.className).toContain("min-h-dvh");
+  });
+
+  it("content wrapper has 3% horizontal padding on desktop", () => {
+    renderPage();
+    const wrapper = document.querySelector('[class*="flex-1"]')!;
     expect(wrapper.className).toContain("px-[3%]");
   });
 
