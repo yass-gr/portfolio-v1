@@ -136,6 +136,12 @@ describe("Layout on mobile (375x812)", () => {
   });
 
   /* ── Projects section ── */
+  it("projects section has top padding to prevent title from being hidden on mobile", () => {
+    renderPage();
+    const section = document.querySelector("#projects")!;
+    expect(section.className).toContain("max-sm:pt-[15vh]");
+  });
+
   it("projects inner grid becomes single column on mobile", () => {
     renderPage();
     const inner = document.querySelector("#projects [class*='grid-cols-12']")!;
@@ -158,7 +164,7 @@ describe("Layout on mobile (375x812)", () => {
     const grid = document.querySelector("#projects [class*='col-span-9']")!;
     expect(grid.className).toContain("max-sm:col-span-1");
     expect(grid.className).toContain("max-sm:grid-cols-1");
-    expect(grid.className).toContain("max-sm:gap-4");
+    expect(grid.className).toContain("max-sm:gap-6");
   });
 
   it("project cards become smaller with rounded-[20px] on mobile", () => {
@@ -200,12 +206,10 @@ describe("Layout on mobile (375x812)", () => {
 
   it("project card gh and pv icons are larger on mobile", () => {
     renderPage();
-    const svgs = document.querySelectorAll("#projects [class*='col-span-9'] svg");
-    expect(svgs.length).toBe(16);
-    svgs.forEach((svg) => {
-      expect(svg.className).toContain("max-sm:w-6");
-      expect(svg.className).toContain("max-sm:h-6");
-    });
+    const svgs = document.querySelectorAll("#projects svg");
+    expect(svgs.length).toBe(17);
+    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-sm:w-6"));
+    expect(iconSvgs.length).toBe(16);
   });
 
   /* ── Tools section ── */

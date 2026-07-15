@@ -84,14 +84,18 @@ export default function Projects() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="projects" className="min-h-dvh p-5">
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="min-h-dvh p-5 max-sm:pt-[15vh]"
+    >
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Projects
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 ">
+      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%]">
         <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3">
-          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6">
+          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6 max-sm:px-4 max-sm:mt-4 max-sm:ml-4">
             <div className="text-left">
               <h2 className="font-clash-grotesk-regular leading-15">
                 i do{" "}
@@ -108,15 +112,20 @@ export default function Projects() {
                 </span>
                 <br />
               </h2>
-              <h2 className="font-clash-grotesk-regular ">
+              <h2 className="font-clash-grotesk-regular">
                 and everything in <br />
                 between.
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-4 max-sm:p-0">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-6 max-sm:p-0">
             {projects.map((project) => (
-              <Magnet key={project.imageId} padding={10} magnetStrength={10} disabled={isMobile}>
+              <Magnet
+                key={project.imageId}
+                padding={10}
+                magnetStrength={10}
+                disabled={isMobile}
+              >
                 <ProjectCard {...project} />
               </Magnet>
             ))}
