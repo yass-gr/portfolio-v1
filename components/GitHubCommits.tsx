@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { ActivityCalendar } from "react-activity-calendar";
 
 const styles = `
@@ -57,6 +57,15 @@ export function GitHubCommits({ username = "yass-gr" }: { username?: string }) {
       .catch(() => setLoading(false));
   }, [username]);
 
+  const displayData = useMemo(() => {
+    if (typeof window === "undefined") return data;
+    const isMobile = window.innerWidth < 640;
+    if (!isMobile || data.length === 0) return data;
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+    return data.filter((d) => new Date(d.date) >= sixMonthsAgo);
+  }, [data]);
+
   return (
     <>
       <style>{styles}</style>
@@ -78,7 +87,7 @@ export function GitHubCommits({ username = "yass-gr" }: { username?: string }) {
       ) : (
         <ActivityCalendar
           className="gh-scroll"
-          data={data}
+          data={displayData}
           blockSize={10}
           blockMargin={3}
           fontSize={11}
