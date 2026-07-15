@@ -272,45 +272,57 @@ export default function Hero() {
     const heroTitle = ctx.querySelector(".hero-title-wrap");
     const glassCard = ctx.querySelector(".glass-card-wrap");
 
-    if (heroTitle) {
-      gsap.to(heroTitle, {
-        opacity: 0,
-        yPercent: -50,
-        scale: 0.7,
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-        },
-      });
-    }
+    const mm = gsap.matchMedia();
 
-    if (glassCard) {
-      gsap.to(glassCard, {
-        opacity: 0,
-        yPercent: -20,
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.5,
-        },
-      });
-    }
+    mm.add(
+      {
+        isDesktop: "(min-width: 640px)",
+        isMobile: "(max-width: 639px)",
+      },
+      (context) => {
+        const { isDesktop } = context.conditions;
+
+        if (heroTitle) {
+          gsap.to(heroTitle, {
+            opacity: 0,
+            yPercent: isDesktop ? -50 : -15,
+            scale: isDesktop ? 0.7 : 0.85,
+            ease: "none",
+            scrollTrigger: {
+              trigger: hero,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.5,
+            },
+          });
+        }
+
+        if (glassCard) {
+          gsap.to(glassCard, {
+            opacity: 0,
+            ...(isDesktop && { yPercent: -20 }),
+            ease: "none",
+            scrollTrigger: {
+              trigger: hero,
+              start: "top top",
+              end: "bottom top",
+              scrub: 0.5,
+            },
+          });
+        }
+      },
+    );
   }, []);
 
   return (
     <div
       id="about"
-      className="relative h-[100dvh] flex flex-col justify-center"
+      className="relative h-[100dvh] flex flex-col justify-center max-sm:h-auto max-sm:min-h-dvh max-sm:justify-start max-sm:pt-4 max-sm:pb-0"
       ref={containerRef}
     >
 
-      <div className="hero-title-wrap flex justify-center  xl:lg:-translate-y-18 lg:-translate-y-6 sm:-translate-y-4">
-        <h1 className="mx-auto text-[7.5vw] font-panchang-extrabold">
+      <div className="hero-title-wrap flex justify-center  xl:lg:-translate-y-18 lg:-translate-y-6 sm:-translate-y-4 max-sm:mb-4">
+        <h1 className="mx-auto text-[7.5vw] font-panchang-extrabold max-sm:w-full max-sm:text-[12vw] max-sm:text-center max-sm:leading-[0.9]">
           {words.map((word, i) => (
             <span key={i} className="hero-word inline-block">
               {word}
@@ -321,7 +333,7 @@ export default function Hero() {
       </div>
 
       <LiquidGlassCard
-        className="glass-card-wrap w-[60%] absolute -top-38 left-30"
+        className="glass-card-wrap w-[60%] absolute -top-38 left-30 max-sm:!relative max-sm:!w-[92%] max-sm:!left-auto max-sm:!top-auto max-sm:mx-auto"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}
@@ -331,11 +343,11 @@ export default function Hero() {
         borderOpacity={borderOpacity}
         borderRadius={borderRadius}
       >
-        <div className="grid grid-cols-[15%_85%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-4xl mx-auto py-10 mt-5 md:mt-4 px-2">
-          <div className="row-span-4 flex items-center justify-center">
+        <div className="grid grid-cols-[15%_85%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-4xl mx-auto py-10 mt-5 md:mt-4 px-2 max-sm:grid-cols-1 max-sm:gap-6 max-sm:py-8 max-sm:px-6">
+          <div className="row-span-4 flex items-center justify-center max-sm:row-span-1 max-sm:mb-2">
             <Avatar />
           </div>
-          <p className="font-clash-grotesk-regular text-2xl text-pretty text-base sm:text-lg md:text-xl leading-relaxed">
+          <p className="font-clash-grotesk-regular text-2xl text-pretty text-base sm:text-lg md:text-xl leading-relaxed max-sm:text-base max-sm:text-center max-sm:px-2">
             {lines.map((line, i) => (
               <span key={i} className="hero-line block">
                 {line}
@@ -348,7 +360,7 @@ export default function Hero() {
             </span>
             <LogoCarousel columnCount={3} logos={logos} />
           </div>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3 max-sm:overflow-hidden max-sm:w-full">
             <span className="text-xs font-clash-grotesk-semibold uppercase tracking-widest text-neutral-500">
               GitHub Activity (2026)
             </span>
@@ -436,7 +448,7 @@ export default function Hero() {
         </div>
       )}
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400 max-sm:bottom-24">
         <span className="font-clash-grotesk-semibold text-[10px] uppercase tracking-[0.25em] animate-bounce">
           scroll for more
         </span>
