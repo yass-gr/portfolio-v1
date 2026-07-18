@@ -16,7 +16,9 @@ beforeAll(() => {
     const width = window.innerWidth;
     const matches =
       (query === "(min-width: 640px)" && width >= 640) ||
-      (query === "(max-width: 639px)" && width < 640);
+      (query === "(max-width: 639px)" && width < 640) ||
+      (query === "(min-width: 1024px)" && width >= 1024) ||
+      (query === "(max-width: 1023px)" && width < 1024);
     return {
       matches,
       media: query,
