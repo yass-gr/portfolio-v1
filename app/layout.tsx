@@ -50,8 +50,7 @@ export default function RootLayout({
           muted
           playsInline
         >
-          <source src="/ascii-test-2-slow.webm" type="video/webm" />
-          <source src="/ascii-test-2-slow.mp4" type="video/mp4" />
+          <source src="/background-dark.webm" type="video/webm" />
         </video>
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] max-lg:!inset-x-0 max-lg:!top-1/2 max-lg:!-translate-y-1/2 max-lg:!h-[40vh] block dark:hidden"
@@ -60,8 +59,7 @@ export default function RootLayout({
           muted
           playsInline
         >
-          <source src="/ascii-test-2-slow-light.webm" type="video/webm" />
-          <source src="/ascii-test-2-slow-light.mp4" type="video/mp4" />
+          <source src="/background-light.webm" type="video/webm" />
         </video>
         <TooltipProvider>
           <div className="flex-1 px-[3%] max-sm:px-0 max-lg:px-0">
