@@ -44,7 +44,7 @@ export default function RootLayout({
       </head>
       <body className="flex min-h-dvh flex-col overflow-hidden">
         <video
-          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] dark:block hidden"
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] max-lg:!inset-x-0 max-lg:!top-1/2 max-lg:!-translate-y-1/2 max-lg:!h-[40vh] dark:block hidden"
           loop
           autoPlay
           muted
@@ -52,7 +52,7 @@ export default function RootLayout({
           src="/ascii-test-2-slow.mp4"
         ></video>
         <video
-          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] block dark:hidden"
+          className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] max-lg:!inset-x-0 max-lg:!top-1/2 max-lg:!-translate-y-1/2 max-lg:!h-[40vh] block dark:hidden"
           loop
           autoPlay
           muted
@@ -60,7 +60,7 @@ export default function RootLayout({
           src="/ascii-test-2-slow-light.mp4"
         ></video>
         <TooltipProvider>
-          <div className="flex-1 px-[3%] max-sm:px-0">
+          <div className="flex-1 px-[3%] max-sm:px-0 max-lg:px-0">
             {children}
           </div>
           <Footer />
