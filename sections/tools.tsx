@@ -147,7 +147,7 @@ function ToolPill({
       clampMaxX={clampMaxX}
     >
       <div
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm ${textColor} ${borderColor} ${bgColor}`}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-1.5 max-lg:px-3 max-lg:py-1.5 max-lg:text-sm ${textColor} ${borderColor} ${bgColor}`}
         style={{
           borderWidth: "1.5px",
           boxShadow: isDark
@@ -156,14 +156,14 @@ function ToolPill({
         }}
       >
         {iconFailed ? (
-          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs">
+          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-5 max-lg:h-5 max-lg:text-xs">
             {tool.name[0]}
           </span>
         ) : (
           <img
             src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
             alt={tool.name}
-            className="w-6 h-6 max-sm:w-5 max-sm:h-5"
+            className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-5 max-lg:h-5"
             onError={() => setIconFailed(true)}
           />
         )}
@@ -188,7 +188,7 @@ function BucketVisual({
 }) {
   return (
     <div
-      className="absolute pointer-events-none rounded-[60px] max-sm:rounded-[20px]"
+      className="absolute pointer-events-none rounded-[60px] max-sm:rounded-[20px] max-lg:rounded-[20px]"
       style={{
         left: bucket.x,
         width: bucket.width,
@@ -239,7 +239,7 @@ export default function Tools() {
   }, [wallPositions, isMobile]);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 640);
+    setIsMobile(window.innerWidth < 1024);
   }, []);
 
   useEffect(() => {
@@ -361,8 +361,8 @@ export default function Tools() {
 
     mm.add(
       {
-        isDesktop: "(min-width: 640px)",
-        isMobile: "(max-width: 639px)",
+        isDesktop: "(min-width: 1024px)",
+        isMobile: "(max-width: 1023px)",
       },
       (context) => {
         const isDesktop = !!(context.conditions as Record<string, boolean>)
@@ -414,30 +414,30 @@ export default function Tools() {
     <section
       ref={sectionRef}
       id="tools"
-      className="min-h-dvh p-5 max-sm:pt-[15vh]"
+      className="min-h-dvh p-5 max-sm:pt-[15vh] max-lg:pt-[15vh]"
     >
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Tools
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%]">
-        <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4">
-          <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2">
+      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%] max-lg:-translate-y-[5%]">
+        <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4 max-lg:pt-8 max-lg:pb-6 max-lg:px-4">
+          <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2 max-lg:text-base max-lg:pl-2">
             everything i need to build, design, and ship
           </p>
         </div>
         <div
-          className="px-10 pb-5 relative min-h-[600px] max-sm:min-h-0 max-sm:px-4"
+          className="px-10 pb-5 relative min-h-[600px] max-sm:min-h-0 max-sm:px-4 max-lg:min-h-0 max-lg:px-4"
           ref={gravityContainerRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
           {isMobile && (
-            <div className="flex flex-col items-center gap-4 py-4">
+            <div className="flex flex-col md:flex-row items-center md:items-stretch gap-4 py-4">
               {buckets.map((bucket) => (
                 <div
                   key={bucket.label}
-                  className="w-full aspect-square rounded-[60px] max-sm:rounded-[20px] relative bucket-card"
+                  className="w-full md:w-1/3 aspect-square rounded-[60px] max-sm:rounded-[20px] max-lg:rounded-[20px] relative bucket-card"
                   style={{
                     border: `1.5px solid ${borderColor}`,
                     backgroundColor: blurBg,
