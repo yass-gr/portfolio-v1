@@ -16,7 +16,7 @@ export default function DownloadCvButton() {
         borderRadius={999}
         backgroundOpacity={0.25}
         saturation={1.8}
-        className="p-1.5 cursor-pointer max-sm:p-1"
+        className="p-1.5 cursor-pointer max-sm:p-1 max-lg:p-1"
       >
         <a
           href="/cv.pdf"

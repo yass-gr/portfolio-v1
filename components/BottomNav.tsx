@@ -49,9 +49,9 @@ export function BottomNav() {
         borderRadius={999}
         backgroundOpacity={0.15}
         saturation={1.8}
-        className="px-2 py-1.5 max-sm:px-1.5 max-sm:py-1"
+        className="px-2 py-1.5 max-sm:px-1.5 max-sm:py-1 max-lg:px-1.5 max-lg:py-1"
       >
-        <div className="flex items-center gap-1.5 max-sm:gap-1">
+        <div className="flex items-center gap-1.5 max-sm:gap-1 max-lg:gap-1">
             {navItems.map(({ label, icon }) => (
               <Tooltip key={label}>
                 <button
