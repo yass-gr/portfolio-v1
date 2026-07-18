@@ -59,7 +59,7 @@ export default function Projects() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 640);
+    setIsMobile(window.innerWidth < 1024);
   }, []);
 
   useGSAP(() => {
@@ -69,8 +69,8 @@ export default function Projects() {
 
     mm.add(
       {
-        isDesktop: "(min-width: 640px)",
-        isMobile: "(max-width: 639px)",
+        isDesktop: "(min-width: 1024px)",
+        isMobile: "(max-width: 1023px)",
       },
       (context) => {
         const isDesktop = !!(context.conditions as Record<string, boolean>)
@@ -119,15 +119,15 @@ export default function Projects() {
     <section
       ref={sectionRef}
       id="projects"
-      className="min-h-dvh p-5 max-sm:pt-[15vh]"
+      className="min-h-dvh p-5 max-sm:pt-[15vh] max-lg:pt-[15vh]"
     >
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Projects
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%]">
-        <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3">
-          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6 max-sm:px-4 max-sm:mt-4 max-sm:ml-4">
+      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%] max-lg:-translate-y-[2.3%]">
+        <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3 max-lg:grid-cols-1 max-lg:py-6 max-lg:p-3">
+          <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6 max-sm:px-4 max-sm:mt-4 max-sm:ml-4 max-lg:col-span-1 max-lg:static max-lg:text-lg max-lg:mb-6 max-lg:px-4 max-lg:mt-4 max-lg:ml-4">
             <div className="text-left">
               <h2 className="font-clash-grotesk-regular leading-15">
                 i do{" "}
@@ -150,7 +150,7 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-6 max-sm:p-0">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-6 max-sm:p-0 max-lg:col-span-1 max-lg:grid-cols-1 max-lg:gap-6 max-lg:p-0">
             {projects.map((project) => (
               <Magnet
                 key={project.imageId}
