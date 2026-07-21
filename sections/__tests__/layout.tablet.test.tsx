@@ -361,18 +361,18 @@ describe("Layout on tablet (768x1024)", () => {
   });
 
   /* ── Bottom nav ── */
-  it("bottom nav GlassSurface shrinks padding on tablet", () => {
+  it("bottom nav GlassSurface is larger on tablet", () => {
     renderPage();
     const nav = document.querySelector("nav")!;
     const glass = nav.firstElementChild!;
-    expect(glass.className).toContain("max-lg:px-1.5");
-    expect(glass.className).toContain("max-lg:py-1");
+    expect(glass.className).toContain("max-lg:px-4");
+    expect(glass.className).toContain("max-lg:py-2.5");
   });
 
-  it("bottom nav flex reduces gap on tablet", () => {
+  it("bottom nav flex gap is larger on tablet", () => {
     renderPage();
-    const inner = document.querySelector("nav [class*='gap-1\\.5']")!;
-    expect(inner.className).toContain("max-lg:gap-1");
+    const inner = document.querySelector("nav [class*='gap-2']")!;
+    expect(inner.className).toContain("max-lg:gap-3");
   });
 
   it("download cv button shrinks padding on tablet", () => {

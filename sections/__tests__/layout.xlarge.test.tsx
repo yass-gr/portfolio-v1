@@ -253,7 +253,8 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     renderPage();
     const section = document.querySelector("#tools")!;
     expect(section.className).toContain("min-h-dvh");
-    expect(section.className).toContain("p-5");
+    expect(section.className).toContain("px-5");
+    expect(section.className).toContain("py-3");
   });
 
   it("tools title is text-5xl, panchang-bold, centered", () => {
@@ -450,12 +451,12 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(container.className).toContain("gap-4");
   });
 
-  it("bottom nav GlassSurface has borderRadius 999 with px-2 py-1.5", () => {
+  it("bottom nav GlassSurface has borderRadius 999 with px-3 py-2", () => {
     renderPage();
     const nav = document.querySelector("nav")!;
     const glass = nav.firstElementChild!;
-    expect(glass.className).toContain("px-2");
-    expect(glass.className).toContain("py-1.5");
+    expect(glass.className).toContain("px-3");
+    expect(glass.className).toContain("py-2");
     expect((glass as HTMLElement).style.borderRadius).toBe("999px");
   });
 

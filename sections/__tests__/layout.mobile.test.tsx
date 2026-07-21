@@ -188,7 +188,7 @@ describe("Layout on mobile (375x812)", () => {
     renderPage();
     const titles = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] h3");
     titles.forEach((t) => {
-      expect(t.className).toContain("max-sm:text-xl");
+      expect(t.className).toContain("max-sm:text-lg");
     });
   });
 
@@ -208,7 +208,7 @@ describe("Layout on mobile (375x812)", () => {
     renderPage();
     const svgs = document.querySelectorAll("#projects svg");
     expect(svgs.length).toBe(17);
-    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-sm:w-4"));
+    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-sm:w-5"));
     expect(iconSvgs.length).toBe(16);
   });
 
@@ -371,7 +371,7 @@ describe("Layout on mobile (375x812)", () => {
 
   it("bottom nav flex reduces gap on mobile", () => {
     renderPage();
-    const inner = document.querySelector("nav [class*='gap-1\\.5']")!;
+    const inner = document.querySelector("nav [class*='gap-2']")!;
     expect(inner.className).toContain("max-sm:gap-1");
   });
 
