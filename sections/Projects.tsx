@@ -113,11 +113,11 @@ export default function Projects() {
         } else {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "1vw", x: "-0.7%", y: "-250%" },
+            { fontSize: "1vw", x: "-3%", y: "-10%" },
             {
               fontSize: "10vw",
-              x: "12dvw",
-              y: "-100%",
+              x: "11dvw",
+              y: "-20%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
