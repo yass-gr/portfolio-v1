@@ -15,11 +15,11 @@ const navItems = [
 ];
 
 const icons: Record<string, React.ReactNode> = {
-  about: <User size={20} />,
-  projects: <FolderKanban size={20} />,
-  tools: <Wrench size={20} />,
-  dark: <Moon size={20} />,
-  light: <Sun size={20} />,
+  about: <User size={24} />,
+  projects: <FolderKanban size={24} />,
+  tools: <Wrench size={24} />,
+  dark: <Moon size={24} />,
+  light: <Sun size={24} />,
 };
 
 function scrollToSection(id: string) {
@@ -49,9 +49,9 @@ export function BottomNav() {
         borderRadius={999}
         backgroundOpacity={0.15}
         saturation={1.8}
-        className="px-2 py-1.5 max-sm:px-1.5 max-sm:py-1 max-lg:px-1.5 max-lg:py-1"
+        className="px-3 py-2 max-sm:px-1.5 max-sm:py-1 max-lg:px-4 max-lg:py-2.5"
       >
-        <div className="flex items-center gap-1.5 max-sm:gap-1 max-lg:gap-1">
+        <div className="flex items-center gap-2 max-sm:gap-1 max-lg:gap-3">
             {navItems.map(({ label, icon }) => (
               <Tooltip key={label}>
                 <button
@@ -59,7 +59,7 @@ export function BottomNav() {
                     setActiveItem(label.toLowerCase());
                     scrollToSection(label.toLowerCase());
                   }}
-                  className={`rounded-lg p-1.5 transition-colors ${
+                  className={`rounded-lg p-1.5 max-lg:p-2 transition-colors ${
                     activeItem === label.toLowerCase()
                       ? "text-black dark:text-white"
                       : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
@@ -71,12 +71,12 @@ export function BottomNav() {
               </Tooltip>
             ))}
 
-            <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50" />
+            <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50 max-lg:h-5" />
 
             <Tooltip>
               <button
                 onClick={toggleDark}
-                className="rounded-lg p-1.5 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                className="rounded-lg p-1.5 max-lg:p-2 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
                 aria-label="Toggle dark mode"
               >
                 {isDark ? icons.light : icons.dark}
