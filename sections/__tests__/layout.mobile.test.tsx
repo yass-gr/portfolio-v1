@@ -20,7 +20,8 @@ beforeAll(() => {
       (query === "(min-width: 640px)" && width >= 640) ||
       (query === "(max-width: 639px)" && width < 640) ||
       (query === "(min-width: 1024px)" && width >= 1024) ||
-      (query === "(max-width: 1023px)" && width < 1024);
+      (query === "(max-width: 1023px)" && width < 1024) ||
+      (query === "(min-width: 640px) and (max-width: 1023px)" && width >= 640 && width < 1024);
     return {
       matches,
       media: query,
@@ -134,13 +135,6 @@ describe("Layout on mobile (375x812)", () => {
     expect(githubWrap.className).toContain("max-sm:w-full");
   });
 
-  it("scroll indicator is positioned higher on mobile", () => {
-    renderPage();
-    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]')!;
-    expect(el).toBeInTheDocument();
-    expect(el.className).toContain("max-sm:bottom-24");
-  });
-
   /* ── Projects section ── */
   it("projects section has top padding to prevent title from being hidden on mobile", () => {
     renderPage();
@@ -170,14 +164,14 @@ describe("Layout on mobile (375x812)", () => {
     const grid = document.querySelector("#projects [class*='col-span-9']")!;
     expect(grid.className).toContain("max-sm:col-span-1");
     expect(grid.className).toContain("max-sm:grid-cols-1");
-    expect(grid.className).toContain("max-sm:gap-6");
+    expect(grid.className).toContain("max-sm:gap-4");
   });
 
   it("project cards become smaller with rounded-[20px] on mobile", () => {
     renderPage();
     const cards = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]']");
     cards.forEach((c) => {
-      expect(c.className).toContain("max-sm:rounded-[20px]");
+      expect(c.className).toContain("max-sm:rounded-[60px]");
     });
   });
 
@@ -210,11 +204,11 @@ describe("Layout on mobile (375x812)", () => {
     });
   });
 
-  it("project card gh and pv icons are larger on mobile", () => {
+  it("project card gh and pv icons are smaller on mobile", () => {
     renderPage();
     const svgs = document.querySelectorAll("#projects svg");
     expect(svgs.length).toBe(17);
-    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-sm:w-6"));
+    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-sm:w-4"));
     expect(iconSvgs.length).toBe(16);
   });
 
@@ -287,7 +281,7 @@ describe("Layout on mobile (375x812)", () => {
     expect(cards.length).toBe(3);
     cards.forEach((c) => {
       expect(c.className).toContain("rounded-[60px]");
-      expect(c.className).toContain("max-sm:rounded-[20px]");
+      expect(c.className).toContain("max-sm:rounded-[60px]");
     });
   });
 

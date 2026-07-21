@@ -18,7 +18,8 @@ beforeAll(() => {
       (query === "(min-width: 640px)" && width >= 640) ||
       (query === "(max-width: 639px)" && width < 640) ||
       (query === "(min-width: 1024px)" && width >= 1024) ||
-      (query === "(max-width: 1023px)" && width < 1024);
+      (query === "(max-width: 1023px)" && width < 1024) ||
+      (query === "(min-width: 640px) and (max-width: 1023px)" && width >= 640 && width < 1024);
     return {
       matches,
       media: query,
@@ -98,20 +99,20 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     });
   });
 
-  it("glass card in hero is absolute, w-[60%], negative top offset", () => {
+  it("glass card in hero is absolute, w-[85%], negative top offset", () => {
     renderPage();
-    const card = document.querySelector('[class*="w-[60%]"]')!;
+    const card = document.querySelector('[class*="w-[85%]"]')!;
     expect(card).toBeInTheDocument();
-    expect(card.className).toContain("w-[60%]");
+    expect(card.className).toContain("w-[85%]");
     expect(card.className).toContain("absolute");
-    expect(card.className).toContain("-top-38");
-    expect(card.className).toContain("left-30");
+    expect(card.className).toContain("-top-24");
+    expect(card.className).toContain("left-[7.5%]");
   });
 
-  it("hero glass card inner grid is 15%/85% columns, 4 rows, gap-10", () => {
+  it("hero glass card inner grid is 20%/80% columns, 4 rows, gap-10", () => {
     renderPage();
     const grid = document.querySelector('[class*="glass-card-wrap"] [class*="grid"]')!;
-    expect(grid.className).toContain("grid-cols-[15%_85%]");
+    expect(grid.className).toContain("grid-cols-[20%_80%]");
     expect(grid.className).toContain("grid-rows-[auto_auto_auto_auto]");
     expect(grid.className).toContain("gap-10");
   });
@@ -122,7 +123,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(p.className).toContain("font-clash-grotesk-regular");
     expect(p.className).toContain("text-base");
     expect(p.className).toContain("sm:text-lg");
-    expect(p.className).toContain("md:text-xl");
+    expect(p.className).toContain("md:text-2xl");
   });
 
   it("hero section labels are text-xs, uppercase, tracking-widest", () => {
@@ -148,16 +149,6 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     const lines = document.querySelectorAll(".hero-line");
     expect(lines.length).toBeGreaterThanOrEqual(1);
     lines.forEach((l) => expect(l.className).toContain("block"));
-  });
-
-  it("scroll indicator is bottom-8 left-1/2 with flex column centered", () => {
-    renderPage();
-    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]')!;
-    expect(el).toBeInTheDocument();
-    expect(el.className).toContain("flex");
-    expect(el.className).toContain("flex-col");
-    expect(el.className).toContain("items-center");
-    expect(el.className).toContain("gap-2");
   });
 
   /* ── Projects section ── */

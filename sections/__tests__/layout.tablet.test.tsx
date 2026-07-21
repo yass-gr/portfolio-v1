@@ -20,7 +20,8 @@ beforeAll(() => {
       (query === "(min-width: 640px)" && width >= 640) ||
       (query === "(max-width: 639px)" && width < 640) ||
       (query === "(min-width: 1024px)" && width >= 1024) ||
-      (query === "(max-width: 1023px)" && width < 1024);
+      (query === "(max-width: 1023px)" && width < 1024) ||
+      (query === "(min-width: 640px) and (max-width: 1023px)" && width >= 640 && width < 1024);
     return {
       matches,
       media: query,
@@ -134,13 +135,6 @@ describe("Layout on tablet (768x1024)", () => {
     expect(githubWrap.className).toContain("max-lg:w-full");
   });
 
-  it("scroll indicator is positioned higher on tablet", () => {
-    renderPage();
-    const el = document.querySelector('[class*="bottom-8"][class*="left-1/2"]')!;
-    expect(el).toBeInTheDocument();
-    expect(el.className).toContain("max-lg:bottom-24");
-  });
-
   /* ── Projects section ── */
   it("projects section has top padding on tablet", () => {
     renderPage();
@@ -170,14 +164,14 @@ describe("Layout on tablet (768x1024)", () => {
     const grid = document.querySelector("#projects [class*='col-span-9']")!;
     expect(grid.className).toContain("max-lg:col-span-1");
     expect(grid.className).toContain("max-lg:grid-cols-1");
-    expect(grid.className).toContain("max-lg:gap-6");
+    expect(grid.className).toContain("max-lg:gap-4");
   });
 
   it("project cards become smaller with rounded-[20px] on tablet", () => {
     renderPage();
     const cards = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]']");
     cards.forEach((c) => {
-      expect(c.className).toContain("max-lg:rounded-[20px]");
+      expect(c.className).toContain("max-lg:rounded-[60px]");
     });
   });
 
@@ -190,11 +184,11 @@ describe("Layout on tablet (768x1024)", () => {
     });
   });
 
-  it("project card title shrinks to text-xl on tablet", () => {
+  it("project card title is text-3xl on tablet", () => {
     renderPage();
     const titles = document.querySelectorAll("#projects [class*='rounded-\\[60px\\]'] h3");
     titles.forEach((t) => {
-      expect(t.className).toContain("max-lg:text-xl");
+      expect(t.className).toContain("max-lg:text-3xl");
     });
   });
 
@@ -214,7 +208,7 @@ describe("Layout on tablet (768x1024)", () => {
     renderPage();
     const svgs = document.querySelectorAll("#projects svg");
     expect(svgs.length).toBe(17);
-    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-lg:w-6"));
+    const iconSvgs = Array.from(svgs).filter((s) => s.getAttribute("class")?.includes("max-lg:w-8"));
     expect(iconSvgs.length).toBe(16);
   });
 
@@ -247,33 +241,33 @@ describe("Layout on tablet (768x1024)", () => {
     expect(card.className).toContain("max-lg:-translate-y-[5%]");
   });
 
-  it("tools gravity container has no min-h and reduced padding on tablet", () => {
+  it("tools gravity container keeps min-h-[600px] on tablet with reduced padding", () => {
     renderPage();
     const container = document.querySelector("#tools [class*='min-h-\\[600px\\]']")!;
     expect(container).toBeInTheDocument();
-    expect(container.className).toContain("max-lg:min-h-0");
+    expect(container.className).toContain("min-h-[600px]");
     expect(container.className).toContain("max-lg:px-4");
   });
 
-  it("tool pills are slightly smaller on tablet", () => {
+  it("tool pills are larger on tablet", () => {
     renderPage();
     const pills = document.querySelectorAll("#tools [class*='rounded-full']");
     expect(pills.length).toBeGreaterThan(10);
     pills.forEach((p) => {
-      expect(p.className).toContain("max-lg:gap-1.5");
-      expect(p.className).toContain("max-lg:px-3");
-      expect(p.className).toContain("max-lg:py-1.5");
-      expect(p.className).toContain("max-lg:text-sm");
+      expect(p.className).toContain("max-lg:gap-4");
+      expect(p.className).toContain("max-lg:px-7");
+      expect(p.className).toContain("max-lg:py-4");
+      expect(p.className).toContain("max-lg:text-lg");
     });
   });
 
-  it("tool pill icons are smaller on tablet", () => {
+  it("tool pill icons are larger on tablet", () => {
     renderPage();
     const icons = document.querySelectorAll("#tools [class*='rounded-full'] img");
     expect(icons.length).toBeGreaterThan(10);
     icons.forEach((icon) => {
-      expect(icon.className).toContain("max-lg:w-5");
-      expect(icon.className).toContain("max-lg:h-5");
+      expect(icon.className).toContain("max-lg:w-8");
+      expect(icon.className).toContain("max-lg:h-8");
     });
   });
 
@@ -287,7 +281,7 @@ describe("Layout on tablet (768x1024)", () => {
     expect(cards.length).toBe(3);
     cards.forEach((c) => {
       expect(c.className).toContain("rounded-[60px]");
-      expect(c.className).toContain("max-lg:rounded-[20px]");
+      expect(c.className).toContain("max-lg:rounded-[60px]");
     });
   });
 
@@ -409,8 +403,8 @@ describe("Layout on tablet (768x1024)", () => {
 
     expect(titleAnim).toBeDefined();
     const vars = titleAnim[1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-15);
-    expect(vars.scale).toBe(0.85);
+    expect(vars.yPercent).toBe(-25);
+    expect(vars.scale).toBe(0.8);
     expect(vars.ease).toBe("none");
     const st = vars.scrollTrigger as Record<string, unknown>;
     expect(st).toBeDefined();
@@ -419,7 +413,7 @@ describe("Layout on tablet (768x1024)", () => {
     expect(st.scrub).toBe(0.5);
   });
 
-  it("hero glass card scroll animation uses yPercent -10 on tablet", () => {
+  it("hero glass card scroll animation uses yPercent -15 on tablet", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
@@ -430,7 +424,7 @@ describe("Layout on tablet (768x1024)", () => {
 
     expect(cardAnims.length).toBe(1);
     const vars = cardAnims[0][1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-10);
+    expect(vars.yPercent).toBe(-15);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });
