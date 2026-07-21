@@ -39,15 +39,15 @@ const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
   })
 
   const maxLength = Math.max(...columns.map((col) => col.length))
+  const globallyUsedIds = new Set(shuffled.map((l) => l.id))
   columns.forEach((col) => {
-    const usedIds = new Set(col.map((l) => l.id))
     while (col.length < maxLength) {
-      const unused = shuffled.filter((l) => !usedIds.has(l.id))
+      const unused = shuffled.filter((l) => !globallyUsedIds.has(l.id))
       const pick = unused.length > 0
         ? unused[Math.floor(Math.random() * unused.length)]
         : shuffled[Math.floor(Math.random() * shuffled.length)]
       col.push(pick)
-      usedIds.add(pick.id)
+      globallyUsedIds.add(pick.id)
     }
   })
 
