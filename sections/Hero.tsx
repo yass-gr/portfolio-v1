@@ -213,20 +213,15 @@ const logos = [
 
 const lines = [
   <>
-    <strong>Yassine Grairi</strong> is a 23 y/o <strong>full-stack</strong>{" "}
-    developer from <strong>Morocco</strong>, currently studying.
+    Hi, I'm <strong>Yassine</strong> — a <strong>full-stack</strong> developer
+    from <strong>Morocco</strong> with a design background.
   </>,
   <>
-    Specialised in the <strong>JavaScript</strong> ecosystem with a background
-    in <strong>design</strong>,
-  </>,
-  <>focused on building clean, performant Software</>,
-  <>
-    Interested in <strong>AI</strong> & agentic workflows, and Always Curious
-    about the latest Tech developments.
+    I love building clean, performant software, and lately I've been deep into{" "}
+    <strong>AI</strong> and agentic workflows.
   </>,
   <>
-    Available for <strong>freelance</strong>.
+    Always learning, always curious. Open to <strong>freelance</strong> work.
   </>,
 ];
 
@@ -277,16 +272,19 @@ export default function Hero() {
     mm.add(
       {
         isDesktop: "(min-width: 1024px)",
-        isMobile: "(max-width: 1023px)",
+        isTablet: "(min-width: 640px) and (max-width: 1023px)",
+        isMobile: "(max-width: 639px)",
       },
       (context) => {
-        const isDesktop = !!(context.conditions as Record<string, boolean>).isDesktop;
+        const conditions = context.conditions as Record<string, boolean>;
 
         if (heroTitle) {
+          const yVal = conditions.isDesktop ? -50 : conditions.isTablet ? -25 : -15;
+          const scaleVal = conditions.isDesktop ? 0.7 : conditions.isTablet ? 0.8 : 0.85;
           gsap.to(heroTitle, {
             opacity: 0,
-            yPercent: isDesktop ? -50 : -15,
-            scale: isDesktop ? 0.7 : 0.85,
+            yPercent: yVal,
+            scale: scaleVal,
             ease: "none",
             scrollTrigger: {
               trigger: hero,
@@ -298,9 +296,10 @@ export default function Hero() {
         }
 
         if (glassCard) {
+          const yVal = conditions.isDesktop ? -20 : conditions.isTablet ? -15 : -10;
           gsap.to(glassCard, {
             opacity: 0,
-            yPercent: isDesktop ? -20 : -10,
+            yPercent: yVal,
             ease: "none",
             scrollTrigger: {
               trigger: hero,
@@ -333,7 +332,7 @@ export default function Hero() {
       </div>
 
       <LiquidGlassCard
-        className="glass-card-wrap w-[60%] absolute -top-38 left-30 max-sm:!relative max-sm:!w-[92%] max-sm:!left-auto max-sm:!top-auto max-sm:mx-auto max-lg:!relative max-lg:!w-[92%] max-lg:!left-auto max-lg:!top-auto max-lg:mx-auto"
+        className="glass-card-wrap w-[85%] absolute -top-24 left-[7.5%] max-sm:!relative max-sm:!w-[92%] max-sm:!left-auto max-sm:!top-auto max-sm:mx-auto max-lg:!relative max-lg:!w-[92%] max-lg:!left-auto max-lg:!top-auto max-lg:mx-auto"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}
@@ -343,11 +342,11 @@ export default function Hero() {
         borderOpacity={borderOpacity}
         borderRadius={borderRadius}
       >
-        <div className="grid grid-cols-[15%_85%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-4xl mx-auto py-10 mt-5 lg:mt-4 px-2 max-sm:grid-cols-1 max-sm:gap-6 max-sm:py-8 max-sm:px-6 max-lg:grid-cols-1 max-lg:gap-6 max-lg:py-8 max-lg:px-6">
+        <div className="grid grid-cols-[20%_80%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-5xl mx-auto py-10 mt-5 lg:mt-4 px-2 max-sm:grid-cols-1 max-sm:gap-6 max-sm:py-8 max-sm:px-6 max-lg:grid-cols-1 max-lg:gap-6 max-lg:py-8 max-lg:px-6">
           <div className="row-span-4 flex items-center justify-center max-sm:row-span-1 max-sm:mb-2 max-lg:row-span-1 max-lg:mb-2">
             <Avatar />
           </div>
-          <p className="font-clash-grotesk-regular text-2xl text-pretty text-base sm:text-lg md:text-xl leading-relaxed max-sm:text-base max-sm:text-center max-sm:px-2 max-lg:text-base max-lg:text-center max-lg:px-2">
+          <p className="font-clash-grotesk-regular text-2xl text-pretty text-base sm:text-lg md:text-2xl leading-relaxed max-sm:text-base max-sm:text-center max-sm:px-2 max-lg:text-base max-lg:text-center max-lg:px-2">
             {lines.map((line, i) => (
               <span key={i} className="hero-line block">
                 {line}
@@ -447,15 +446,6 @@ export default function Hero() {
           />
         </div>
       )}
-
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-neutral-500 dark:text-neutral-400 max-sm:bottom-24 max-lg:bottom-24">
-        <span className="font-clash-grotesk-semibold text-[10px] uppercase tracking-[0.25em] animate-bounce">
-          scroll for more
-        </span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="animate-bounce">
-          <path d="M6 9l6 6 6-6" />
-        </svg>
-      </div>
     </div>
   );
 }
