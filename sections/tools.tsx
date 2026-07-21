@@ -147,7 +147,7 @@ function ToolPill({
       clampMaxX={clampMaxX}
     >
       <div
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-1.5 max-lg:px-3 max-lg:py-1.5 max-lg:text-sm ${textColor} ${borderColor} ${bgColor}`}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold cursor-grab active:cursor-grabbing max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-4 max-lg:px-7 max-lg:py-4 max-lg:text-lg ${textColor} ${borderColor} ${bgColor}`}
         style={{
           borderWidth: "1.5px",
           boxShadow: isDark
@@ -156,14 +156,14 @@ function ToolPill({
         }}
       >
         {iconFailed ? (
-          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-5 max-lg:h-5 max-lg:text-xs">
+          <span className="w-6 h-6 flex items-center justify-center rounded-full text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-8 max-lg:h-8">
             {tool.name[0]}
           </span>
         ) : (
           <img
             src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
             alt={tool.name}
-            className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-5 max-lg:h-5"
+            className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-8 max-lg:h-8"
             onError={() => setIconFailed(true)}
           />
         )}
@@ -188,7 +188,7 @@ function BucketVisual({
 }) {
   return (
     <div
-      className="absolute pointer-events-none rounded-[60px] max-sm:rounded-[20px] max-lg:rounded-[20px]"
+      className="absolute pointer-events-none rounded-[60px] max-sm:rounded-[60px] max-lg:rounded-[60px]"
       style={{
         left: bucket.x,
         width: bucket.width,
@@ -362,20 +362,37 @@ export default function Tools() {
     mm.add(
       {
         isDesktop: "(min-width: 1024px)",
-        isMobile: "(max-width: 1023px)",
+        isTablet: "(min-width: 640px) and (max-width: 1023px)",
+        isMobile: "(max-width: 639px)",
       },
       (context) => {
-        const isDesktop = !!(context.conditions as Record<string, boolean>)
-          .isDesktop;
+        const conditions = context.conditions as Record<string, boolean>;
 
-        if (isDesktop) {
+        if (conditions.isDesktop) {
           gsap.fromTo(
             titleRef.current,
             { fontSize: "3vw", x: 0, y: "-70%" },
             {
               fontSize: "6.5vw",
-              x: "-30dvw",
-              y: "-20%",
+              x: "-31dvw",
+              y: "-23%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 0,
+              },
+            },
+          );
+        } else if (conditions.isTablet) {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "2vw", x: "30%", y: "-3.5rem" },
+            {
+              fontSize: "10vw",
+              x: "-27%",
+              y: "-4.5rem",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -427,17 +444,17 @@ export default function Tools() {
           </p>
         </div>
         <div
-          className="px-10 pb-5 relative min-h-[600px] max-sm:min-h-0 max-sm:px-4 max-lg:min-h-0 max-lg:px-4"
+          className="px-10 pb-5 relative min-h-[600px] max-sm:min-h-0 max-sm:px-4 max-lg:px-4"
           ref={gravityContainerRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
           {isMobile && (
-            <div className="flex flex-col md:flex-row items-center md:items-stretch gap-4 py-4">
+            <div className="flex flex-col items-center gap-4 py-4">
               {buckets.map((bucket) => (
                 <div
                   key={bucket.label}
-                  className="w-full md:w-1/3 aspect-square rounded-[60px] max-sm:rounded-[20px] max-lg:rounded-[20px] relative bucket-card"
+                  className="w-full aspect-square rounded-[60px] max-sm:rounded-[60px] max-lg:rounded-[60px] relative bucket-card"
                   style={{
                     border: `1.5px solid ${borderColor}`,
                     backgroundColor: blurBg,
@@ -445,7 +462,7 @@ export default function Tools() {
                 >
                   <div
                     id={`bucket-label-${bucket.label}`}
-                    className="absolute top-8 left-8 font-panchang-bold text-4xl text-black dark:text-white capitalize pointer-events-none transition-all duration-500 ease-out translate-y-[-120%] opacity-0"
+                    className="absolute top-8 left-8 font-panchang-bold text-4xl text-black dark:text-white capitalize pointer-events-none max-sm:translate-y-0 max-sm:opacity-100 max-sm:top-4 max-sm:left-4 max-lg:translate-y-0 max-lg:opacity-100 max-lg:top-4 max-lg:left-4"
                   >
                     {bucket.label}
                   </div>
@@ -576,7 +593,7 @@ export default function Tools() {
             <MatterBody
               matterBodyOptions={{ isStatic: true, friction: 1 }}
               x="50%"
-              y="93%"
+              y={isMobile ? "100%" : "93%"}
             >
               <div
                 className="opacity-0 pointer-events-none"
