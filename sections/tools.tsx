@@ -405,16 +405,16 @@ export default function Tools() {
         } else {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "2vw", x: "2%", y: "-50%" },
+            { fontSize: "2vw", x: "2%", y: "-10%" },
             {
               fontSize: "10vw",
-              x: "-30%",
-              y: "-10%",
+              x: "-25%",
+              y: "-25%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
                 start: "top bottom",
-                end: "bottom top",
+                end: "top top",
                 scrub: 0,
               },
             },
@@ -431,7 +431,7 @@ export default function Tools() {
     <section
       ref={sectionRef}
       id="tools"
-      className="min-h-dvh p-5 max-sm:pt-[15vh] max-lg:pt-[15vh]"
+      className="min-h-dvh px-5 py-3 max-sm:pt-[15vh] max-lg:pt-[15vh]"
     >
       <h1 ref={titleRef} className="font-panchang-bold text-center text-5xl">
         Tools
