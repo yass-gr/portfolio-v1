@@ -70,20 +70,37 @@ export default function Projects() {
     mm.add(
       {
         isDesktop: "(min-width: 1024px)",
-        isMobile: "(max-width: 1023px)",
+        isTablet: "(min-width: 640px) and (max-width: 1023px)",
+        isMobile: "(max-width: 639px)",
       },
       (context) => {
-        const isDesktop = !!(context.conditions as Record<string, boolean>)
-          .isDesktop;
+        const conditions = context.conditions as Record<string, boolean>;
 
-        if (isDesktop) {
+        if (conditions.isDesktop) {
           gsap.fromTo(
             titleRef.current,
             { fontSize: "3vw", x: 0, y: "-70%" },
             {
               fontSize: "6.5vw",
               x: "24dvw",
-              y: "-20%",
+              y: "-10%",
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top bottom",
+                end: "top top",
+                scrub: 0,
+              },
+            },
+          );
+        } else if (conditions.isTablet) {
+          gsap.fromTo(
+            titleRef.current,
+            { fontSize: "1.5vw", x: "-0.5%", y: "-350%" },
+            {
+              fontSize: "8vw",
+              x: "20dvw",
+              y: "-130%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -96,11 +113,11 @@ export default function Projects() {
         } else {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "2vw", x: "-2%", y: "-50%" },
+            { fontSize: "1vw", x: "-0.7%", y: "-250%" },
             {
               fontSize: "10vw",
-              x: "10dvw",
-              y: "-10%",
+              x: "12dvw",
+              y: "-100%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -150,7 +167,7 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-6 max-sm:p-0 max-lg:col-span-1 max-lg:grid-cols-1 max-lg:gap-6 max-lg:p-0">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-4 max-sm:p-0 max-lg:col-span-1 max-lg:grid-cols-1 max-lg:gap-4 max-lg:p-0">
             {projects.map((project) => (
               <Magnet
                 key={project.imageId}
