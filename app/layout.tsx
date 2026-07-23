@@ -67,7 +67,7 @@ export default function RootLayout({
           </div>
           <Footer />
         </LenisProvider>
-        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 px-4 max-sm:bottom-10 max-sm:gap-2 max-lg:bottom-12 max-lg:gap-3">
+        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 px-4 max-sm:bottom-2 max-sm:gap-2 max-lg:bottom-2 max-lg:gap-3">
           <TooltipProvider delayDuration={0}>
             <DownloadCvButton />
             <BottomNav />
