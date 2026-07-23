@@ -137,6 +137,7 @@ export default function ProjectCard({
                       src={`https://cdn.simpleicons.org/${slug}/${color}`}
                       alt={tag}
                       title={tag}
+                      loading="lazy"
                       className="w-4 h-4 max-sm:w-2.5 max-sm:h-2.5 max-lg:w-6 max-lg:h-6"
                     />
                     <span className="text-xs font-clash-grotesk-regular text-white/70 max-sm:text-[8px] max-lg:text-base">{tag}</span>

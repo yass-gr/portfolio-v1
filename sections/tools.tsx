@@ -163,6 +163,7 @@ function ToolPill({
           <img
             src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
             alt={tool.name}
+            loading="lazy"
             className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-8 max-lg:h-8"
             onError={() => setIconFailed(true)}
           />
