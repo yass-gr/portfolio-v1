@@ -268,9 +268,7 @@ export default function Tools() {
   const gravityRef = useRef<GravityRef>(null);
   const gravityStarted = useRef(false);
   const [isDark, setIsDark] = useState(false);
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth < 1024 : true
-  );
+  const [isMobile, setIsMobile] = useState(true);
   const hoveredRef = useRef<string | null>(null);
 
   useEffect(() => {

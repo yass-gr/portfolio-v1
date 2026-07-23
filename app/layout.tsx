@@ -11,6 +11,7 @@ import {
   panchangExtrabold,
 } from "./fonts";
 import { BottomNav } from "@/components/BottomNav";
+import LenisProvider from "@/components/lenis-provider";
 import DownloadCvButton from "@/components/download-cv";
 import Footer from "@/components/footer";
 
@@ -33,7 +34,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased overflow-x-hidden overflow-y-scroll`}
+      className={`${exposeRegular.variable} ${exposeBold.variable} ${exposeBlack.variable} ${clashGroteskRegular.variable} ${clashGroteskSemibold.variable} ${clashGroteskBold.variable} ${panchangRegular.variable} ${panchangBold.variable} ${panchangExtrabold.variable} h-full antialiased overflow-hidden`}
     >
       <head>
         <link rel="icon" href="/strawhat.png" />
@@ -41,7 +42,7 @@ export default function RootLayout({
           html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
       </head>
-      <body className="flex min-h-dvh flex-col overflow-x-hidden">
+      <body className="flex min-h-dvh flex-col overflow-hidden">
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] max-lg:!inset-x-0 max-lg:!top-1/2 max-lg:!-translate-y-1/2 max-lg:!h-[40vh] dark:block hidden"
           loop
@@ -60,10 +61,12 @@ export default function RootLayout({
         >
           <source src="/background-light.webm" type="video/webm" />
         </video>
-        <div className="flex-1 px-[3%] max-sm:px-0 max-lg:px-0">
-          {children}
-        </div>
-        <Footer />
+        <LenisProvider>
+          <div className="flex-1 px-[3%] max-sm:px-0 max-lg:px-0">
+            {children}
+          </div>
+          <Footer />
+        </LenisProvider>
         <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 px-4">
           <TooltipProvider delayDuration={0}>
             <DownloadCvButton />
