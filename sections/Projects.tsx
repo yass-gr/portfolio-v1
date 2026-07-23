@@ -56,10 +56,10 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 1024);
+    setIsDesktop(window.innerWidth >= 1024);
   }, []);
 
   useGSAP(() => {
@@ -173,7 +173,7 @@ export default function Projects() {
                 key={project.imageId}
                 padding={10}
                 magnetStrength={10}
-                disabled={isMobile}
+                disabled={!isDesktop}
               >
                 <ProjectCard {...project} />
               </Magnet>
