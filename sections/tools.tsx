@@ -478,7 +478,7 @@ export default function Tools() {
           <Gravity
             ref={gravityRef}
             gravity={{ x: 0, y: 0.2 }}
-            className="w-full h-full"
+            className="w-full h-full max-xl:pointer-events-none xl:pointer-events-auto"
             grabCursor
             addTopWall
             autoStart={false}
