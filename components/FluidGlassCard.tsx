@@ -78,7 +78,7 @@ export default function FluidGlassCard({
         style={{ borderRadius: `${borderRadius}px` }}
         aria-hidden
       >
-        <FluidGlass embed mode="cube" cubeProps={cubeProps} />
+        <FluidGlass cubeProps={cubeProps} />
       </div>
 
       {/* Edge highlights */}
