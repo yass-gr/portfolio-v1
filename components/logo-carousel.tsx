@@ -1,11 +1,10 @@
 "use client"
 
 import React, {
-  useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
-  type SVGProps,
 } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 
@@ -19,6 +18,7 @@ interface LogoColumnProps {
   logos: Logo[]
   index: number
   currentTime: number
+  isMobile: boolean
 }
 
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -30,8 +30,18 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled
 }
 
+const deduplicateByIcon = (logos: Logo[]): Logo[] => {
+  const seen = new Set<React.ComponentType<React.SVGProps<SVGSVGElement>>>()
+  return logos.filter((logo) => {
+    if (seen.has(logo.img)) return false
+    seen.add(logo.img)
+    return true
+  })
+}
+
 const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
-  const shuffled = shuffleArray(allLogos)
+  const unique = deduplicateByIcon(allLogos)
+  const shuffled = shuffleArray(unique)
   const columns: Logo[][] = Array.from({ length: columnCount }, () => [])
 
   shuffled.forEach((logo, index) => {
@@ -39,15 +49,15 @@ const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
   })
 
   const maxLength = Math.max(...columns.map((col) => col.length))
-  const globallyUsedIds = new Set(shuffled.map((l) => l.id))
+  const usedIds = new Set(shuffled.map((l) => l.id))
   columns.forEach((col) => {
     while (col.length < maxLength) {
-      const unused = shuffled.filter((l) => !globallyUsedIds.has(l.id))
-      const pick = unused.length > 0
-        ? unused[Math.floor(Math.random() * unused.length)]
-        : shuffled[Math.floor(Math.random() * shuffled.length)]
+      const available = unique.filter((l) => !usedIds.has(l.id))
+      const pick = available.length > 0
+        ? available[Math.floor(Math.random() * available.length)]
+        : unique[Math.floor(Math.random() * unique.length)]
       col.push(pick)
-      globallyUsedIds.add(pick.id)
+      usedIds.add(pick.id)
     }
   })
 
@@ -55,12 +65,26 @@ const distributeLogos = (allLogos: Logo[], columnCount: number): Logo[][] => {
 }
 
 const LogoColumn: React.FC<LogoColumnProps> = React.memo(
-  ({ logos, index, currentTime }) => {
+  ({ logos, index, currentTime, isMobile }) => {
     const cycleInterval = 4000
     const columnDelay = index * 200
     const adjustedTime = (currentTime + columnDelay) % (cycleInterval * logos.length)
     const currentIndex = Math.floor(adjustedTime / cycleInterval)
     const CurrentLogo = useMemo(() => logos[currentIndex].img, [logos, currentIndex])
+
+    if (isMobile) {
+      return (
+        <div className="relative h-8 w-8 overflow-hidden">
+          <div
+            key={`${logos[currentIndex].id}-${currentIndex}`}
+            className="absolute inset-0 flex items-center justify-center animate-logo-fade"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <CurrentLogo className="h-8 w-8 max-h-[80%] max-w-[80%] object-contain text-black dark:text-white" />
+          </div>
+        </div>
+      )
+    }
 
     return (
       <motion.div
@@ -118,15 +142,22 @@ interface LogoCarouselProps {
 export function LogoCarousel({ columnCount = 2, logos }: LogoCarouselProps) {
   const [logoSets, setLogoSets] = useState<Logo[][]>([])
   const [currentTime, setCurrentTime] = useState(0)
+  const isMobileRef = useRef(false)
 
-  const updateTime = useCallback(() => {
-    setCurrentTime((prevTime) => prevTime + 100)
+  useEffect(() => {
+    const check = () => { isMobileRef.current = window.innerWidth < 1024 }
+    check()
+    window.addEventListener("resize", check)
+    return () => window.removeEventListener("resize", check)
   }, [])
 
   useEffect(() => {
-    const intervalId = setInterval(updateTime, 100)
+    const intervalMs = isMobileRef.current ? 4000 : 100
+    const intervalId = setInterval(() => {
+      setCurrentTime((prev) => prev + intervalMs)
+    }, intervalMs)
     return () => clearInterval(intervalId)
-  }, [updateTime])
+  }, [])
 
   useEffect(() => {
     const distributedLogos = distributeLogos(logos, columnCount)
@@ -141,6 +172,7 @@ export function LogoCarousel({ columnCount = 2, logos }: LogoCarouselProps) {
           logos={logos}
           index={index}
           currentTime={currentTime}
+          isMobile={isMobileRef.current}
         />
       ))}
     </div>
