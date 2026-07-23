@@ -13,7 +13,7 @@ import {
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import Footer from "@/components/footer";
-import GradualBlur from "@/components/GradualBlur";
+import GradualBlurWrapper from "@/components/GradualBlurWrapper";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { InlineScript } from "@/components/inline-script";
 import "./globals.css";
@@ -70,7 +70,7 @@ export default function RootLayout({
             <BottomNav />
           </TooltipProvider>
         </div>
-        <GradualBlur
+        <GradualBlurWrapper
           target="page"
           position="bottom"
           height="5rem"

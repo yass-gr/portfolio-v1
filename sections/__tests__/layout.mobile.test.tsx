@@ -407,4 +407,11 @@ describe("Layout on mobile (375x812)", () => {
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });
+
+  /* ── GradualBlur ── */
+  it("gradual blur is not rendered on mobile", () => {
+    renderPage();
+    const blur = document.querySelector(".gradual-blur");
+    expect(blur).not.toBeInTheDocument();
+  });
 });

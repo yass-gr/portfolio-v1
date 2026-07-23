@@ -493,4 +493,11 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });
+
+  /* ── GradualBlur ── */
+  it("gradual blur is rendered on desktop", () => {
+    renderPage();
+    const blur = document.querySelector(".gradual-blur");
+    expect(blur).toBeInTheDocument();
+  });
 });

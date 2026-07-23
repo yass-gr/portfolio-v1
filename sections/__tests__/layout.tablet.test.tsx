@@ -407,4 +407,11 @@ describe("Layout on tablet (768x1024)", () => {
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });
+
+  /* ── GradualBlur ── */
+  it("gradual blur is not rendered on tablet", () => {
+    renderPage();
+    const blur = document.querySelector(".gradual-blur");
+    expect(blur).not.toBeInTheDocument();
+  });
 });
