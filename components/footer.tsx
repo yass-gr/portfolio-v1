@@ -4,7 +4,7 @@ import { useState, useCallback, useRef } from "react"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-import LiquidGlassCard from "@/components/LiquidGlassCard"
+import FluidGlassCard from "@/components/FluidGlassCard"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -133,7 +133,7 @@ export default function Footer() {
   return (
     <section className="relative flex items-center justify-center overflow-hidden pt-16 pb-24 max-sm:pt-8 max-sm:pb-20 max-lg:pt-8 max-lg:pb-20">
 
-      <LiquidGlassCard
+      <FluidGlassCard
         borderRadius={42}
         className="flex-col w-full px-14 lg:px-20 py-28 items-center justify-center max-sm:px-6 max-sm:py-12 max-lg:px-6 max-lg:py-12"
       >
@@ -176,7 +176,7 @@ export default function Footer() {
           <span>&copy; 2026 Yassine Grairi</span>
           <span ref={builtRef}>Built with Next.js &amp; GSAP</span>
         </div>
-      </LiquidGlassCard>
+      </FluidGlassCard>
     </section>
   )
 }
