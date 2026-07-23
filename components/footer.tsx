@@ -132,7 +132,7 @@ export default function Footer() {
   }, [])
 
   return (
-    <section className="relative flex items-center justify-center overflow-hidden pt-16 pb-24 max-sm:pt-8 max-sm:pb-20 max-lg:pt-8 max-lg:pb-20">
+    <section id="contact" className="relative flex items-center justify-center overflow-hidden pt-16 pb-24 max-sm:pt-8 max-sm:pb-20 max-lg:pt-8 max-lg:pb-20">
 
       <LiquidGlassCard
         borderRadius={42}
