@@ -43,14 +43,14 @@ export function BottomNav() {
   }, [isDark]);
 
   return (
-    <nav className="flex justify-center max-w-full overflow-hidden">
+    <nav className="flex justify-center">
       <GlassSurface
         width="auto"
         height="auto"
         borderRadius={999}
         backgroundOpacity={0.15}
         saturation={1.8}
-        className="px-3 py-2 max-sm:px-1.5 max-sm:py-1 max-lg:px-4 max-lg:py-2.5 max-w-full"
+        className="px-3 py-2 max-sm:px-1.5 max-sm:py-1 max-lg:px-4 max-lg:py-2.5"
       >
         <div className="flex items-center gap-2 max-sm:gap-1 max-lg:gap-3">
             {navItems.map(({ label, icon }) => (

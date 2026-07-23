@@ -64,7 +64,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
-        <div className="fixed inset-x-0 bottom-6 z-[1200] flex items-center justify-center gap-4 overflow-x-hidden">
+        <div className="fixed bottom-6 left-1/2 z-[1200] flex items-center justify-center gap-4 -translate-x-1/2">
           <TooltipProvider delayDuration={0}>
             <DownloadCvButton />
             <BottomNav />
