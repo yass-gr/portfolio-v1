@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback, Fragment } from "react";
+import { useRef, useState, useEffect, useCallback } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -178,6 +178,76 @@ function rng(base: number, range: number) {
   return `${base + (Math.random() - 0.5) * range}%`;
 }
 
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) {
+    h = ((h << 5) - h) + s.charCodeAt(i);
+    h |= 0;
+  }
+  return Math.abs(h);
+}
+
+function ToolPillStatic({
+  tool,
+  isDark,
+  index,
+  total,
+}: {
+  tool: Tool;
+  isDark: boolean;
+  index: number;
+  total: number;
+}) {
+  const seed = hashStr(tool.name);
+
+  const cols = Math.min(3, total);
+  const col = index % cols;
+  const row = Math.floor(index / cols);
+  const rows = Math.ceil(total / cols);
+
+  const left = 15 + (col / Math.max(cols - 1, 1)) * 70 + ((seed * 137 + index * 13) % 10) - 5;
+  const top = 45 + (row / Math.max(1, rows - 1)) * 40 + ((seed * 251) % 8) - 4;
+  const rotation = ((seed * 67 + index * 13) % 10) - 5;
+
+  const iconColor = isDark ? "ffffff" : "000000";
+  const textColor = isDark ? "text-white" : "text-black";
+  const borderColor = isDark ? "border-white/15" : "border-black/10";
+  const bgColor = isDark ? "bg-white/8" : "bg-black/5";
+
+  return (
+    <div
+      className={`absolute flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-4 max-lg:px-7 max-lg:py-4 max-lg:text-lg ${textColor} ${borderColor} ${bgColor}`}
+      style={{
+        left: `${left}%`,
+        top: `${top}%`,
+        transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
+        borderWidth: "1.5px",
+        boxShadow: isDark
+          ? "0 0 20px rgba(255,255,255,0.06)"
+          : "0 0 20px rgba(0,0,0,0.04)",
+        pointerEvents: "none",
+      }}
+    >
+      <img
+        src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
+        alt={tool.name}
+        loading="lazy"
+        className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-8 max-lg:h-8"
+        onError={(e) => {
+          const target = e.currentTarget;
+          target.style.display = "none";
+          const fallback = target.nextElementSibling;
+          if (fallback) (fallback as HTMLElement).style.display = "flex";
+        }}
+      />
+      <span className="hidden w-6 h-6 items-center justify-center text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-8 max-lg:h-8">
+        {tool.name[0]}
+      </span>
+      {tool.name}
+    </div>
+  );
+}
+
 function BucketVisual({
   bucket,
   borderColor,
@@ -217,27 +287,7 @@ export default function Tools() {
   const gravityStarted = useRef(false);
   const [isDark, setIsDark] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [wallPositions, setWallPositions] = useState<number[]>([]);
-  const [cardBounds, setCardBounds] = useState<
-    { left: number; right: number; bottom: number }[]
-  >([]);
-  const wallPositionsRef = useRef<number[]>([]);
-  const cardBoundsRef = useRef<
-    { left: number; right: number; bottom: number }[]
-  >([]);
   const hoveredRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    wallPositionsRef.current = wallPositions;
-    cardBoundsRef.current = cardBounds;
-    if (isMobile && wallPositions.length > 0 && !gravityStarted.current) {
-      const rect = sectionRef.current?.getBoundingClientRect();
-      if (rect && rect.top < window.innerHeight && rect.bottom > 0) {
-        gravityStarted.current = true;
-        gravityRef.current?.start();
-      }
-    }
-  }, [wallPositions, isMobile]);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
@@ -245,36 +295,6 @@ export default function Tools() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-
-  useEffect(() => {
-    if (!isMobile || !gravityContainerRef.current) return;
-    const container = gravityContainerRef.current;
-    const updateWalls = () => {
-      const containerRect = container.getBoundingClientRect();
-      const containerHeight = containerRect.height;
-      const containerWidth = containerRect.width;
-      if (!containerHeight || !containerWidth) return;
-      const cardEls = container.querySelectorAll<HTMLElement>(".bucket-card");
-      const positions: number[] = [];
-      const bounds: { left: number; right: number; bottom: number }[] = [];
-      cardEls.forEach((card, i) => {
-        const r = card.getBoundingClientRect();
-        const left = ((r.left - containerRect.left) / containerWidth) * 100;
-        const right = ((r.right - containerRect.left) / containerWidth) * 100;
-        const bottom = ((r.bottom - containerRect.top) / containerHeight) * 100;
-        bounds.push({ left, right, bottom });
-        if (i < cardEls.length - 1) {
-          positions.push(bottom);
-        }
-      });
-      setWallPositions(positions);
-      setCardBounds(bounds);
-    };
-    updateWalls();
-    const ro = new ResizeObserver(updateWalls);
-    ro.observe(container);
-    return () => ro.disconnect();
-  }, [isMobile]);
 
   useEffect(() => {
     const check = () =>
@@ -295,7 +315,6 @@ export default function Tools() {
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !gravityStarted.current) {
-          if (isMobile && wallPositionsRef.current.length === 0) return;
           gravityStarted.current = true;
           gravityRef.current?.start();
         }
@@ -304,7 +323,7 @@ export default function Tools() {
     );
     io.observe(sectionRef.current);
     return () => io.disconnect();
-  }, [isMobile]);
+  }, []);
 
   function updateBucketLabel(label: string | null) {
     for (const bucket of buckets) {
@@ -375,11 +394,10 @@ export default function Tools() {
         if (conditions.isDesktop) {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "3vw", x: 0, y: "-70%" },
+            { fontSize: "3vw", x: 0 },
             {
               fontSize: "6.5vw",
               x: "-31dvw",
-              y: "-23%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -392,11 +410,10 @@ export default function Tools() {
         } else if (conditions.isTablet) {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "2vw", x: "30%", y: "-3.5rem" },
+            { fontSize: "2vw", x: "30%" },
             {
               fontSize: "10vw",
               x: "-27%",
-              y: "-4.5rem",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -409,11 +426,10 @@ export default function Tools() {
         } else {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "2vw", x: "2%", y: "-10%" },
+            { fontSize: "2vw", x: "2%" },
             {
               fontSize: "10vw",
               x: "-25%",
-              y: "-25%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -441,7 +457,7 @@ export default function Tools() {
         Tools
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%] max-lg:-translate-y-[5%]">
+      <LiquidGlassCard className="mt-4 pb-14">
         <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4 max-lg:pt-8 max-lg:pb-6 max-lg:px-4">
           <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2 max-lg:text-base max-lg:pl-2">
             everything i need to build, design, and ship
@@ -453,12 +469,12 @@ export default function Tools() {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
         >
-          {isMobile && (
+          {isMobile ? (
             <div className="flex flex-col items-center gap-4 py-4">
-              {buckets.map((bucket) => (
+              {buckets.map((bucket, bi) => (
                 <div
                   key={bucket.label}
-                  className="w-full aspect-square rounded-[60px] max-sm:rounded-[60px] max-lg:rounded-[60px] relative bucket-card"
+                  className="w-full aspect-square rounded-[60px] max-sm:rounded-[60px] max-lg:rounded-[60px] relative bucket-card overflow-hidden"
                   style={{
                     border: `1.5px solid ${borderColor}`,
                     backgroundColor: blurBg,
@@ -470,22 +486,28 @@ export default function Tools() {
                   >
                     {bucket.label}
                   </div>
+                  {bucket.tools.map((tool, i) => (
+                    <ToolPillStatic
+                      key={tool.name}
+                      tool={tool}
+                      isDark={isDark}
+                      index={i}
+                      total={bucket.tools.length}
+                    />
+                  ))}
                 </div>
               ))}
             </div>
-          )}
-
-          <Gravity
-            ref={gravityRef}
-            gravity={{ x: 0, y: 0.2 }}
-            className="w-full h-full max-xl:pointer-events-none xl:pointer-events-auto"
-            grabCursor
-            addTopWall
-            autoStart={false}
-            interactive={!isMobile}
-          >
-            {!isMobile &&
-              buckets.map((bucket) => (
+          ) : (
+            <Gravity
+              ref={gravityRef}
+              gravity={{ x: 0, y: 0.2 }}
+              className="w-full h-full"
+              grabCursor
+              addTopWall
+              autoStart={false}
+            >
+              {buckets.map((bucket) => (
                 <BucketVisual
                   key={bucket.label}
                   bucket={bucket}
@@ -494,68 +516,23 @@ export default function Tools() {
                 />
               ))}
 
-            {buckets.map((bucket, bi) =>
-              bucket.tools.map((tool, i) => (
-                <ToolPill
-                  key={`${bucket.label}-${tool.name}`}
-                  tool={tool}
-                  x={rng(
-                    getBucketCenter(bucket),
-                    parseFloat(bucket.width) * 0.3,
-                  )}
-                  y={isMobile ? `${2 + bi * 33 + i * 3}%` : `${12 + i * 8}%`}
-                  clampMinX={
-                    isMobile && cardBounds[bi]
-                      ? `${cardBounds[bi].left}%`
-                      : bucket.x
-                  }
-                  clampMaxX={
-                    isMobile && cardBounds[bi]
-                      ? `${cardBounds[bi].right}%`
-                      : `${getBucketRight(bucket)}%`
-                  }
-                />
-              )),
-            )}
+              {buckets.map((bucket, bi) =>
+                bucket.tools.map((tool, i) => (
+                  <ToolPill
+                    key={`${bucket.label}-${tool.name}`}
+                    tool={tool}
+                    x={rng(
+                      getBucketCenter(bucket),
+                      parseFloat(bucket.width) * 0.3,
+                    )}
+                    y={`${12 + i * 8}%`}
+                    clampMinX={bucket.x}
+                    clampMaxX={`${getBucketRight(bucket)}%`}
+                  />
+                )),
+              )}
 
-            {isMobile &&
-              cardBounds.map((b, i) => (
-                <Fragment key={`enc-${i}`}>
-                  <MatterBody
-                    matterBodyOptions={{ isStatic: true, friction: 1 }}
-                    x="50%"
-                    y={`${b.bottom}%`}
-                  >
-                    <div
-                      className="opacity-0 pointer-events-none"
-                      style={{ width: 5000, height: 30 }}
-                    />
-                  </MatterBody>
-                  <MatterBody
-                    matterBodyOptions={{ isStatic: true, friction: 1 }}
-                    x={`${b.left}%`}
-                    y={`${b.bottom / 2}%`}
-                  >
-                    <div
-                      className="opacity-0 pointer-events-none"
-                      style={{ width: 30, height: 5000 }}
-                    />
-                  </MatterBody>
-                  <MatterBody
-                    matterBodyOptions={{ isStatic: true, friction: 1 }}
-                    x={`${b.right}%`}
-                    y={`${b.bottom / 2}%`}
-                  >
-                    <div
-                      className="opacity-0 pointer-events-none"
-                      style={{ width: 30, height: 5000 }}
-                    />
-                  </MatterBody>
-                </Fragment>
-              ))}
-
-            {!isMobile &&
-              buckets.slice(0, -1).map((bucket, i) => (
+              {buckets.slice(0, -1).map((bucket, i) => (
                 <MatterBody
                   key={`wall-${i}`}
                   matterBodyOptions={{ isStatic: true, friction: 1 }}
@@ -569,7 +546,6 @@ export default function Tools() {
                 </MatterBody>
               ))}
 
-            {!isMobile && (
               <MatterBody
                 matterBodyOptions={{ isStatic: true, friction: 1 }}
                 x={buckets[0].x}
@@ -580,9 +556,7 @@ export default function Tools() {
                   style={{ width: 60, height: 3000 }}
                 />
               </MatterBody>
-            )}
 
-            {!isMobile && (
               <MatterBody
                 matterBodyOptions={{ isStatic: true, friction: 1 }}
                 x={`${getBucketRight(buckets[buckets.length - 1])}%`}
@@ -593,19 +567,19 @@ export default function Tools() {
                   style={{ width: 60, height: 3000 }}
                 />
               </MatterBody>
-            )}
 
-            <MatterBody
-              matterBodyOptions={{ isStatic: true, friction: 1 }}
-              x="50%"
-              y={isMobile ? "100%" : "93%"}
-            >
-              <div
-                className="opacity-0 pointer-events-none"
-                style={{ width: 5000, height: 40 }}
-              />
-            </MatterBody>
-          </Gravity>
+              <MatterBody
+                matterBodyOptions={{ isStatic: true, friction: 1 }}
+                x="50%"
+                y="93%"
+              >
+                <div
+                  className="opacity-0 pointer-events-none"
+                  style={{ width: 5000, height: 40 }}
+                />
+              </MatterBody>
+            </Gravity>
+          )}
         </div>
       </LiquidGlassCard>
     </section>

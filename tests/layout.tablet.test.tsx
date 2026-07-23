@@ -76,13 +76,11 @@ describe("Layout on tablet (768x1024)", () => {
   });
 
   /* ── Hero section ── */
-  it("hero section is auto height with justify-start on tablet", () => {
+  it("hero section has top padding on tablet", () => {
     renderPage();
     const hero = document.getElementById("about")!;
     expect(hero).toBeInTheDocument();
-    expect(hero.className).toContain("max-lg:h-auto");
-    expect(hero.className).toContain("max-lg:min-h-dvh");
-    expect(hero.className).toContain("max-lg:justify-start");
+    expect(hero.className).toContain("min-h-dvh");
     expect(hero.className).toContain("max-lg:pt-4");
     expect(hero.className).toContain("max-lg:pb-0");
   });
@@ -96,14 +94,10 @@ describe("Layout on tablet (768x1024)", () => {
     expect(h1.className).toContain("max-lg:leading-[0.9]");
   });
 
-  it("hero glass card becomes relative, 92% width, centered on tablet", () => {
+  it("hero glass card is 92% width centered on tablet", () => {
     renderPage();
     const card = document.querySelector('[class*="glass-card-wrap"]')!;
-    expect(card.className).toContain("max-lg:!relative");
-    expect(card.className).toContain("max-lg:!w-[92%]");
-    expect(card.className).toContain("max-lg:!left-auto");
-    expect(card.className).toContain("max-lg:!top-auto");
-    expect(card.className).toContain("max-lg:mx-auto");
+    expect(card.className).toContain("max-lg:w-[92%]");
   });
 
   it("hero card inner grid becomes single column on tablet", () => {
@@ -239,10 +233,11 @@ describe("Layout on tablet (768x1024)", () => {
     expect(section.className).toContain("max-lg:pt-[15vh]");
   });
 
-  it("tools glass card adjusts translate-y on tablet", () => {
+  it("tools glass card is present on tablet", () => {
     renderPage();
-    const card = document.querySelector("#tools [class*='-translate-y-']")!;
-    expect(card.className).toContain("max-lg:-translate-y-[5%]");
+    const section = document.querySelector("#tools")!;
+    const card = section.querySelector('[class*="pb-14"]')!;
+    expect(card).toBeInTheDocument();
   });
 
   it("tools gravity container keeps min-h-[600px] on tablet with reduced padding", () => {
@@ -402,7 +397,7 @@ describe("Layout on tablet (768x1024)", () => {
   });
 
   /* ── GSAP matchMedia animation configs ── */
-  it("hero glass card scroll animation uses yPercent -15 on tablet", () => {
+  it("hero glass card scroll animation fades out on scroll", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
@@ -413,7 +408,6 @@ describe("Layout on tablet (768x1024)", () => {
 
     expect(cardAnims.length).toBe(1);
     const vars = cardAnims[0][1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-15);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });

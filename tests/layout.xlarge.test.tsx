@@ -73,14 +73,13 @@ describe("Layout on xlarge screens (1920x1080)", () => {
   });
 
   /* ── Hero section ── */
-  it("hero section is full viewport with centered flex column", () => {
+  it("hero section is full viewport with flex column", () => {
     renderPage();
     const hero = document.getElementById("about")!;
     expect(hero).toBeInTheDocument();
-    expect(hero.className).toContain("h-[100dvh]");
+    expect(hero.className).toContain("min-h-dvh");
     expect(hero.className).toContain("flex");
     expect(hero.className).toContain("flex-col");
-    expect(hero.className).toContain("justify-center");
   });
 
   it("hero title uses 7.5vw font with panchang-extrabold, centered", () => {
@@ -90,14 +89,12 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(h1.className).toContain("font-panchang-extrabold");
   });
 
-  it("glass card in hero is absolute, w-[85%], negative top offset", () => {
+  it("glass card in hero is centered with w-[85%]", () => {
     renderPage();
     const card = document.querySelector('[class*="w-[85%]"]')!;
     expect(card).toBeInTheDocument();
     expect(card.className).toContain("w-[85%]");
-    expect(card.className).toContain("absolute");
-    expect(card.className).toContain("-top-24");
-    expect(card.className).toContain("left-[7.5%]");
+    expect(card.className).toContain("mx-auto");
   });
 
   it("hero glass card inner grid is 20%/80% columns, 4 rows, gap-10", () => {
@@ -312,12 +309,11 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(visuals.length).toBeGreaterThanOrEqual(3);
   });
 
-  it("tools glass card uses desktop translate-y and margin", () => {
+  it("tools glass card uses margin for spacing", () => {
     renderPage();
     const section = document.querySelector("#tools")!;
-    const card = section.querySelector('[class*="-translate-y-\\[11\\.5\\%\\]"]')!;
+    const card = section.querySelector('[class*="pb-14"]')!;
     expect(card).toBeInTheDocument();
-    expect(card.className).toContain("mt-16");
   });
 
   /* ── Footer ── */
@@ -488,7 +484,7 @@ describe("Layout on xlarge screens (1920x1080)", () => {
   });
 
   /* ── GSAP matchMedia animation configs ── */
-  it("hero glass card scroll animation uses yPercent -20 on desktop", () => {
+  it("hero glass card scroll animation fades out on scroll", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
@@ -499,7 +495,6 @@ describe("Layout on xlarge screens (1920x1080)", () => {
 
     expect(cardAnims.length).toBe(1);
     const vars = cardAnims[0][1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-20);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });

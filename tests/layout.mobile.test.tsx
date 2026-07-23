@@ -76,13 +76,11 @@ describe("Layout on mobile (431x932)", () => {
   });
 
   /* ── Hero section ── */
-  it("hero section switches to auto height with justify-start on mobile", () => {
+  it("hero section has top padding on mobile", () => {
     renderPage();
     const hero = document.getElementById("about")!;
     expect(hero).toBeInTheDocument();
-    expect(hero.className).toContain("max-sm:h-auto");
-    expect(hero.className).toContain("max-sm:min-h-dvh");
-    expect(hero.className).toContain("max-sm:justify-start");
+    expect(hero.className).toContain("min-h-dvh");
     expect(hero.className).toContain("max-sm:pt-4");
     expect(hero.className).toContain("max-sm:pb-0");
   });
@@ -96,14 +94,10 @@ describe("Layout on mobile (431x932)", () => {
     expect(h1.className).toContain("max-sm:leading-[0.9]");
   });
 
-  it("hero glass card becomes relative, 92% width, centered on mobile", () => {
+  it("hero glass card is 92% width centered on mobile", () => {
     renderPage();
     const card = document.querySelector('[class*="glass-card-wrap"]')!;
-    expect(card.className).toContain("max-sm:!relative");
-    expect(card.className).toContain("max-sm:!w-[92%]");
-    expect(card.className).toContain("max-sm:!left-auto");
-    expect(card.className).toContain("max-sm:!top-auto");
-    expect(card.className).toContain("max-sm:mx-auto");
+    expect(card.className).toContain("max-sm:w-[92%]");
   });
 
   it("hero card inner grid becomes single column on mobile", () => {
@@ -239,10 +233,11 @@ describe("Layout on mobile (431x932)", () => {
     expect(section.className).toContain("max-sm:pt-[15vh]");
   });
 
-  it("tools glass card adjusts translate-y on mobile", () => {
+  it("tools glass card is present on mobile", () => {
     renderPage();
-    const card = document.querySelector("#tools [class*='-translate-y-']")!;
-    expect(card.className).toContain("max-sm:-translate-y-[5%]");
+    const section = document.querySelector("#tools")!;
+    const card = section.querySelector('[class*="pb-14"]')!;
+    expect(card).toBeInTheDocument();
   });
 
   it("tools gravity container has no min-h and reduced padding on mobile", () => {
@@ -402,7 +397,7 @@ describe("Layout on mobile (431x932)", () => {
   });
 
   /* ── GSAP matchMedia animation configs ── */
-  it("hero glass card scroll animation uses yPercent -10 on mobile", () => {
+  it("hero glass card scroll animation fades out on scroll", () => {
     renderPage();
 
     const cardAnims = toSpy.mock.calls.filter(
@@ -413,7 +408,6 @@ describe("Layout on mobile (431x932)", () => {
 
     expect(cardAnims.length).toBe(1);
     const vars = cardAnims[0][1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-10);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
   });

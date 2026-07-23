@@ -258,11 +258,9 @@ export default function Hero() {
         const conditions = context.conditions as Record<string, boolean>;
 
         if (heroTitle) {
-          const yVal = conditions.isDesktop ? -50 : conditions.isTablet ? -25 : -15;
           const scaleVal = conditions.isDesktop ? 0.7 : conditions.isTablet ? 0.8 : 0.85;
           gsap.to(heroTitle, {
             opacity: 0,
-            yPercent: yVal,
             scale: scaleVal,
             ease: "none",
             scrollTrigger: {
@@ -275,10 +273,8 @@ export default function Hero() {
         }
 
         if (glassCard) {
-          const yVal = conditions.isDesktop ? -20 : conditions.isTablet ? -15 : -10;
           gsap.to(glassCard, {
             opacity: 0,
-            yPercent: yVal,
             ease: "none",
             scrollTrigger: {
               trigger: hero,
@@ -295,11 +291,11 @@ export default function Hero() {
   return (
     <div
       id="about"
-      className="relative h-[100dvh] flex flex-col justify-center max-sm:h-auto max-sm:min-h-dvh max-sm:justify-start max-sm:pt-4 max-sm:pb-0 max-lg:h-auto max-lg:min-h-dvh max-lg:justify-start max-lg:pt-4 max-lg:pb-0"
+      className="relative min-h-dvh flex flex-col max-sm:pt-4 max-sm:pb-0 max-lg:pt-4 max-lg:pb-0"
       ref={containerRef}
     >
 
-      <div className="hero-title-wrap flex justify-center xl:lg:-translate-y-18 lg:-translate-y-6 max-sm:mb-4 max-lg:mb-4">
+      <div className="hero-title-wrap flex justify-center mb-2 max-sm:mb-2 max-lg:mb-2">
         <h1 className="mx-auto text-[7.5vw] font-panchang-extrabold max-sm:w-full max-sm:text-[12vw] max-sm:text-center max-sm:leading-[0.9] max-lg:w-full max-lg:text-[12vw] max-lg:text-center max-lg:leading-[0.9]">
           {words.map((word, i) => (
             <span key={i} className="hero-word inline-block">
@@ -311,7 +307,7 @@ export default function Hero() {
       </div>
 
       <LiquidGlassCard
-        className="glass-card-wrap w-[85%] absolute -top-24 left-[7.5%] max-sm:!relative max-sm:!w-[92%] max-sm:!left-auto max-sm:!top-auto max-sm:mx-auto max-lg:!relative max-lg:!w-[92%] max-lg:!left-auto max-lg:!top-auto max-lg:mx-auto"
+        className="glass-card-wrap w-[85%] mx-auto max-sm:w-[92%] max-lg:w-[92%]"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}

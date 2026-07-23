@@ -79,11 +79,10 @@ export default function Projects() {
         if (conditions.isDesktop) {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "3vw", x: 0, y: "-70%" },
+            { fontSize: "3vw", x: 0 },
             {
               fontSize: "6.5vw",
               x: "24dvw",
-              y: "-10%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -96,11 +95,10 @@ export default function Projects() {
         } else if (conditions.isTablet) {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "1.5vw", x: "-0.5%", y: "-350%" },
+            { fontSize: "1.5vw", x: "-0.5%" },
             {
               fontSize: "8vw",
               x: "20dvw",
-              y: "-130%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -113,11 +111,10 @@ export default function Projects() {
         } else {
           gsap.fromTo(
             titleRef.current,
-            { fontSize: "1vw", x: "-3%", y: "-10%" },
+            { fontSize: "1vw", x: "-3%" },
             {
               fontSize: "10vw",
               x: "11dvw",
-              y: "-20%",
               ease: "power1.out",
               scrollTrigger: {
                 trigger: sectionRef.current,
@@ -142,7 +139,7 @@ export default function Projects() {
         Projects
       </h1>
 
-      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%] max-lg:-translate-y-[2.3%]">
+      <LiquidGlassCard className="mt-4">
         <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3 max-lg:grid-cols-1 max-lg:py-6 max-lg:p-3">
           <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6 max-sm:px-4 max-sm:mt-4 max-sm:ml-4 max-lg:col-span-1 max-lg:static max-lg:text-lg max-lg:mb-6 max-lg:px-4 max-lg:mt-4 max-lg:ml-4">
             <div className="text-left">
