@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, type ReactNode } from "react";
+import { useId, useEffect, useState, type ReactNode } from "react";
 
 interface LiquidGlassCardProps {
   children: ReactNode;
@@ -40,22 +40,38 @@ export default function LiquidGlassCard({
 }: LiquidGlassCardProps) {
   const uid = useId().replace(/[:.]/g, "-");
   const filterId = `lg-filter-${uid}`;
+  const [isDesktop, setIsDesktop] = useState(true);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const svgFilter = (
+    <svg style={{ display: "none" }}>
+      <filter id={filterId}>
+        <feTurbulence type="turbulence" baseFrequency={turbulenceFreq} numOctaves={turbulenceOctaves} result="turbulence" />
+        <feDisplacementMap in="SourceGraphic" in2="turbulence" scale={displacementScale} xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
+  );
+
+  const backdropFilter = isDesktop
+    ? `brightness(${brightness}) blur(${blurAmount}px) url(#${filterId})`
+    : `brightness(${brightness}) blur(${blurAmount}px)`;
 
   return (
     <>
-      <svg style={{ display: "none" }}>
-        <filter id={filterId}>
-          <feTurbulence type="turbulence" baseFrequency={turbulenceFreq} numOctaves={turbulenceOctaves} result="turbulence" />
-          <feDisplacementMap in="SourceGraphic" in2="turbulence" scale={displacementScale} xChannelSelector="R" yChannelSelector="G" />
-        </filter>
-      </svg>
+      {isDesktop && svgFilter}
       <div
         className={`relative flex flex-wrap items-center justify-center overflow-hidden ${className}`}
         style={{
           borderRadius: `${borderRadius}px`,
           filter: "drop-shadow(-8px -10px 46px #0000005f)",
-          backdropFilter: `brightness(${brightness}) blur(${blurAmount}px) url(#${filterId})`,
-          WebkitBackdropFilter: `brightness(${brightness}) blur(${blurAmount}px) url(#${filterId})`,
+          backdropFilter,
+          WebkitBackdropFilter: backdropFilter,
         }}
       >
         <div
