@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import GradualBlurWrapper from "@/components/GradualBlurWrapper";
 
 beforeAll(() => {
   global.innerWidth = 375;
@@ -47,6 +48,16 @@ function TestWrapper({ children }: { children: ReactNode }) {
           <DownloadCvButton />
           <BottomNav />
         </div>
+        <GradualBlurWrapper
+          target="page"
+          position="bottom"
+          height="5rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential
+          opacity={0.8}
+        />
       </TooltipProvider>
     </div>
   );
