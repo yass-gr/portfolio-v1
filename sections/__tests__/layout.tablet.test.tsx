@@ -6,7 +6,7 @@ import Page from "@/app/page";
 import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/tooltip";
 import GradualBlurWrapper from "@/components/GradualBlurWrapper";
 
 beforeAll(() => {

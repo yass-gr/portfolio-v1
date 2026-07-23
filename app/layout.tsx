@@ -14,7 +14,7 @@ import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import Footer from "@/components/footer";
 import GradualBlurWrapper from "@/components/GradualBlurWrapper";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/tooltip";
 import { InlineScript } from "@/components/inline-script";
 import "./globals.css";
 

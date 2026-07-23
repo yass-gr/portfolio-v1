@@ -5,7 +5,8 @@ import gsap from "gsap";
 import Page from "@/app/page";
 import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/tooltip";
+import GradualBlurWrapper from "@/components/GradualBlurWrapper";
 
 beforeAll(() => {
   global.innerWidth = 1920;
@@ -44,6 +45,16 @@ function TestWrapper({ children }: { children: ReactNode }) {
         <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
           <BottomNav />
         </div>
+        <GradualBlurWrapper
+          target="page"
+          position="bottom"
+          height="5rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential
+          opacity={0.8}
+        />
       </TooltipProvider>
     </div>
   );

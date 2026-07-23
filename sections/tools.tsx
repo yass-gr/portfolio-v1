@@ -8,7 +8,7 @@ import LiquidGlassCard from "@/components/LiquidGlassCard";
 import Gravity, {
   GravityRef,
   MatterBody,
-} from "@/components/fancy/physics/gravity";
+} from "@/components/gravity";
 
 gsap.registerPlugin(ScrollTrigger);
 

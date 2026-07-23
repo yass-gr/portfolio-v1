@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 import Avatar from "@/components/Avatar";
-import { LogoCarousel } from "@/components/ui/logo-carousel";
+import { LogoCarousel } from "@/components/logo-carousel";
 import { GitHubCommits } from "@/components/GitHubCommits";
 
 function Slider({
