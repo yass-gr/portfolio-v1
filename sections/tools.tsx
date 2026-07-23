@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useCallback, Fragment } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import FluidGlassCard from "@/components/FluidGlassCard";
+import LiquidGlassCard from "@/components/LiquidGlassCard";
 import Gravity, {
   GravityRef,
   MatterBody,
@@ -437,7 +437,7 @@ export default function Tools() {
         Tools
       </h1>
 
-      <FluidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%] max-lg:-translate-y-[5%]">
+      <LiquidGlassCard className="-translate-y-[11.5%] mt-16 pb-14 max-sm:-translate-y-[5%] max-lg:-translate-y-[5%]">
         <div className="pt-14 pb-10 px-10 max-sm:pt-8 max-sm:pb-6 max-sm:px-4 max-lg:pt-8 max-lg:pb-6 max-lg:px-4">
           <p className="font-clash-grotesk-regular text-2xl text-neutral-700 dark:text-neutral-300 pl-6 max-sm:text-base max-sm:pl-2 max-lg:text-base max-lg:pl-2">
             everything i need to build, design, and ship
@@ -602,7 +602,7 @@ export default function Tools() {
             </MatterBody>
           </Gravity>
         </div>
-      </FluidGlassCard>
+      </LiquidGlassCard>
     </section>
   );
 }

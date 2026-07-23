@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import FluidGlassCard from "@/components/FluidGlassCard";
+import LiquidGlassCard from "@/components/LiquidGlassCard";
 import ProjectCard from "@/components/projectCard";
 import Magnet from "@/components/magnet";
 
@@ -142,7 +142,7 @@ export default function Projects() {
         Projects
       </h1>
 
-      <FluidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%] max-lg:-translate-y-[2.3%]">
+      <LiquidGlassCard className="-translate-y-[3.5%] mt-20 max-sm:-translate-y-[2.3%] max-lg:-translate-y-[2.3%]">
         <div className="min-h-dvh p-5 grid grid-cols-12 py-[100px] max-sm:grid-cols-1 max-sm:py-6 max-sm:p-3 max-lg:grid-cols-1 max-lg:py-6 max-lg:p-3">
           <div className="text-2xl col-span-3 mt-20 ml-8 sticky top-40 h-fit max-sm:col-span-1 max-sm:static max-sm:text-lg max-sm:mb-6 max-sm:px-4 max-sm:mt-4 max-sm:ml-4 max-lg:col-span-1 max-lg:static max-lg:text-lg max-lg:mb-6 max-lg:px-4 max-lg:mt-4 max-lg:ml-4">
             <div className="text-left">
@@ -180,7 +180,7 @@ export default function Projects() {
             ))}
           </div>
         </div>
-      </FluidGlassCard>
+      </LiquidGlassCard>
     </section>
   );
 }
