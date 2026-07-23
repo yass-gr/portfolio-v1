@@ -85,7 +85,7 @@ describe("Layout on tablet (768x1024)", () => {
 
   it("hero title is full width, big font, centered on tablet", () => {
     renderPage();
-    const h1 = document.querySelector('[class*="hero-title-wrap"] h1')!;
+    const h1 = document.querySelector("#about h1")!;
     expect(h1.className).toContain("max-lg:w-full");
     expect(h1.className).toContain("max-lg:text-[12vw]");
     expect(h1.className).toContain("max-lg:text-center");
@@ -392,27 +392,6 @@ describe("Layout on tablet (768x1024)", () => {
   });
 
   /* ── GSAP matchMedia animation configs ── */
-  it("hero title scroll animation uses mobile-friendly values on tablet", () => {
-    renderPage();
-
-    const titleAnim = toSpy.mock.calls.find(
-      (call: unknown[]) =>
-        (call[0] as Element | null)?.classList?.contains?.("hero-title-wrap") ||
-        (call[0] as { className?: string } | null)?.className?.includes?.("hero-title-wrap"),
-    )!;
-
-    expect(titleAnim).toBeDefined();
-    const vars = titleAnim[1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-25);
-    expect(vars.scale).toBe(0.8);
-    expect(vars.ease).toBe("none");
-    const st = vars.scrollTrigger as Record<string, unknown>;
-    expect(st).toBeDefined();
-    expect(st.start).toBe("top top");
-    expect(st.end).toBe("bottom top");
-    expect(st.scrub).toBe(0.5);
-  });
-
   it("hero glass card scroll animation uses yPercent -15 on tablet", () => {
     renderPage();
 

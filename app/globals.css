@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -7,6 +8,8 @@
   --foreground: #171717;
   --popover: #ffffff;
   --popover-foreground: #171717;
+  --primary: #171717;
+  --primary-foreground: #ffffff;
 }
 
 .dark {
@@ -14,6 +17,8 @@
   --foreground: #ededed;
   --popover: #000000;
   --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #000000;
 }
 
 @theme inline {
@@ -21,6 +26,8 @@
   --color-foreground: var(--foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --font-expose-regular: var(--font-expose-regular);
   --font-expose-bold: var(--font-expose-bold);
   --font-expose-black: var(--font-expose-black);

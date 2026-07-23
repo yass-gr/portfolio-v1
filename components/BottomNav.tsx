@@ -6,6 +6,7 @@ import GlassSurface from "@/components/GlassSurface";
 import {
   Tooltip,
   TooltipContent,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 
 const navItems = [
@@ -54,19 +55,21 @@ export function BottomNav() {
         <div className="flex items-center gap-2 max-sm:gap-1 max-lg:gap-3">
             {navItems.map(({ label, icon }) => (
               <Tooltip key={label}>
-                <button
-                  onClick={() => {
-                    setActiveItem(label.toLowerCase());
-                    scrollToSection(label.toLowerCase());
-                  }}
-                  className={`rounded-lg p-1.5 max-lg:p-2 transition-colors ${
-                    activeItem === label.toLowerCase()
-                      ? "text-black dark:text-white"
-                      : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
-                  }`}
-                >
-                  {icons[icon as keyof typeof icons]}
-                </button>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      setActiveItem(label.toLowerCase());
+                      scrollToSection(label.toLowerCase());
+                    }}
+                    className={`rounded-lg p-1.5 max-lg:p-2 transition-colors ${
+                      activeItem === label.toLowerCase()
+                        ? "text-black dark:text-white"
+                        : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                    }`}
+                  >
+                    {icons[icon as keyof typeof icons]}
+                  </button>
+                </TooltipTrigger>
                 <TooltipContent>{label}</TooltipContent>
               </Tooltip>
             ))}
@@ -74,19 +77,21 @@ export function BottomNav() {
             <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50 max-lg:h-5" />
 
             <Tooltip>
-              <button
-                onClick={toggleDark}
-                className="rounded-lg p-1.5 max-lg:p-2 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
-                aria-label="Toggle dark mode"
-              >
-                {isDark ? icons.light : icons.dark}
-              </button>
+              <TooltipTrigger asChild>
+                <button
+                  onClick={toggleDark}
+                  className="rounded-lg p-1.5 max-lg:p-2 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                  aria-label="Toggle dark mode"
+                >
+                  {isDark ? icons.light : icons.dark}
+                </button>
+              </TooltipTrigger>
               <TooltipContent>
                 {isDark ? "Light mode" : "Dark mode"}
               </TooltipContent>
             </Tooltip>
           </div>
-        </GlassSurface>
-      </nav>
-    );
+      </GlassSurface>
+    </nav>
+  );
   }

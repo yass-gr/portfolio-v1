@@ -1,5 +1,5 @@
 "use client";
-import FluidGlassCard from "@/components/FluidGlassCard";
+import LiquidGlassCard from "@/components/LiquidGlassCard";
 import { useRef, useState, type SVGProps } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -242,27 +242,6 @@ export default function Hero() {
     const ctx = containerRef.current;
     if (!ctx) return;
 
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-    const wordEls = ctx.querySelectorAll(".hero-word");
-    if (wordEls.length) {
-      tl.fromTo(
-        wordEls,
-        { filter: "blur(10px)", opacity: 0, y: 20 },
-        { filter: "blur(0px)", opacity: 1, y: 0, stagger: 0.15, duration: 0.8 },
-      );
-    }
-
-    const lineEls = ctx.querySelectorAll(".hero-line");
-    if (lineEls.length) {
-      tl.fromTo(
-        lineEls,
-        { filter: "blur(10px)", opacity: 0, y: 20 },
-        { filter: "blur(0px)", opacity: 1, y: 0, stagger: 0.12, duration: 0.6 },
-        "-=0.2",
-      );
-    }
-
     const hero = containerRef.current;
     const heroTitle = ctx.querySelector(".hero-title-wrap");
     const glassCard = ctx.querySelector(".glass-card-wrap");
@@ -331,9 +310,8 @@ export default function Hero() {
         </h1>
       </div>
 
-      <FluidGlassCard
+      <LiquidGlassCard
         className="glass-card-wrap w-[85%] absolute -top-24 left-[7.5%] max-sm:!relative max-sm:!w-[92%] max-sm:!left-auto max-sm:!top-auto max-sm:mx-auto max-lg:!relative max-lg:!w-[92%] max-lg:!left-auto max-lg:!top-auto max-lg:mx-auto"
-        mode="lens"
         blurAmount={blurAmount}
         brightness={brightness}
         displacementScale={displacementScale}
@@ -342,12 +320,6 @@ export default function Hero() {
         borderWidth={borderWidth}
         borderOpacity={borderOpacity}
         borderRadius={borderRadius}
-        glassProps={{
-          ior: 1.15,
-          thickness: 5,
-          chromaticAberration: 0.1,
-          anisotropy: 0.01,
-        }}
       >
         <div className="grid grid-cols-[20%_80%] grid-rows-[auto_auto_auto_auto] gap-10 items-start max-w-5xl mx-auto py-10 mt-5 lg:mt-4 px-2 max-sm:grid-cols-1 max-sm:gap-6 max-sm:py-8 max-sm:px-6 max-lg:grid-cols-1 max-lg:gap-6 max-lg:py-8 max-lg:px-6">
           <div className="row-span-4 flex items-center justify-center max-sm:row-span-1 max-sm:mb-2 max-lg:row-span-1 max-lg:mb-2">
@@ -373,7 +345,7 @@ export default function Hero() {
             <GitHubCommits />
           </div>
         </div>
-      </FluidGlassCard>
+      </LiquidGlassCard>
 
       <button
         onClick={() => setShowControls((v) => !v)}

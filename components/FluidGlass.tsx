@@ -27,7 +27,12 @@ import { easing } from "maath";
 export type FluidGlassMode = "lens" | "bar" | "cube";
 
 export type GlassMaterialProps = {
+  /** Uniform scale, or auto-fit when omitted (embed stretches to card) */
   scale?: number;
+  /** Non-uniform scale overrides (embed). Useful to flatten/stretch the cube */
+  scaleX?: number;
+  scaleY?: number;
+  scaleZ?: number;
   ior?: number;
   thickness?: number;
   anisotropy?: number;
@@ -48,17 +53,31 @@ type FluidGlassProps = {
   lensProps?: GlassMaterialProps;
   barProps?: BarProps;
   cubeProps?: GlassMaterialProps;
-  /** Card embed: no scroll demo, fills parent as a glass panel background */
+  /** Card embed: cube only, no backdrop scene, transparent canvas */
   embed?: boolean;
 };
 
 export default function FluidGlass({
-  mode = "lens",
+  mode = "cube",
   lensProps = {},
   barProps = {},
   cubeProps = {},
   embed = false,
 }: FluidGlassProps) {
+  if (embed) {
+    return (
+      <Canvas
+        camera={{ position: [0, 0, 20], fov: 15 }}
+        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        dpr={[1, 1.5]}
+        style={{ width: "100%", height: "100%", background: "transparent" }}
+      >
+        <EmbedCube modeProps={cubeProps} />
+        <Preload all />
+      </Canvas>
+    );
+  }
+
   const Wrapper = mode === "bar" ? Bar : mode === "cube" ? Cube : Lens;
 
   let navItems: NavItem[] = [
@@ -78,22 +97,6 @@ export default function FluidGlass({
     modeProps = lensProps;
   }
 
-  if (embed) {
-    return (
-      <Canvas
-        camera={{ position: [0, 0, 20], fov: 15 }}
-        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
-        dpr={[1, 1.5]}
-        style={{ width: "100%", height: "100%" }}
-      >
-        <Wrapper modeProps={modeProps} embed>
-          <CardBackdrop />
-        </Wrapper>
-        <Preload all />
-      </Canvas>
-    );
-  }
-
   return (
     <Canvas camera={{ position: [0, 0, 20], fov: 15 }} gl={{ alpha: true }}>
       <ScrollControls damping={0.2} pages={3} distance={0.4}>
@@ -111,6 +114,68 @@ export default function FluidGlass({
   );
 }
 
+/**
+ * Card embed: captures the transparent scene behind into an FBO,
+ * then renders a cube with MeshTransmissionMaterial that uses the FBO
+ * as buffer — creates a refractive glass panel with no background images.
+ */
+function EmbedCube({ modeProps = {} }: { modeProps?: GlassMaterialProps }) {
+  const ref = useRef<THREE.Mesh>(null);
+  const buffer = useFBO();
+  const { viewport: vp } = useThree();
+  const [scene] = useState(() => new THREE.Scene());
+
+  useFrame((state) => {
+    const { gl, camera } = state;
+    if (!ref.current) return;
+    const v = vp.getCurrentViewport(camera, [0, 0, 15]);
+
+    gl.setRenderTarget(buffer);
+    gl.render(scene, camera);
+    gl.setRenderTarget(null);
+    gl.setClearColor(0x000000, 0);
+
+    const { scale } = modeProps;
+    if (scale != null) {
+      ref.current.scale.setScalar(scale);
+    } else {
+      ref.current.scale.set(v.width * 0.98, v.height * 0.98, Math.min(v.width, v.height) * 0.06);
+    }
+  });
+
+  const {
+    scale: _s,
+    ior,
+    thickness,
+    anisotropy,
+    chromaticAberration,
+    ...extraMat
+  } = modeProps;
+
+  return (
+    <>
+      {createPortal(null, scene)}
+      <mesh scale={[vp.width, vp.height, 1]}>
+        <planeGeometry />
+        <meshBasicMaterial map={buffer.texture} transparent />
+      </mesh>
+      <mesh ref={ref} rotation-x={Math.PI / 2}>
+        <boxGeometry args={[1, 1, 1]} />
+        <MeshTransmissionMaterial
+          buffer={buffer.texture}
+          ior={ior ?? 1.15}
+          thickness={thickness ?? 5}
+          anisotropy={anisotropy ?? 0.01}
+          chromaticAberration={chromaticAberration ?? 0.1}
+          transmission={1}
+          roughness={0.05}
+          {...extraMat}
+        />
+      </mesh>
+    </>
+  );
+}
+
 type ModeWrapperProps = {
   children?: ReactNode;
   glb: string;
@@ -118,7 +183,6 @@ type ModeWrapperProps = {
   lockToBottom?: boolean;
   followPointer?: boolean;
   modeProps?: GlassMaterialProps;
-  embed?: boolean;
 } & Omit<ComponentPropsWithoutRef<"mesh">, "children" | "ref">;
 
 const ModeWrapper = memo(function ModeWrapper({
@@ -128,7 +192,6 @@ const ModeWrapper = memo(function ModeWrapper({
   lockToBottom = false,
   followPointer = true,
   modeProps = {},
-  embed = false,
   ...props
 }: ModeWrapperProps) {
   const ref = useRef<THREE.Mesh>(null);
@@ -152,39 +215,24 @@ const ModeWrapper = memo(function ModeWrapper({
 
     const v = viewport.getCurrentViewport(camera, [0, 0, 15]);
 
-    if (embed) {
-      // Keep glass centered and large enough to read as a panel
-      easing.damp3(ref.current.position, [0, 0, 15], 0.2, delta);
-      if (modeProps.scale == null) {
-        const maxWorld = Math.max(v.width, v.height) * 0.95;
-        const desired = maxWorld / geoWidthRef.current;
-        ref.current.scale.setScalar(desired);
-      }
-    } else {
-      const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
-      const destY = lockToBottom
-        ? -v.height / 2 + 0.2
-        : followPointer
-          ? (pointer.y * v.height) / 2
-          : 0;
-      easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
+    const destX = followPointer ? (pointer.x * v.width) / 2 : 0;
+    const destY = lockToBottom
+      ? -v.height / 2 + 0.2
+      : followPointer
+        ? (pointer.y * v.height) / 2
+        : 0;
+    easing.damp3(ref.current.position, [destX, destY, 15], 0.15, delta);
 
-      if (modeProps.scale == null) {
-        const maxWorld = v.width * 0.9;
-        const desired = maxWorld / geoWidthRef.current;
-        ref.current.scale.setScalar(Math.min(0.15, desired));
-      }
+    if (modeProps.scale == null) {
+      const maxWorld = v.width * 0.9;
+      const desired = maxWorld / geoWidthRef.current;
+      ref.current.scale.setScalar(Math.min(0.15, desired));
     }
 
     gl.setRenderTarget(buffer);
     gl.render(scene, camera);
     gl.setRenderTarget(null);
-
-    if (embed) {
-      gl.setClearColor(0x000000, 0);
-    } else {
-      gl.setClearColor(0x5227ff, 1);
-    }
+    gl.setClearColor(0x5227ff, 1);
   });
 
   const {
@@ -207,7 +255,7 @@ const ModeWrapper = memo(function ModeWrapper({
       </mesh>
       <mesh
         ref={ref}
-        scale={scale ?? (embed ? 1 : 0.15)}
+        scale={scale ?? 0.15}
         rotation-x={Math.PI / 2}
         geometry={geometry}
         {...props}
@@ -227,19 +275,16 @@ const ModeWrapper = memo(function ModeWrapper({
 
 function Lens({
   modeProps,
-  embed,
   ...p
 }: {
   modeProps?: GlassMaterialProps;
-  embed?: boolean;
   children?: ReactNode;
 }) {
   return (
     <ModeWrapper
       glb="/assets/3d/lens.glb"
       geometryKey="Cylinder"
-      followPointer={!embed}
-      embed={embed}
+      followPointer
       modeProps={modeProps}
       {...p}
     />
@@ -248,19 +293,16 @@ function Lens({
 
 function Cube({
   modeProps,
-  embed,
   ...p
 }: {
   modeProps?: GlassMaterialProps;
-  embed?: boolean;
   children?: ReactNode;
 }) {
   return (
     <ModeWrapper
       glb="/assets/3d/cube.glb"
       geometryKey="Cube"
-      followPointer={!embed}
-      embed={embed}
+      followPointer
       modeProps={modeProps}
       {...p}
     />
@@ -269,11 +311,9 @@ function Cube({
 
 function Bar({
   modeProps = {},
-  embed,
   ...p
 }: {
   modeProps?: GlassMaterialProps;
-  embed?: boolean;
   children?: ReactNode;
 }) {
   const defaultMat: GlassMaterialProps = {
@@ -290,44 +330,11 @@ function Bar({
     <ModeWrapper
       glb="/assets/3d/bar.glb"
       geometryKey="Cube"
-      lockToBottom={!embed}
+      lockToBottom
       followPointer={false}
-      embed={embed}
       modeProps={{ ...defaultMat, ...modeProps }}
       {...p}
     />
-  );
-}
-
-/** Soft abstract scene refracted by the glass in card embed mode */
-function CardBackdrop() {
-  return (
-    <group>
-      <mesh position={[0, 0, 0]}>
-        <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial color="#1a1528" />
-      </mesh>
-      <mesh position={[1.2, 0.6, 0.2]}>
-        <circleGeometry args={[1.4, 48]} />
-        <meshBasicMaterial color="#f43f5e" transparent opacity={0.55} />
-      </mesh>
-      <mesh position={[-1.1, -0.7, 0.2]}>
-        <circleGeometry args={[1.1, 48]} />
-        <meshBasicMaterial color="#3b82f6" transparent opacity={0.5} />
-      </mesh>
-      <mesh position={[-0.9, 0.9, 0.15]}>
-        <circleGeometry args={[0.85, 48]} />
-        <meshBasicMaterial color="#8b5cf6" transparent opacity={0.5} />
-      </mesh>
-      <mesh position={[1.3, -0.8, 0.15]}>
-        <circleGeometry args={[0.7, 48]} />
-        <meshBasicMaterial color="#06b6d4" transparent opacity={0.45} />
-      </mesh>
-      <mesh position={[0, 0.2, 0.1]}>
-        <circleGeometry args={[0.55, 48]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.12} />
-      </mesh>
-    </group>
   );
 }
 
@@ -493,7 +500,4 @@ function Typography() {
   );
 }
 
-// Preload GLBs for smoother first paint
-useGLTF.preload("/assets/3d/lens.glb");
 useGLTF.preload("/assets/3d/cube.glb");
-useGLTF.preload("/assets/3d/bar.glb");

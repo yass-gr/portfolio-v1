@@ -2,7 +2,7 @@
 
 import { type ReactNode } from "react";
 import dynamic from "next/dynamic";
-import type { FluidGlassMode, GlassMaterialProps } from "@/components/FluidGlass";
+import type { GlassMaterialProps } from "@/components/FluidGlass";
 
 const FluidGlass = dynamic(() => import("@/components/FluidGlass"), {
   ssr: false,
@@ -11,14 +11,17 @@ const FluidGlass = dynamic(() => import("@/components/FluidGlass"), {
 interface FluidGlassCardProps {
   children: ReactNode;
   className?: string;
-  /** Display mode for the 3D glass mesh */
-  mode?: FluidGlassMode;
-  /** Props passed to the active mode (ior, thickness, scale, …) */
+  /**
+   * Cube material + size.
+   * - omit scale → auto-stretches cube to the card
+   * - `scale` → uniform size
+   * - `scaleX` / `scaleY` / `scaleZ` → non-uniform resize
+   */
   glassProps?: GlassMaterialProps;
   borderRadius?: number;
   borderWidth?: number;
   borderOpacity?: number;
-  /** Kept for drop-in compatibility with LiquidGlassCard — softens the panel under the WebGL layer */
+  /** Soft frosted layer under the cube (readable content) */
   blurAmount?: number;
   brightness?: number;
   displacementScale?: number;
@@ -26,42 +29,22 @@ interface FluidGlassCardProps {
   turbulenceOctaves?: number;
 }
 
-const DEFAULT_GLASS: Record<FluidGlassMode, GlassMaterialProps> = {
-  lens: {
-    ior: 1.15,
-    thickness: 5,
-    chromaticAberration: 0.1,
-    anisotropy: 0.01,
-    transmission: 1,
-    roughness: 0.05,
-  },
-  cube: {
-    ior: 1.15,
-    thickness: 5,
-    chromaticAberration: 0.1,
-    anisotropy: 0.01,
-    transmission: 1,
-    roughness: 0.05,
-  },
-  bar: {
-    transmission: 1,
-    roughness: 0,
-    thickness: 10,
-    ior: 1.15,
-    color: "#ffffff",
-    attenuationColor: "#ffffff",
-    attenuationDistance: 0.25,
-  },
+const DEFAULT_CUBE: GlassMaterialProps = {
+  ior: 1.15,
+  thickness: 5,
+  chromaticAberration: 0.1,
+  anisotropy: 0.01,
+  transmission: 1,
+  roughness: 0.05,
 };
 
 /**
- * Glass content card powered by React Bits FluidGlass (MeshTransmissionMaterial).
- * Drop-in shape of the archived LiquidGlassCard: children + className + borderRadius.
+ * Glass content card: transparent cube.glb only (no backdrop images).
+ * Drop-in shape of the archived LiquidGlassCard.
  */
 export default function FluidGlassCard({
   children,
   className = "",
-  mode = "lens",
   glassProps = {},
   borderRadius = 60,
   borderWidth = 4,
@@ -69,10 +52,7 @@ export default function FluidGlassCard({
   blurAmount = 12,
   brightness = 1.15,
 }: FluidGlassCardProps) {
-  const modeProps = { ...DEFAULT_GLASS[mode], ...glassProps };
-  const lensProps = mode === "lens" ? modeProps : undefined;
-  const barProps = mode === "bar" ? modeProps : undefined;
-  const cubeProps = mode === "cube" ? modeProps : undefined;
+  const cubeProps = { ...DEFAULT_CUBE, ...glassProps };
 
   return (
     <div
@@ -82,34 +62,26 @@ export default function FluidGlassCard({
         filter: "drop-shadow(-8px -10px 46px #0000005f)",
       }}
     >
-      {/* Soft frosted base so content stays readable while WebGL loads / refracts */}
+      {/* Soft frosted base for readability */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           borderRadius: `${borderRadius}px`,
           backdropFilter: `brightness(${brightness}) blur(${blurAmount}px)`,
           WebkitBackdropFilter: `brightness(${brightness}) blur(${blurAmount}px)`,
-          background:
-            "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))",
         }}
       />
 
-      {/* Fluid glass WebGL layer */}
+      {/* Cube glass only — no bg images */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] opacity-90"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{ borderRadius: `${borderRadius}px` }}
         aria-hidden
       >
-        <FluidGlass
-          embed
-          mode={mode}
-          lensProps={lensProps}
-          barProps={barProps}
-          cubeProps={cubeProps}
-        />
+        <FluidGlass embed mode="cube" cubeProps={cubeProps} />
       </div>
 
-      {/* Edge highlights (same language as archived LiquidGlassCard) */}
+      {/* Edge highlights */}
       <div
         className="pointer-events-none absolute inset-0 z-[2] dark:opacity-100"
         style={{

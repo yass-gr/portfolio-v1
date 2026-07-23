@@ -79,24 +79,11 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(hero.className).toContain("justify-center");
   });
 
-  it("hero title uses 7.5vw font with panchang-extrabold, centered flex row", () => {
+  it("hero title uses 7.5vw font with panchang-extrabold, centered", () => {
     renderPage();
-    const titleWrap = document.querySelector('[class*="hero-title-wrap"]')!;
-    expect(titleWrap.className).toContain("flex");
-    expect(titleWrap.className).toContain("justify-center");
-
-    const h1 = titleWrap.querySelector("h1")!;
+    const h1 = document.querySelector("#about h1")!;
     expect(h1.className).toContain("text-[7.5vw]");
     expect(h1.className).toContain("font-panchang-extrabold");
-  });
-
-  it("hero individual words are inline-block with GSAP animation attrs", () => {
-    renderPage();
-    const words = document.querySelectorAll(".hero-word");
-    expect(words.length).toBeGreaterThanOrEqual(2);
-    words.forEach((w) => {
-      expect(w.className).toContain("inline-block");
-    });
   });
 
   it("glass card in hero is absolute, w-[85%], negative top offset", () => {
@@ -144,9 +131,10 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(avatarWrap.className).toContain("aspect-square");
   });
 
-  it("hero description lines are block elements with GSAP animation", () => {
+  it("hero description lines are block elements", () => {
     renderPage();
-    const lines = document.querySelectorAll(".hero-line");
+    const p = document.querySelector('[class*="glass-card-wrap"] p')!;
+    const lines = p.querySelectorAll("span");
     expect(lines.length).toBeGreaterThanOrEqual(1);
     lines.forEach((l) => expect(l.className).toContain("block"));
   });
@@ -490,27 +478,6 @@ describe("Layout on xlarge screens (1920x1080)", () => {
   });
 
   /* ── GSAP matchMedia animation configs ── */
-  it("hero title scroll animation uses desktop-friendly values", () => {
-    renderPage();
-
-    const titleAnim = toSpy.mock.calls.find(
-      (call: unknown[]) =>
-        (call[0] as Element | null)?.classList?.contains?.("hero-title-wrap") ||
-        (call[0] as { className?: string } | null)?.className?.includes?.("hero-title-wrap"),
-    )!;
-
-    expect(titleAnim).toBeDefined();
-    const vars = titleAnim[1] as Record<string, unknown>;
-    expect(vars.yPercent).toBe(-50);
-    expect(vars.scale).toBe(0.7);
-    expect(vars.ease).toBe("none");
-    const st = vars.scrollTrigger as Record<string, unknown>;
-    expect(st).toBeDefined();
-    expect(st.start).toBe("top top");
-    expect(st.end).toBe("bottom top");
-    expect(st.scrub).toBe(0.5);
-  });
-
   it("hero glass card scroll animation uses yPercent -20 on desktop", () => {
     renderPage();
 
