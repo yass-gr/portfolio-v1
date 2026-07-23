@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import LiquidGlassCard from "@/components/LiquidGlassCard"
+import Image from "next/image"
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -163,7 +164,7 @@ export default function Footer() {
         <div className="mt-20 flex items-center gap-6">
           <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
           <div className="flex items-center justify-center size-8">
-            <img src="/strawhat.png" alt="" className="size-full object-contain dark:invert" />
+            <Image src="/strawhat.png" alt="" width={32} height={32} className="object-contain dark:invert" />
           </div>
           <div className="h-px flex-1 bg-black/10 dark:bg-white/10" />
         </div>
