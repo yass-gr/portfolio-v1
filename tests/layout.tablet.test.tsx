@@ -254,9 +254,9 @@ describe("Layout on tablet (768x1024)", () => {
     expect(pills.length).toBeGreaterThan(10);
     pills.forEach((p) => {
       expect(p.className).toContain("max-lg:gap-4");
-      expect(p.className).toContain("max-lg:px-7");
-      expect(p.className).toContain("max-lg:py-4");
-      expect(p.className).toContain("max-lg:text-lg");
+      expect(p.className).toContain("max-lg:px-10");
+      expect(p.className).toContain("max-lg:py-5");
+      expect(p.className).toContain("max-lg:text-xl");
     });
   });
 
@@ -265,8 +265,8 @@ describe("Layout on tablet (768x1024)", () => {
     const icons = document.querySelectorAll("#tools [class*='rounded-full'] img");
     expect(icons.length).toBeGreaterThan(10);
     icons.forEach((icon) => {
-      expect(icon.className).toContain("max-lg:w-8");
-      expect(icon.className).toContain("max-lg:h-8");
+      expect(icon.className).toContain("max-lg:w-10");
+      expect(icon.className).toContain("max-lg:h-10");
     });
   });
 

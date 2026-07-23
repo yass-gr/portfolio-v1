@@ -164,7 +164,7 @@ function ToolPill({
             src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
             alt={tool.name}
             loading="lazy"
-            className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-8 max-lg:h-8"
+        className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-10 max-lg:h-10"
             onError={() => setIconFailed(true)}
           />
         )}
@@ -190,25 +190,10 @@ function hashStr(s: string): number {
 function ToolPillStatic({
   tool,
   isDark,
-  index,
-  total,
 }: {
   tool: Tool;
   isDark: boolean;
-  index: number;
-  total: number;
 }) {
-  const seed = hashStr(tool.name);
-
-  const cols = Math.min(3, total);
-  const col = index % cols;
-  const row = Math.floor(index / cols);
-  const rows = Math.ceil(total / cols);
-
-  const left = 15 + (col / Math.max(cols - 1, 1)) * 70 + ((seed * 137 + index * 13) % 10) - 5;
-  const top = 45 + (row / Math.max(1, rows - 1)) * 40 + ((seed * 251) % 8) - 4;
-  const rotation = ((seed * 67 + index * 13) % 10) - 5;
-
   const iconColor = isDark ? "ffffff" : "000000";
   const textColor = isDark ? "text-white" : "text-black";
   const borderColor = isDark ? "border-white/15" : "border-black/10";
@@ -216,11 +201,8 @@ function ToolPillStatic({
 
   return (
     <div
-      className={`absolute flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-4 max-lg:px-7 max-lg:py-4 max-lg:text-lg ${textColor} ${borderColor} ${bgColor}`}
+      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-clash-grotesk-semibold w-fit max-sm:gap-1.5 max-sm:px-3 max-sm:py-1.5 max-sm:text-sm max-lg:gap-4 max-lg:px-10 max-lg:py-5 max-lg:text-xl ${textColor} ${borderColor} ${bgColor}`}
       style={{
-        left: `${left}%`,
-        top: `${top}%`,
-        transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
         borderWidth: "1.5px",
         boxShadow: isDark
           ? "0 0 20px rgba(255,255,255,0.06)"
@@ -232,7 +214,7 @@ function ToolPillStatic({
         src={`https://cdn.simpleicons.org/${tool.slug}/${iconColor}`}
         alt={tool.name}
         loading="lazy"
-        className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-8 max-lg:h-8"
+        className="w-6 h-6 max-sm:w-5 max-sm:h-5 max-lg:w-10 max-lg:h-10"
         onError={(e) => {
           const target = e.currentTarget;
           target.style.display = "none";
@@ -240,7 +222,7 @@ function ToolPillStatic({
           if (fallback) (fallback as HTMLElement).style.display = "flex";
         }}
       />
-      <span className="hidden w-6 h-6 items-center justify-center text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-8 max-lg:h-8">
+      <span className="hidden w-6 h-6 items-center justify-center text-xs font-bold max-sm:w-5 max-sm:h-5 max-sm:text-xs max-lg:w-10 max-lg:h-10">
         {tool.name[0]}
       </span>
       {tool.name}
@@ -286,7 +268,9 @@ export default function Tools() {
   const gravityRef = useRef<GravityRef>(null);
   const gravityStarted = useRef(false);
   const [isDark, setIsDark] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < 1024 : true
+  );
   const hoveredRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -482,19 +466,19 @@ export default function Tools() {
                 >
                   <div
                     id={`bucket-label-${bucket.label}`}
-                    className="absolute top-8 left-8 font-panchang-bold text-4xl text-black dark:text-white capitalize pointer-events-none max-sm:translate-y-0 max-sm:opacity-100 max-sm:top-4 max-sm:left-4 max-lg:translate-y-0 max-lg:opacity-100 max-lg:top-4 max-lg:left-4"
+                    className="absolute top-8 left-8 font-panchang-bold text-4xl text-black dark:text-white capitalize pointer-events-none max-sm:translate-y-0 max-sm:opacity-100 max-sm:top-4 max-sm:left-4 max-sm:text-2xl max-lg:translate-y-0 max-lg:opacity-100 max-lg:top-4 max-lg:left-4"
                   >
                     {bucket.label}
                   </div>
-                  {bucket.tools.map((tool, i) => (
-                    <ToolPillStatic
-                      key={tool.name}
-                      tool={tool}
-                      isDark={isDark}
-                      index={i}
-                      total={bucket.tools.length}
-                    />
-                  ))}
+                  <div className="absolute left-0 right-0 bottom-8 flex flex-wrap justify-center gap-x-3 gap-y-2 max-sm:gap-x-1.5 max-sm:gap-y-1.5 max-lg:gap-x-3 max-lg:gap-y-2 px-3">
+                    {bucket.tools.map((tool) => (
+                      <ToolPillStatic
+                        key={tool.name}
+                        tool={tool}
+                        isDark={isDark}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
