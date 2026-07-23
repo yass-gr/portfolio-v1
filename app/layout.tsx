@@ -13,7 +13,7 @@ import {
 import { BottomNav } from "@/components/BottomNav";
 import DownloadCvButton from "@/components/download-cv";
 import Footer from "@/components/footer";
-import GradualBlurWrapper from "@/components/GradualBlurWrapper";
+
 import { TooltipProvider } from "@/components/tooltip";
 import { InlineScript } from "@/components/inline-script";
 import "./globals.css";
@@ -41,7 +41,7 @@ export default function RootLayout({
           html={`(function(){try{var mq=window.matchMedia('(prefers-color-scheme: dark)');if(mq.matches){document.documentElement.classList.add('dark')}mq.addEventListener('change',function(e){document.documentElement.classList.toggle('dark',e.matches)})}catch(e){}})()`}
         />
       </head>
-      <body className="flex min-h-dvh flex-col overflow-x-hidden">
+      <body className="flex min-h-dvh flex-col">
         <video
           className="fixed inset-0 w-full h-full object-cover -z-10 pointer-events-none max-sm:!inset-x-0 max-sm:!top-1/2 max-sm:!-translate-y-1/2 max-sm:!h-[40vh] max-lg:!inset-x-0 max-lg:!top-1/2 max-lg:!-translate-y-1/2 max-lg:!h-[40vh] dark:block hidden"
           loop
@@ -70,16 +70,6 @@ export default function RootLayout({
             <BottomNav />
           </TooltipProvider>
         </div>
-        <GradualBlurWrapper
-          target="page"
-          position="bottom"
-          height="5rem"
-          strength={2}
-          divCount={5}
-          curve="bezier"
-          exponential
-          opacity={0.8}
-        />
       </body>
     </html>
   );
