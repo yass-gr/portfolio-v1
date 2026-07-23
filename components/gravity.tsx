@@ -39,6 +39,7 @@ type GravityProps = {
   addTopWall?: boolean
   autoStart?: boolean
   className?: string
+  interactive?: boolean
 }
 
 type PhysicsBody = {
@@ -140,6 +141,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       resetOnResize = true,
       addTopWall = true,
       autoStart = true,
+      interactive = true,
       className,
       ...props
     },
@@ -256,16 +258,20 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       })
 
       canvas.current.addEventListener("wheel", (e) => e.stopPropagation(), { capture: true })
-      const mouse = Mouse.create(render.current.canvas)
-      mouseConstraint.current = MouseConstraint.create(engine.current, {
-        mouse: mouse,
-        constraint: {
-          stiffness: 0.2,
-          render: {
-            visible: debug,
+
+      let mouse: Matter.Mouse | undefined
+      if (interactive) {
+        mouse = Mouse.create(render.current.canvas)
+        mouseConstraint.current = MouseConstraint.create(engine.current, {
+          mouse: mouse,
+          constraint: {
+            stiffness: 0.2,
+            render: {
+              visible: debug,
+            },
           },
-        },
-      })
+        })
+      }
 
       const walls = [
         Bodies.rectangle(width / 2, height + 10, width, 20, {
@@ -305,13 +311,15 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         walls.push(topWall)
       }
 
-      const touchingMouse = () =>
-        Query.point(
+      const touchingMouse = () => {
+        if (!mouseConstraint.current?.mouse.position) return false
+        return Query.point(
           engine.current.world.bodies,
-          mouseConstraint.current?.mouse.position || { x: 0, y: 0 }
+          mouseConstraint.current.mouse.position
         ).length > 0
+      }
 
-      if (grabCursor) {
+      if (interactive && grabCursor) {
         Events.on(engine.current, "beforeUpdate", () => {
           if (canvas.current) {
             if (!mouseDown.current && !touchingMouse()) {
@@ -356,9 +364,11 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         })
       })
 
-      World.add(engine.current.world, [mouseConstraint.current, ...walls])
+      const constraints: Matter.MouseConstraint[] = []
+      if (mouseConstraint.current) constraints.push(mouseConstraint.current)
+      World.add(engine.current.world, [...constraints, ...walls])
 
-      render.current.mouse = mouse
+      if (mouse) render.current.mouse = mouse
 
       runner.current = Runner.create()
       Render.run(render.current)
@@ -381,7 +391,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
       }
 
       if (render.current) {
-        Mouse.clearSourceEvents(render.current.mouse)
+        if (render.current.mouse) Mouse.clearSourceEvents(render.current.mouse)
         Render.stop(render.current)
         render.current.canvas.remove()
       }
@@ -490,6 +500,7 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         <div
           ref={canvas}
           className={cn(className, "absolute top-0 left-0 w-full h-full")}
+          style={{ pointerEvents: interactive ? undefined : "none" }}
           {...props}
         >
           {children}

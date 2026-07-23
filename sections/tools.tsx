@@ -482,6 +482,7 @@ export default function Tools() {
             grabCursor
             addTopWall
             autoStart={false}
+            interactive={!isMobile}
           >
             {!isMobile &&
               buckets.map((bucket) => (
