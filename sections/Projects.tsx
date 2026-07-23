@@ -167,7 +167,7 @@ export default function Projects() {
               </h2>
             </div>
           </div>
-          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-4 max-sm:p-0 max-lg:col-span-1 max-lg:grid-cols-1 max-lg:gap-4 max-lg:p-0">
+          <div className="col-span-9 grid grid-cols-2 gap-8 content-start p-4 max-sm:col-span-1 max-sm:grid-cols-1 max-sm:gap-4 max-sm:p-0 max-lg:col-span-1 max-lg:grid-cols-1 max-lg:gap-4 max-lg:p-0 max-lg:max-w-lg max-lg:mx-auto">
             {projects.map((project) => (
               <Magnet
                 key={project.imageId}
