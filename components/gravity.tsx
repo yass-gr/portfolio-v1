@@ -11,8 +11,8 @@ import {
   useRef,
   useState,
 } from "react"
-import { calculatePosition } from "@/utils/calculate-position"
-import { parsePathToVertices } from "@/utils/svg-path-to-vertices"
+import { calculatePosition } from "@/lib/calculate-position"
+import { parsePathToVertices } from "@/lib/svg-path-to-vertices"
 import { debounce } from "lodash"
 import Matter, {
   Bodies,
