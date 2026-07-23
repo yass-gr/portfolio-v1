@@ -41,10 +41,10 @@ function TestWrapper({ children }: { children: ReactNode }) {
           {children}
         </div>
         <Footer />
+        <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
+          <BottomNav />
+        </div>
       </TooltipProvider>
-      <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
-        <BottomNav />
-      </div>
     </div>
   );
 }
