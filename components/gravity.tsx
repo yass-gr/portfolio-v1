@@ -257,8 +257,6 @@ const Gravity = forwardRef<GravityRef, GravityProps>(
         },
       })
 
-      canvas.current.addEventListener("wheel", (e) => e.stopPropagation(), { capture: true })
-
       let mouse: Matter.Mouse | undefined
       if (interactive) {
         mouse = Mouse.create(render.current.canvas)
