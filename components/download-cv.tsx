@@ -12,22 +12,24 @@ export default function DownloadCvButton() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <GlassSurface
-          width="auto"
-          height="auto"
-          borderRadius={999}
-          backgroundOpacity={0.25}
-          saturation={1.8}
-          className="p-1.5 cursor-pointer max-sm:p-1 max-lg:p-1"
-        >
-          <a
-            href="/cv.pdf"
-            download
-            className="flex items-center justify-center p-1.5 rounded-lg text-neutral-700 dark:text-neutral-300"
+        <div className="overflow-hidden">
+          <GlassSurface
+            width="auto"
+            height="auto"
+            borderRadius={999}
+            backgroundOpacity={0.25}
+            saturation={1.8}
+            className="p-1.5 cursor-pointer max-sm:p-1 max-lg:p-1"
           >
-            <Download size={20} />
-          </a>
-        </GlassSurface>
+            <a
+              href="/cv.pdf"
+              download
+              className="flex items-center justify-center p-1.5 rounded-lg text-neutral-700 dark:text-neutral-300"
+            >
+              <Download size={20} />
+            </a>
+          </GlassSurface>
+        </div>
       </TooltipTrigger>
       <TooltipContent>Download CV</TooltipContent>
     </Tooltip>

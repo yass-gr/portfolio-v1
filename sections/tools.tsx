@@ -240,7 +240,10 @@ export default function Tools() {
   }, [wallPositions, isMobile]);
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 1024);
+    const check = () => setIsMobile(window.innerWidth < 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
   useEffect(() => {

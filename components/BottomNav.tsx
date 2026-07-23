@@ -43,55 +43,59 @@ export function BottomNav() {
   }, [isDark]);
 
   return (
-    <nav className="flex justify-center">
-      <GlassSurface
-        width="auto"
-        height="auto"
-        borderRadius={999}
-        backgroundOpacity={0.15}
-        saturation={1.8}
-        className="px-3 py-2 max-sm:px-1.5 max-sm:py-1 max-lg:px-4 max-lg:py-2.5"
-      >
-        <div className="flex items-center gap-2 max-sm:gap-1 max-lg:gap-3">
-            {navItems.map(({ label, icon }) => (
-              <Tooltip key={label}>
+    <nav className="flex justify-center overflow-hidden max-w-full">
+      <div className="overflow-hidden">
+        <GlassSurface
+          width="auto"
+          height="auto"
+          borderRadius={999}
+          backgroundOpacity={0.4}
+          saturation={1.8}
+          className="px-3 py-2 max-sm:px-1.5 max-sm:py-1 max-lg:px-4 max-lg:py-2.5 max-w-full"
+          style={{ minHeight: '44px' }}
+        >
+          <div className="flex items-center gap-2 max-sm:gap-1 max-lg:gap-3">
+            <>
+              {navItems.map(({ label, icon }) => (
+                <Tooltip key={label}>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        setActiveItem(label.toLowerCase());
+                        scrollToSection(label.toLowerCase());
+                      }}
+                      className={`rounded-lg p-1.5 max-lg:p-2 transition-colors ${
+                        activeItem === label.toLowerCase()
+                          ? "text-black dark:text-white"
+                          : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                      }`}
+                    >
+                      {icons[icon as keyof typeof icons]}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>{label}</TooltipContent>
+                </Tooltip>
+              ))}
+              <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50 max-lg:h-5"></div>
+
+              <Tooltip>
                 <TooltipTrigger asChild>
                   <button
-                    onClick={() => {
-                      setActiveItem(label.toLowerCase());
-                      scrollToSection(label.toLowerCase());
-                    }}
-                    className={`rounded-lg p-1.5 max-lg:p-2 transition-colors ${
-                      activeItem === label.toLowerCase()
-                        ? "text-black dark:text-white"
-                        : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
-                    }`}
+                    onClick={toggleDark}
+                    className="rounded-lg p-1.5 max-lg:p-2 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+                    aria-label="Toggle dark mode"
                   >
-                    {icons[icon as keyof typeof icons]}
+                    {isDark ? icons.light : icons.dark}
                   </button>
                 </TooltipTrigger>
-                <TooltipContent>{label}</TooltipContent>
+                <TooltipContent>
+                  {isDark ? "Light mode" : "Dark mode"}
+                </TooltipContent>
               </Tooltip>
-            ))}
-
-            <div className="mx-1 h-4 w-px bg-neutral-300/50 dark:bg-neutral-600/50 max-lg:h-5" />
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <button
-                  onClick={toggleDark}
-                  className="rounded-lg p-1.5 max-lg:p-2 text-neutral-500 transition-colors hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
-                  aria-label="Toggle dark mode"
-                >
-                  {isDark ? icons.light : icons.dark}
-                </button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {isDark ? "Light mode" : "Dark mode"}
-              </TooltipContent>
-            </Tooltip>
+            </>
           </div>
-      </GlassSurface>
+        </GlassSurface>
+      </div>
     </nav>
   );
-  }
+}

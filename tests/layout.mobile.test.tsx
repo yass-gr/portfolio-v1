@@ -10,8 +10,8 @@ import { TooltipProvider } from "@/components/tooltip";
 
 
 beforeAll(() => {
-  global.innerWidth = 375;
-  global.innerHeight = 812;
+  global.innerWidth = 431;
+  global.innerHeight = 932;
   window.dispatchEvent(new Event("resize"));
   document.documentElement.className = "h-full antialiased overflow-x-hidden";
 
@@ -61,7 +61,7 @@ function renderPage() {
   );
 }
 
-describe("Layout on mobile (375x812)", () => {
+describe("Layout on mobile (431x932)", () => {
   let toSpy: Mock;
   let timelineSpy: Mock;
 
