@@ -6,7 +6,7 @@ import Page from "@/app/page";
 import Footer from "@/components/footer";
 import { BottomNav } from "@/components/BottomNav";
 import { TooltipProvider } from "@/components/tooltip";
-import GradualBlurWrapper from "@/components/GradualBlurWrapper";
+
 
 beforeAll(() => {
   global.innerWidth = 1920;
@@ -45,16 +45,6 @@ function TestWrapper({ children }: { children: ReactNode }) {
         <div className="fixed inset-x-0 bottom-6 z-[9999] flex items-center justify-center gap-4">
           <BottomNav />
         </div>
-        <GradualBlurWrapper
-          target="page"
-          position="bottom"
-          height="5rem"
-          strength={2}
-          divCount={5}
-          curve="bezier"
-          exponential
-          opacity={0.8}
-        />
       </TooltipProvider>
     </div>
   );
@@ -70,13 +60,16 @@ function renderPage() {
 
 describe("Layout on xlarge screens (1920x1080)", () => {
   let toSpy: Mock;
+  let timelineSpy: Mock;
 
   beforeEach(() => {
     toSpy = vi.spyOn(gsap, "to");
+    timelineSpy = vi.spyOn(gsap, "timeline");
   });
 
   afterEach(() => {
     toSpy.mockRestore();
+    timelineSpy.mockRestore();
   });
 
   /* ── Hero section ── */
@@ -488,6 +481,12 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(wrapper.className).toContain("px-[3%]");
   });
 
+  /* ── Project card hover animations ── */
+  it("project card hover animations are active on desktop (gsap.timeline is called)", () => {
+    renderPage();
+    expect(timelineSpy).toHaveBeenCalledTimes(8);
+  });
+
   /* ── GSAP matchMedia animation configs ── */
   it("hero glass card scroll animation uses yPercent -20 on desktop", () => {
     renderPage();
@@ -503,12 +502,5 @@ describe("Layout on xlarge screens (1920x1080)", () => {
     expect(vars.yPercent).toBe(-20);
     expect(vars.opacity).toBe(0);
     expect(vars.scrollTrigger).toBeDefined();
-  });
-
-  /* ── GradualBlur ── */
-  it("gradual blur is rendered on desktop", () => {
-    renderPage();
-    const blur = document.querySelector(".gradual-blur");
-    expect(blur).toBeInTheDocument();
   });
 });
