@@ -39,12 +39,7 @@
   --font-panchang-extrabold: var(--font-panchang-extrabold);
 }
 
-html {
-  overflow: hidden;
-}
-
 body {
-  overflow: hidden;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
